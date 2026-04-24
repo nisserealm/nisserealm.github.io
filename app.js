@@ -829,6 +829,35 @@ async function connectAdenaWallet() {
   return account;
 }
 
+async function sendWithAdena({ msgs, gasWanted, gasFee, memo = "", address = "" }) {
+  if (!window.adena) {
+    throw new Error("Adena extension was not found in this browser.");
+  }
+  if (!Array.isArray(msgs) || !msgs.length) {
+    throw new Error("Adena send requires at least one message.");
+  }
+
+  const sender = String(address || adenaState.address || "").trim();
+  if (!sender) {
+    throw new Error("No connected Adena address is available.");
+  }
+
+  const payload = {
+    msgs,
+    fee: {
+      gas_wanted: String(gasWanted),
+      gas_fee: String(gasFee)
+    },
+    memo: String(memo || "")
+  };
+
+  return window.adena.DoContract({
+    type: "SIGN_AND_BROADCAST",
+    address: sender,
+    data: payload
+  });
+}
+
 async function uploadHostedNissePackage() {
   if (!window.adena) {
     throw new Error("Adena extension was not found in this browser.");
@@ -847,7 +876,8 @@ async function uploadHostedNissePackage() {
 
   const manifest = await buildHostedPackagePayload();
   const sender = adenaState.address;
-  const tx = {
+  const response = await sendWithAdena({
+    address: sender,
     msgs: [
       {
         "@type": "/vm.m_addpkg",
@@ -860,17 +890,9 @@ async function uploadHostedNissePackage() {
         }
       }
     ],
-    fee: {
-      gas_wanted: String(manifest.gasWanted),
-      gas_fee: `${manifest.gasFee}ugnot`
-    },
+    gasWanted: manifest.gasWanted,
+    gasFee: `${manifest.gasFee}ugnot`,
     memo: "Upload Nisse package from GitHub Pages"
-  };
-
-  const response = await window.adena.DoContract({
-    type: "SIGN_AND_BROADCAST",
-    address: sender,
-    data: tx
   });
 
   const txHash = String(response?.data?.txHash || response?.txHash || response?.hash || "").trim();
