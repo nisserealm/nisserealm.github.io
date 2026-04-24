@@ -755,13 +755,17 @@ async function loadNissePackageManifest() {
   if (!response.ok) {
     throw new Error(`Package manifest HTTP ${response.status}`);
   }
-  return response.json();
+  return {
+    manifest: await response.json(),
+    manifestUrl: response.url
+  };
 }
 
 async function buildHostedPackagePayload() {
-  const manifest = await loadNissePackageManifest();
+  const { manifest, manifestUrl } = await loadNissePackageManifest();
+  const filesBaseUrl = new URL(String(manifest.filesBaseUrl || "./"), manifestUrl);
   const files = await Promise.all((manifest.files || []).map(async (entry) => {
-    const response = await fetch(new URL(entry.path, document.baseURI), { cache: "no-store" });
+    const response = await fetch(new URL(entry.path, filesBaseUrl), { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Failed to load ${entry.name} (HTTP ${response.status})`);
     }
