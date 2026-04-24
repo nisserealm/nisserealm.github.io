@@ -6,7 +6,7 @@ import {
   movementCost
 } from "./map_data.js";
 
-const PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse-staging";
+const PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse_staging";
 const PLAYER_NAME_STORAGE_KEY = "nisse.playerName";
 const KEY_NAME_STORAGE_KEY = "nisse.keyName";
 const ATTITUDE_STORAGE_KEY = "nisse.attitude";
