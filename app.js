@@ -829,11 +829,11 @@ async function connectAdenaWallet() {
   return account;
 }
 
-async function sendWithAdena({ msgs, gasWanted, gasFee, memo = "", address = "" }) {
+async function sendWithAdena({ messages, gasWanted, gasFee, memo = "", address = "" }) {
   if (!window.adena) {
     throw new Error("Adena extension was not found in this browser.");
   }
-  if (!Array.isArray(msgs) || !msgs.length) {
+  if (!Array.isArray(messages) || !messages.length) {
     throw new Error("Adena send requires at least one message.");
   }
 
@@ -843,19 +843,13 @@ async function sendWithAdena({ msgs, gasWanted, gasFee, memo = "", address = "" 
   }
 
   const payload = {
-    msgs,
-    fee: {
-      gas_wanted: String(gasWanted),
-      gas_fee: String(gasFee)
-    },
+    messages,
+    gasFee: Number(gasFee),
+    gasWanted: Number(gasWanted),
     memo: String(memo || "")
   };
 
-  return window.adena.DoContract({
-    type: "SIGN_AND_BROADCAST",
-    address: sender,
-    data: payload
-  });
+  return window.adena.DoContract(payload);
 }
 
 async function uploadHostedNissePackage() {
@@ -878,20 +872,22 @@ async function uploadHostedNissePackage() {
   const sender = adenaState.address;
   const response = await sendWithAdena({
     address: sender,
-    msgs: [
+    messages: [
       {
-        "@type": "/vm.m_addpkg",
-        creator: sender,
-        deposit: manifest.deposit,
-        package: {
-          name: manifest.name,
-          path: manifest.path,
-          files: manifest.files
+        type: "/vm.m_addpkg",
+        value: {
+          creator: sender,
+          deposit: manifest.deposit,
+          package: {
+            name: manifest.name,
+            path: manifest.path,
+            files: manifest.files
+          }
         }
       }
     ],
     gasWanted: manifest.gasWanted,
-    gasFee: `${manifest.gasFee}ugnot`,
+    gasFee: manifest.gasFee,
     memo: "Upload Nisse package from GitHub Pages"
   });
 
