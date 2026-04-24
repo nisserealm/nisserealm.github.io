@@ -1,0 +1,32 @@
+{
+  "name": "nisse",
+  "path": "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse",
+  "deposit": "1ugnot",
+  "gasFee": 8000000,
+  "gasWanted": 120000000,
+  "files": [
+    { "name": "gnomod.toml", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/gnomod.toml" },
+    { "name": "nisse.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse.gno" },
+    { "name": "nisse_asset.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_asset.gno" },
+    { "name": "nisse_core.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_core.gno" },
+    { "name": "nisse_dog.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_dog.gno" },
+    { "name": "nisse_donkey.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_donkey.gno" },
+    { "name": "nisse_encounters.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_encounters.gno" },
+    { "name": "nisse_event.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_event.gno" },
+    { "name": "nisse_forest_companions.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_forest_companions.gno" },
+    { "name": "nisse_griffin.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_griffin.gno" },
+    { "name": "nisse_market.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_market.gno" },
+    { "name": "nisse_monsters.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_monsters.gno" },
+    { "name": "nisse_mule.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_mule.gno" },
+    { "name": "nisse_pegasus.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_pegasus.gno" },
+    { "name": "nisse_pigeonpost.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_pigeonpost.gno" },
+    { "name": "nisse_place.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_place.gno" },
+    { "name": "nisse_player.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_player.gno" },
+    { "name": "nisse_reindeer.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_reindeer.gno" },
+    { "name": "nisse_story.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_story.gno" },
+    { "name": "nisse_tile_scene.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_tile_scene.gno" },
+    { "name": "nisse_treasury.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_treasury.gno" },
+    { "name": "nisse_watercraft.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_watercraft.gno" },
+    { "name": "nisse_world.gno", "path": "./gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/nisse_world.gno" }
+  ]
+}

@@ -67,6 +67,9 @@ const moneyPearlAmountInput = document.getElementById("moneyPearlAmountInput");
 const moneyBuyPearlsButton = document.getElementById("moneyBuyPearlsButton");
 const moneyBuyUGNOTButton = document.getElementById("moneyBuyUGNOTButton");
 const moneyMarketResult = document.getElementById("moneyMarketResult");
+const adenaConnectButton = document.getElementById("adenaConnectButton");
+const adenaUploadPackageButton = document.getElementById("adenaUploadPackageButton");
+const adenaDeployResult = document.getElementById("adenaDeployResult");
 const eventLog = document.getElementById("eventLog");
 const travelBadge = document.getElementById("travelBadge");
 const travelNotice = document.getElementById("travelNotice");
@@ -200,6 +203,16 @@ let moneyMarketState = {
   peddlers: [],
   selectedSeller: "",
   error: ""
+};
+let adenaState = {
+  available: typeof window !== "undefined" && !!window.adena,
+  connecting: false,
+  connected: false,
+  uploading: false,
+  address: "",
+  nickname: "",
+  error: "",
+  lastTxHash: ""
 };
 let mailComposerState = {
   to: "",
@@ -715,6 +728,192 @@ function renderMoneyMarketBox() {
   const hasSeller = !!moneyMarketState.selectedSeller;
   moneyBuyPearlsButton.disabled = !hasSeller;
   moneyBuyUGNOTButton.disabled = !hasSeller;
+}
+
+function adenaData(payload) {
+  return payload?.data ?? payload ?? {};
+}
+
+function adenaAddress(payload) {
+  const data = adenaData(payload);
+  return String(
+    data.address ||
+    data.bech32Address ||
+    data.accountAddress ||
+    data.base?.address ||
+    ""
+  ).trim();
+}
+
+function adenaNickname(payload) {
+  const data = adenaData(payload);
+  return String(data.name || data.nickname || data.keyName || "").trim();
+}
+
+async function loadNissePackageManifest() {
+  const response = await fetch(new URL("./deploy/nisse-package.json", document.baseURI), { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Package manifest HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
+async function buildHostedPackagePayload() {
+  const manifest = await loadNissePackageManifest();
+  const files = await Promise.all((manifest.files || []).map(async (entry) => {
+    const response = await fetch(new URL(entry.path, document.baseURI), { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Failed to load ${entry.name} (HTTP ${response.status})`);
+    }
+    return {
+      name: entry.name,
+      body: await response.text()
+    };
+  }));
+  return {
+    name: manifest.name,
+    path: manifest.path,
+    deposit: manifest.deposit,
+    gasFee: Number(manifest.gasFee || 8000000),
+    gasWanted: Number(manifest.gasWanted || 120000000),
+    files
+  };
+}
+
+async function connectAdenaWallet() {
+  if (!window.adena) {
+    throw new Error("Adena extension was not found in this browser.");
+  }
+  adenaState = {
+    ...adenaState,
+    available: true,
+    connecting: true,
+    error: ""
+  };
+  render(store.getState());
+
+  let established;
+  try {
+    established = await window.adena.AddEstablish("Nisse Realm");
+  } catch (err) {
+    established = null;
+  }
+
+  if (established && adenaAddress(established)) {
+    adenaState = {
+      ...adenaState,
+      connecting: false,
+      connected: true,
+      address: adenaAddress(established),
+      nickname: adenaNickname(established),
+      error: ""
+    };
+    render(store.getState());
+    return established;
+  }
+
+  const account = await window.adena.GetAccount();
+  const address = adenaAddress(account);
+  if (!address) {
+    throw new Error("Adena connected but did not return an address.");
+  }
+  adenaState = {
+    ...adenaState,
+    connecting: false,
+    connected: true,
+    address,
+    nickname: adenaNickname(account),
+    error: ""
+  };
+  render(store.getState());
+  return account;
+}
+
+async function uploadHostedNissePackage() {
+  if (!window.adena) {
+    throw new Error("Adena extension was not found in this browser.");
+  }
+  if (!adenaState.connected) {
+    await connectAdenaWallet();
+  }
+
+  adenaState = {
+    ...adenaState,
+    uploading: true,
+    error: "",
+    lastTxHash: ""
+  };
+  render(store.getState());
+
+  const manifest = await buildHostedPackagePayload();
+  const sender = adenaState.address;
+  const tx = {
+    msgs: [
+      {
+        "@type": "/vm.m_addpkg",
+        creator: sender,
+        deposit: manifest.deposit,
+        package: {
+          name: manifest.name,
+          path: manifest.path,
+          files: manifest.files
+        }
+      }
+    ],
+    fee: {
+      gas_wanted: String(manifest.gasWanted),
+      gas_fee: `${manifest.gasFee}ugnot`
+    },
+    memo: "Upload Nisse package from GitHub Pages"
+  };
+
+  const response = await window.adena.DoContract({
+    type: "SIGN_AND_BROADCAST",
+    address: sender,
+    data: tx
+  });
+
+  const txHash = String(response?.data?.txHash || response?.txHash || response?.hash || "").trim();
+  adenaState = {
+    ...adenaState,
+    uploading: false,
+    error: "",
+    lastTxHash: txHash
+  };
+  render(store.getState());
+  return response;
+}
+
+function renderAdenaDeployBox() {
+  if (!adenaDeployResult) {
+    return;
+  }
+  const lines = [];
+  if (!adenaState.available) {
+    lines.push("Adena not detected in this browser.");
+  } else if (adenaState.connected) {
+    lines.push(`Connected: ${adenaState.nickname || "wallet"}`);
+    lines.push(`Address: ${adenaState.address}`);
+  } else {
+    lines.push("Adena is available but not connected yet.");
+  }
+  if (adenaState.lastTxHash) {
+    lines.push("");
+    lines.push(`Latest upload tx: ${adenaState.lastTxHash}`);
+  }
+  if (adenaState.error) {
+    lines.push("");
+    lines.push(`Error: ${adenaState.error}`);
+  }
+  adenaDeployResult.textContent = lines.join("\n");
+  if (adenaConnectButton) {
+    adenaConnectButton.disabled = adenaState.connecting || adenaState.uploading;
+    adenaConnectButton.textContent = adenaState.connecting ? "Connecting..." : "Connect Adena";
+  }
+  if (adenaUploadPackageButton) {
+    adenaUploadPackageButton.disabled = !adenaState.available || adenaState.connecting || adenaState.uploading;
+    adenaUploadPackageButton.textContent = adenaState.uploading ? "Uploading..." : "Upload Nisse Package";
+  }
 }
 
 function renderMailBox(state) {
@@ -1908,6 +2107,7 @@ function render(state) {
   renderPlace(state);
   renderPlayer(state);
   renderMailBox(state);
+  renderAdenaDeployBox();
   renderCompanionRegistryBox();
   renderFrensBox(state);
   renderMarketBox(state);
@@ -2225,6 +2425,35 @@ ugnotDepositButton?.addEventListener("click", async () => {
 
 ugnotWithdrawButton?.addEventListener("click", async () => {
   await runAction(() => api.stageWithdrawUGNOT(ugnotWithdrawInput?.value));
+});
+
+adenaConnectButton?.addEventListener("click", async () => {
+  try {
+    await connectAdenaWallet();
+  } catch (err) {
+    adenaState = {
+      ...adenaState,
+      connecting: false,
+      connected: false,
+      error: err?.message || String(err)
+    };
+    render(store.getState());
+  }
+});
+
+adenaUploadPackageButton?.addEventListener("click", async () => {
+  try {
+    const response = await uploadHostedNissePackage();
+    const responseText = JSON.stringify(response?.data || response || {}, null, 2);
+    pushLogMessage(`Adena addpkg submitted.\n${responseText}`);
+  } catch (err) {
+    adenaState = {
+      ...adenaState,
+      uploading: false,
+      error: err?.message || String(err)
+    };
+    render(store.getState());
+  }
 });
 
 marketRefreshButton?.addEventListener("click", async () => {
