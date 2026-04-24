@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Cove path</title>
+  <desc id="desc">A sheltered cove with a narrow landing and quiet water.</desc>
+  <rect width="960" height="540" fill="#a8d0da"/>
+  <rect y="215" width="960" height="325" fill="#1f526d"/>
+  <path d="M0 280c171-48 235 47 341 25 89-19 126-126 221-128 126-1 182 144 398 123V540H0Z" fill="#395541"/>
+  <path d="M163 294c43 10 87 40 133 91" fill="none" stroke="#e7f5ff" stroke-width="8" stroke-linecap="round"/>
+  <path d="M584 216c14 21 20 39 20 55" fill="none" stroke="#d6f6ff" stroke-width="7" stroke-linecap="round"/>
+  <path d="M655 292l34-39 44 29-5 22h-48z" fill="#725037"/>
+  <path d="M682 251l4 67" stroke="#433021" stroke-width="6" stroke-linecap="round"/>
+  <path d="M686 257l43 23-43 10z" fill="#f7efe1"/>
+</svg>

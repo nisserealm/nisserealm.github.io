@@ -1,0 +1,141 @@
+{
+  "id": "nightmeadow",
+  "title": "Night Meadow",
+  "theme": "meadow",
+  "startNode": "start",
+  "tileHint": "A meadow after dark, where thin shelter, prowling shapes, and restless sleep shape the encounter",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Keep still, listen to the dark, and let the meadow tell you what is truly moving there.",
+        "baseChance": 46,
+        "levelGain": 1,
+        "successTitle": "A quiet watcher keeps your sleep",
+        "successBody": "$companionName stays by your road as though it had already chosen you while you lay under the tree.",
+        "failureTitle": "The night passes without trust",
+        "failureBody": "You weather the darkness safely, but the hidden life of the meadow keeps its distance."
+      },
+      "2": {
+        "hint": "Offer warmth or mercy in the dark without claiming what answers you.",
+        "baseChance": 50,
+        "levelGain": 1,
+        "successTitle": "A small night-bond is made",
+        "successBody": "$companionName remains with you, drawn by the gentleness you kept even in fear and cold.",
+        "failureTitle": "Kindness fades back into shadow",
+        "failureBody": "You help what you can, yet the creature chooses the dark meadow over your company."
+      },
+      "3": {
+        "hint": "Stand up to the roaming danger of the night and make a place of safety where none was certain.",
+        "baseChance": 56,
+        "levelGain": 1,
+        "successTitle": "A fierce ally accepts your fire",
+        "successBody": "$companionName stays after the danger passes, as though boldness has earned a place near it.",
+        "failureTitle": "The night is broken, but no bond remains",
+        "failureBody": "Your courage changes the shape of the night, though the wild thing you saved keeps its own freedom."
+      }
+    }
+  },
+  "startText": "Night on the meadow is colder than it first appears. The grass whispers in every small wind, shadows move low and uncertain, and even sleep feels like a bargain made with whatever roams beyond the tree line.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "You make a little resting place under a tree at the edge of the meadow. What finds you there depends on how you meet the dark.",
+      "choices": [
+        {
+          "id": "listen-first",
+          "digit": "1",
+          "label": "Lie still and listen before acting",
+          "next": "watch1"
+        },
+        {
+          "id": "keep-kindness",
+          "digit": "2",
+          "label": "Keep gentleness even after the cold and fear have settled in",
+          "next": "kind1"
+        },
+        {
+          "id": "rise-boldly",
+          "digit": "3",
+          "label": "Rise at once when danger circles the shelter",
+          "next": "bold1"
+        }
+      ]
+    },
+    "watch1": {
+      "text": "You remain still beneath the tree and let the meadow's night sounds sort themselves into true meaning: grass-mice, wind-shift, distant paws, and one quieter thing that does not move like a hunter.",
+      "choices": [
+        {
+          "id": "follow-soft-step",
+          "digit": "1",
+          "label": "Follow the soft step that pauses between the shadows",
+          "next": "final"
+        },
+        {
+          "id": "wait-until-near",
+          "digit": "2",
+          "label": "Wait until the hidden creature comes close of its own will",
+          "next": "final"
+        }
+      ]
+    },
+    "kind1": {
+      "text": "The night is long enough that even the smallest act of mercy matters. Some creatures do not need mastery from you, only a little shelter from cold, fear, or hunger.",
+      "choices": [
+        {
+          "id": "share-warmth",
+          "digit": "1",
+          "label": "Share warmth under the tree roots",
+          "next": "final"
+        },
+        {
+          "id": "offer-food",
+          "digit": "2",
+          "label": "Offer a little food without demanding trust in return",
+          "next": "final"
+        }
+      ]
+    },
+    "bold1": {
+      "text": "Night meadow danger is not always a single beast. Sometimes it is a hungry ring of eyes, the confidence of prowlers, and the knowledge that something weaker than you is already caught between them.",
+      "choices": [
+        {
+          "id": "drive-pack-off",
+          "digit": "1",
+          "label": "Drive the prowlers back before they close in",
+          "next": "final"
+        },
+        {
+          "id": "stand-over-small-life",
+          "digit": "2",
+          "label": "Stand over the trapped creature and refuse the night its meal",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By the time the eastern sky begins to pale, the meadow has decided what kind of company, if any, your night was worthy to keep.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "cautious-path",
+          "digit": "1",
+          "label": "Listen first and let the hidden watcher reveal itself"
+        },
+        {
+          "id": "kind-path",
+          "digit": "2",
+          "label": "Offer warmth or mercy beneath the tree"
+        },
+        {
+          "id": "bold-path",
+          "digit": "3",
+          "label": "Stand up to what prowls the meadow in the dark"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#cfd8cf"/>
+  <rect y="390" width="1200" height="330" fill="#547253"/>
+  <rect x="170" y="220" width="20" height="220" fill="#5c4634"/>
+  <circle cx="180" cy="210" r="90" fill="#34593f"/>
+  <rect x="520" y="190" width="24" height="260" fill="#5c4634"/>
+  <circle cx="532" cy="180" r="120" fill="#2b4a35"/>
+  <rect x="910" y="235" width="18" height="215" fill="#5c4634"/>
+  <circle cx="919" cy="220" r="86" fill="#3d6346"/>
+  <text x="70" y="94" fill="#22382a" font-size="42" font-family="Georgia, serif">fallback / forest</text>
+</svg>

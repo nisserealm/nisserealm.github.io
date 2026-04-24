@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "stories": [
+    {
+      "id": "reindeer",
+      "title": "Reindeer",
+      "theme": "mountain",
+      "path": "/stories/reindeer/story.json"
+    }
+  ]
+}

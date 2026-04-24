@@ -1,0 +1,80 @@
+{
+  "tile-7-5": {
+    "title": "An unnamed mountain pass",
+    "theme": "mountain",
+    "description": "A narrow pass of grey stone and old snow where the wind runs thin and the footing turns slick without warning.",
+    "imagePrompt": "narrow mountain pass, old snow, wet stone, thin alpine mist, northern light",
+    "keywords": "pass,slick-stone,mist,frontier"
+  },
+  "tile-15-4": {
+    "title": "An unnamed reindeer highland",
+    "theme": "hills",
+    "description": "A high rolling shoulder of hill country where the grass grows thin over stone, the wind carries farther than the eye, and an old reindeer road still seems to pass just beyond the visible ground.",
+    "imagePrompt": "northern highlands, reindeer grazing ground, wind over hill grass, stone under thin turf, pale cold light",
+    "keywords": "highland,reindeer,old-road,hills,wind",
+    "story": {
+      "id": "reindeer",
+      "title": "Reindeer",
+      "theme": "hills",
+      "path": "/stories/reindeer/story.json"
+    }
+  },
+  "tile-14-5": {
+    "title": "Arregi",
+    "theme": "farm",
+    "description": "Bright cultivated country of hedged lanes, worked strips, and little roadside sanctuaries where a road companion might be found as easily as a farmer.",
+    "imagePrompt": "early medieval cultivated countryside, hedged lanes, worked strips, roadside chapel, bright rural daylight, northern farm country",
+    "keywords": "farm,fields,lanes,chapel,rural-day"
+  },
+  "tile-13-5": {
+    "title": "Arizmendi",
+    "theme": "farm",
+    "description": "Dark field roads and sleeping holdings stretch beneath a restless night, with shrines, hedgerows, and wolf-fear never too far from the lane.",
+    "imagePrompt": "early medieval rural night, dark farm lanes, sleeping fields, roadside shrine, lantern light, northern countryside",
+    "keywords": "farm,night,lanes,shrine,hedgerow"
+  },
+  "tile-13-6": {
+    "title": "Arruti",
+    "theme": "farm",
+    "description": "Heat-struck lanes, orchards, creek bends, and worked fields lie under a hard summer sun where kindness and nerve matter as much as water.",
+    "imagePrompt": "early medieval rural summer, orchard edge, creek bend, worked fields, dry lane, hard sun, northern countryside",
+    "keywords": "farm,summer,orchard,creek,backroad"
+  },
+  "tile-3-5": {
+    "title": "An unnamed forest pocket",
+    "theme": "forest",
+    "description": "A dim pocket between pines where moss softens the roots and berries cling close to the low brush.",
+    "imagePrompt": "northern pine forest pocket, moss, berry brush, soft dim light, quiet woodland floor",
+    "keywords": "berries,moss,pines,frontier"
+  },
+  "tile-4-4": {
+    "title": "Deep Forest Edge",
+    "theme": "forest",
+    "description": "A darker forest pocket where moss softens the roots, trunks stand closer together, and the island quiet seems to gather under the branches.",
+    "imagePrompt": "northern forest pocket, mossy roots, close trunks, deep green shade, quiet woodland floor",
+    "keywords": "forest,moss,roots,shade,pines"
+  },
+  "tile-4-5": {
+    "title": "Quiet Meadow Reach",
+    "theme": "meadow",
+    "description": "A quiet meadow opening where the ground softens, flowers gather low in the growth, and the surrounding country seems to breathe more easily for a while.",
+    "imagePrompt": "quiet northern meadow, low flowers, soft grass, open light, gentle uncultivated ground",
+    "keywords": "meadow,flowers,soft-ground,open-light"
+  },
+  "tile-14-6": {
+    "title": "A southern town",
+    "theme": "city",
+    "description": "A southern town of errands, post, harbor trade, and lived-in streets where each corner seems to offer another purpose.",
+    "image": "/assets/map-tiles/citysouth.png",
+    "fallbackImage": "/stories/fallback/images/themes/city.svg",
+    "imagePrompt": "northern trade town, harbor-adjacent streets, small post office, market stalls, lived-in city quarter",
+    "keywords": "city,market,post,trade,spawn-town"
+  },
+  "tile-14-7": {
+    "title": "An unnamed outer shore",
+    "theme": "coastal",
+    "description": "A bright outer shore of salt grass, broken shell, and long water where a small skiff could vanish from sight between weather turns.",
+    "imagePrompt": "outer northern shore, salt grass, broken shells, long water, windy coastline",
+    "keywords": "shore,salt-grass,frontier,water"
+  }
+}

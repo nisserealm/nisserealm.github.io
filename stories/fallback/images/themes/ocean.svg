@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#b8d6e8"/>
+  <rect y="250" width="1200" height="470" fill="#4d88a8"/>
+  <path d="M0 330 C120 300 220 360 340 330 S560 300 680 330 920 360 1200 320" fill="none" stroke="#dcecf6" stroke-width="10"/>
+  <path d="M0 430 C140 400 260 460 420 430 S760 400 900 430 1090 455 1200 430" fill="none" stroke="#7fc0d9" stroke-width="12"/>
+  <text x="70" y="94" fill="#18394e" font-size="42" font-family="Georgia, serif">fallback / ocean</text>
+</svg>

@@ -1,0 +1,4618 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nisse Terminal</title>
+  <style>
+    :root {
+      --bg: #12130f;
+      --panel: #1a1d16;
+      --panel-2: #20241b;
+      --border: #4d5b37;
+      --text: #d7dfc8;
+      --muted: #91a07a;
+      --accent: #c8f169;
+      --danger: #d98b6a;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(121, 194, 103, 0.12), transparent 30%),
+        linear-gradient(180deg, #161812 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1280px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
+    }
+
+    .topbar,
+    .panel {
+      border: 2px solid var(--border);
+      background: linear-gradient(180deg, var(--panel-2), var(--panel));
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 16px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .navlink {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tophint {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 310px) minmax(0, 1fr);
+      gap: 14px;
+      min-height: 0;
+      align-items: start;
+    }
+
+    .column {
+      display: grid;
+      gap: 14px;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .panel {
+      padding: 14px;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .panel h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .statline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px dotted rgba(145, 160, 122, 0.3);
+      padding-bottom: 4px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .stack label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stack input {
+      width: 100%;
+      background: #12150f;
+      color: var(--text);
+      border: 1px solid rgba(145, 160, 122, 0.4);
+      padding: 8px;
+    }
+
+    .list {
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .screen {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 6px;
+      min-height: 0;
+      min-width: 0;
+    }
+
+    .output {
+      min-height: 0;
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      background: rgba(0, 0, 0, 0.24);
+      border: 1px solid rgba(145, 160, 122, 0.35);
+      padding: 14px;
+      line-height: 1.5;
+      font-size: 14px;
+      min-width: 0;
+    }
+
+    .output-text {
+      white-space: pre-wrap;
+    }
+
+    .place-output {
+      display: grid;
+      gap: 14px;
+    }
+
+    .place-output-media {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+    }
+
+    .place-output-visual {
+      display: block;
+      width: min(100%, 980px);
+      height: auto;
+      max-height: min(68vh, 760px);
+      object-fit: contain;
+      object-position: center;
+      border: 1px solid rgba(145, 160, 122, 0.35);
+      background: rgba(0, 0, 0, 0.18);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+      border-radius: 8px;
+    }
+
+    .travel-map-block {
+      display: grid;
+      gap: 12px;
+    }
+
+    .travel-map-block .map-block {
+      width: 100%;
+    }
+
+    .travel-map-block .map-svg {
+      width: 100%;
+      height: auto;
+      max-height: 560px;
+      display: block;
+    }
+
+    .scenario-output {
+      display: grid;
+      gap: 12px;
+    }
+
+    body.scenario-immersive .topbar,
+    body.scenario-immersive .main > .column:first-child,
+    body.scenario-immersive .statusbar {
+      display: none;
+    }
+
+    body.scenario-immersive .shell {
+      width: min(960px, 100%);
+      padding: 0;
+      gap: 0;
+    }
+
+    body.scenario-immersive .main {
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+      gap: 0;
+    }
+
+    body.scenario-immersive .main > .column:last-child {
+      min-height: 100vh;
+    }
+
+    body.scenario-immersive .panel.screen {
+      min-height: 100vh;
+      border-width: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background:
+        radial-gradient(circle at top, rgba(200, 241, 105, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(32, 36, 27, 0.98), rgba(18, 19, 15, 0.98));
+      box-shadow: none;
+    }
+
+    body.scenario-immersive .composer {
+      order: 2;
+      gap: 0;
+      position: sticky;
+      bottom: 0;
+      margin-top: auto;
+      padding-top: 10px;
+      background: linear-gradient(180deg, rgba(18, 19, 15, 0), rgba(18, 19, 15, 0.92) 38%);
+    }
+
+    body.scenario-immersive .composer textarea {
+      min-height: 4.2em;
+      border: 0;
+      outline: none;
+      padding: 14px 16px 16px;
+      background: rgba(9, 11, 8, 0.58);
+      box-shadow: inset 0 1px 0 rgba(200, 241, 105, 0.14);
+      caret-color: var(--accent);
+    }
+
+    body.scenario-immersive .composer textarea:focus,
+    body.scenario-immersive .composer textarea:focus-visible {
+      outline: none;
+      border: 0;
+      box-shadow: inset 0 1px 0 rgba(200, 241, 105, 0.14);
+    }
+
+    body.scenario-immersive .output {
+      order: 1;
+      flex: 1 1 auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .scenario-visual {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border: 1px solid rgba(145, 160, 122, 0.35);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    body.scenario-immersive .scenario-visual {
+      max-height: min(52vh, 560px);
+      border: 0;
+      background: transparent;
+    }
+
+    body.scenario-immersive .scenario-output {
+      gap: 18px;
+    }
+
+    body.scenario-immersive .output-text {
+      padding: 0 4px 4px;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .statusbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-top: 6px;
+      border-top: 1px dotted rgba(145, 160, 122, 0.3);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .map-block {
+      display: inline-block;
+      padding: 8px;
+      margin-top: 8px;
+      max-width: 100%;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(145, 160, 122, 0.25);
+    }
+
+    .sidebar-map {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    .map-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .composer {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .composer textarea {
+      width: 100%;
+      max-width: 100%;
+      height: 6em;
+      resize: none;
+      background: #10130d;
+      color: var(--text);
+      border: 1px solid rgba(145, 160, 122, 0.4);
+      padding: 12px;
+      line-height: 1.5;
+    }
+
+    button {
+      color: var(--text);
+      background: #23281e;
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2c3325;
+    }
+
+    .inline-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    @media (max-width: 1100px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div>
+        <div class="title">Nisse Terminal</div>
+        <div class="subtitle">One terminal for qeval reads and staged signed commands.</div>
+      </div>
+      <div class="topbar-actions">
+        <div class="tophint">type `help` for guide</div>
+        <a class="navlink" href="/indexdragon0.html">Dragon0 Archive</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="column">
+        <div class="panel">
+          <h3>Island Map</h3>
+          <div id="sidebarMap" class="sidebar-map hint">Loading map...</div>
+        </div>
+
+        <div class="panel">
+          <h3>Mailbox</h3>
+          <div id="mailboxPreview" class="hint">No messages.</div>
+        </div>
+
+        <div class="panel">
+          <h3>Pearl Pouch</h3>
+          <div id="pearlPouchPreview" class="hint">No pearls yet.</div>
+        </div>
+
+        <div class="panel">
+          <h3>UGNOT Pouch</h3>
+          <div id="ugnotPouchPreview" class="hint">No ugnot yet.</div>
+        </div>
+
+      </div>
+
+      <div class="column">
+        <div class="panel screen">
+          <div class="composer">
+            <textarea id="composer" spellcheck="false" placeholder="Type commands like: realm, player map, tile nearby, mint, takeaction, clear"></textarea>
+          </div>
+          <div id="output" class="output"></div>
+          <div class="statusbar">
+            <span>realm: nisse</span>
+            <span>proxy: localhost:3000</span>
+            <span>player: <span id="status-player">Nisse</span></span>
+            <span>action: <span id="status-action">read</span></span>
+            <span>place: <span id="status-place">library</span></span>
+            <span>time: <span id="status-time">day</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div hidden aria-hidden="true">
+      <input id="keyName" value="">
+      <input id="playerName" value="">
+      <input id="actionName" value="read">
+      <input id="actionPlace" value="library">
+      <input id="actionTime" value="day">
+      <input id="adventureMode" value="careful">
+      <input id="tileX" type="number" min="0" value="14">
+      <input id="tileY" type="number" min="0" value="3">
+      <input id="diaryPlayerName" value="">
+      <input id="diaryEntryId" type="number" min="1" value="1">
+      <input id="resourceId" type="number" min="1" value="1">
+      <input id="friendName" value="Friend">
+      <input id="messageBody" value="Hello from Nisse.">
+      <input id="pearlFriendName" value="Friend">
+      <input id="pearlAmount" type="number" min="1" value="10">
+      <input id="ugnotAmount" type="number" min="1" value="10">
+      <input id="ugnotFriendName" value="Friend">
+      <input id="ugnotWithdrawAmount" type="number" min="1" value="10">
+      <input id="peddlerPearlAmount" type="number" min="1" value="10">
+      <input id="peddlerUGNOTAmount" type="number" min="1" value="2000000">
+      <input id="peddlerTargetName" value="Trader">
+    </div>
+  </div>
+
+  <script src="/story/story_runner.js"></script>
+  <script>
+    const pkgPath = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
+    const proxyUrl = "http://localhost:3000/proxy";
+
+    const output = document.getElementById("output");
+    const composer = document.getElementById("composer");
+
+    const keyNameInput = document.getElementById("keyName");
+    const playerNameInput = document.getElementById("playerName");
+    const actionNameInput = document.getElementById("actionName");
+    const actionPlaceInput = document.getElementById("actionPlace");
+    const actionTimeInput = document.getElementById("actionTime");
+    const adventureModeInput = document.getElementById("adventureMode");
+    const tileXInput = document.getElementById("tileX");
+    const tileYInput = document.getElementById("tileY");
+    const diaryPlayerNameInput = document.getElementById("diaryPlayerName");
+    const diaryEntryIdInput = document.getElementById("diaryEntryId");
+    const resourceIdInput = document.getElementById("resourceId");
+    const friendNameInput = document.getElementById("friendName");
+    const messageBodyInput = document.getElementById("messageBody");
+    const pearlFriendNameInput = document.getElementById("pearlFriendName");
+    const pearlAmountInput = document.getElementById("pearlAmount");
+    const ugnotAmountInput = document.getElementById("ugnotAmount");
+    const ugnotFriendNameInput = document.getElementById("ugnotFriendName");
+    const ugnotWithdrawAmountInput = document.getElementById("ugnotWithdrawAmount");
+    const peddlerPearlAmountInput = document.getElementById("peddlerPearlAmount");
+    const peddlerUGNOTAmountInput = document.getElementById("peddlerUGNOTAmount");
+    const peddlerTargetNameInput = document.getElementById("peddlerTargetName");
+    const storageKeyName = "nisse.keyName";
+    const storagePlayerName = "nisse.playerName";
+    const storagePendingTravelName = "nisse.pendingTravel";
+    const defaultGasFee = "2000000ugnot";
+    const defaultGasWanted = "30000000";
+    const pendingTravelMaxAgeMs = 120000;
+    const pendingTravelPollIntervalMs = 2000;
+    let currentMapText = "";
+    let travelMode = false;
+    let travelConfirmMode = false;
+    let travelWaterMode = false;
+    let travelMovesTotal = 0;
+    let travelMovesLeft = 0;
+    let travelTouchedOcean = false;
+    let travelPosition = { x: 14, y: 3 };
+    let travelOrigin = { x: 14, y: 3 };
+    let travelPollTimer = null;
+    let pendingTravelTarget = null;
+    let onboardingMode = "";
+    let messageComposeMode = "";
+    let pearlComposeMode = "";
+    let ugnotDepositMode = "";
+    let ugnotSendMode = "";
+    let ugnotWithdrawMode = "";
+    let tileNamingMode = "";
+    let pendingTileName = "";
+    let peddlerComposeMode = "";
+    let peddlerRoundConfirmMode = false;
+    let pendingPeddlerRound = null;
+    let buyPearlsComposeMode = "";
+    let buyUGNOTComposeMode = "";
+    let adventureComposeMode = "";
+    let scenarioComposeMode = "";
+    let pendingScenarioKind = "";
+    let pendingScenarioPath = "";
+    let pendingScenarioDecision = "";
+    let storyComposeMode = "";
+    let pendingTileStoryMeta = null;
+    let pendingTileStory = null;
+    let pendingTileStoryNode = "";
+    let pendingTileStoryHistory = [];
+    let pendingTileStoryPathCode = "";
+    let pendingTileStoryCommitPathCode = "";
+    let exploreComposeMode = "";
+    let tradeComposeMode = "";
+    let pendingExploreProfile = null;
+    let playerOverlayCounts = {};
+    let currentPlaceVisualMeta = null;
+    let latestOutputRenderState = null;
+    let placeVisualRefreshToken = 0;
+    let travelPreviewRefreshToken = 0;
+
+    function scenarioImmersiveActive() {
+      return storyComposeMode === "ambient" ||
+        storyComposeMode === "choice" ||
+        storyComposeMode === "commit";
+    }
+
+    function syncScenarioImmersion() {
+      document.body.classList.toggle("scenario-immersive", scenarioImmersiveActive());
+      composer.placeholder = scenarioImmersiveActive()
+        ? storyComposeMode === "ambient"
+          ? "Stay with the place. Type `back` or `retreat`."
+          : "Stay with the story. Type a choice, `back`, `retreat`, or `commit`."
+        : "Type commands like: realm, player map, tile nearby, mint, takeaction, clear";
+    }
+
+    function buildPlaceVisualHtml() {
+      if (scenarioImmersiveActive() || !currentPlaceVisualMeta) {
+        return "";
+      }
+
+      const primaryImage = cleanInput(currentPlaceVisualMeta.image) || cleanInput(currentPlaceVisualMeta.fallbackImage);
+      const fallbackImage = cleanInput(currentPlaceVisualMeta.fallbackImage);
+      if (!primaryImage) {
+        return "";
+      }
+
+      const fallbackAttr = fallbackImage && fallbackImage !== primaryImage
+        ? ' onerror="this.onerror=null;this.src=\'' + escapeHtml(fallbackImage).replace(/'/g, "&#39;") + '\';"'
+        : "";
+
+      return (
+        '<div class="place-output-media">' +
+        '<img class="place-output-visual" src="' + escapeHtml(primaryImage) + '" alt="' + escapeHtml(currentPlaceVisualMeta.title || "Current place") + '"' + fallbackAttr + '>' +
+        "</div>"
+      );
+    }
+
+    function renderStoredOutput() {
+      if (!latestOutputRenderState) {
+        output.innerHTML = "";
+        return;
+      }
+
+      const state = latestOutputRenderState;
+      const includePlaceImage = state.options?.includePlaceImage !== false;
+      const contentHtml = state.kind === "html"
+        ? state.value
+        : '<div class="output-text">' + escapeHtml(state.value) + '</div>';
+      const placeVisualHtml = includePlaceImage ? buildPlaceVisualHtml() : "";
+
+      output.innerHTML = '<div class="place-output">' + contentHtml + placeVisualHtml + "</div>";
+      output.scrollTop = 0;
+    }
+
+    function setTravelModeOutput(message) {
+      const mapHtml = renderMapHtml(currentMapText || fallbackMapText(), {
+        marker: travelPosition,
+        tileSize: 34,
+        playerCounts: playerOverlayCounts
+      });
+      setOutputHtml(
+        '<div class="travel-map-block">' +
+        '<div class="output-text">' + escapeHtml(message) + '</div>' +
+        mapHtml +
+        '</div>',
+        { includePlaceImage: false, refreshPlaceImage: false }
+      );
+    }
+
+    function setOutput(message, options = {}) {
+      latestOutputRenderState = { kind: "text", value: message, options };
+      renderStoredOutput();
+      if (options.refreshPlaceImage !== false) {
+        refreshCurrentPlaceVisual();
+      }
+    }
+
+    function setOutputHtml(html, options = {}) {
+      latestOutputRenderState = { kind: "html", value: html, options };
+      renderStoredOutput();
+      if (options.refreshPlaceImage !== false) {
+        refreshCurrentPlaceVisual();
+      }
+    }
+
+    async function refreshCurrentPlaceVisual() {
+      const playerName = playerNameInput.value.trim() || "Nisse";
+      const requestToken = ++placeVisualRefreshToken;
+      const result = await runQeval(pkgPath + ".DescribeTileScene(" + JSON.stringify(playerName) + ")");
+      const normalized = normalizeRealmText(result);
+      const parsed = parseTileSceneMeta(normalized);
+      const resolved = parsed ? await window.NisseStoryRunner.resolveTileSceneMeta(parsed) : null;
+
+      if (requestToken !== placeVisualRefreshToken) {
+        return;
+      }
+
+      currentPlaceVisualMeta = resolved;
+      if (latestOutputRenderState && !scenarioImmersiveActive()) {
+        renderStoredOutput();
+      }
+    }
+
+    async function loadTileSceneMetaAt(x, y) {
+      const result = await runQeval(pkgPath + ".DescribeTileSceneAt(" + Number(x) + ", " + Number(y) + ")");
+      const normalized = normalizeRealmText(result);
+      const parsed = parseTileSceneMeta(normalized);
+      if (!parsed) {
+        return null;
+      }
+      return window.NisseStoryRunner.resolveTileSceneMeta(parsed);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function shellQuote(value) {
+      return "'" + String(value).replace(/'/g, "'\\''") + "'";
+    }
+
+    function normalizedFieldValue(value, fallback) {
+      const trimmed = String(value ?? "").trim();
+      if (!trimmed || trimmed.toLowerCase() === "undefined" || trimmed.toLowerCase() === "null") {
+        return fallback;
+      }
+      return trimmed;
+    }
+
+    function normalizedPlayerArg(value, fallback) {
+      return normalizedFieldValue(value, fallback).toLowerCase();
+    }
+
+    function normalizeRealmText(value) {
+      const raw = String(value ?? "");
+      const trimmed = raw.trim();
+
+      if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+        try {
+          return JSON.parse(trimmed);
+        } catch (err) {
+          // Fall through to lighter cleanup below.
+        }
+      }
+
+      return raw
+        .replace(/^"/, "")
+        .replace(/"\s*string\)?\s*$/, "")
+        .replace(/\\n/g, "\n")
+        .replace(/\\"/g, '"');
+    }
+
+    function parseScenarioVisualMeta(text) {
+      const normalized = normalizeRealmText(text);
+      const scenarioMatch = normalized.match(/^\s*Scenario:\s*(.+)$/m);
+      const stageMatch = normalized.match(/^\s*Stage:\s*(.+)$/m);
+      const pathMatch = normalized.match(/^\s*Path:\s*(.+)$/m);
+      const decisionMatch = normalized.match(/^\s*Decision:\s*(.+)$/m);
+      return {
+        kind: cleanInput(scenarioMatch ? scenarioMatch[1] : "").toLowerCase(),
+        stage: cleanInput(stageMatch ? stageMatch[1] : "").toLowerCase(),
+        path: cleanInput(pathMatch ? pathMatch[1] : "").toLowerCase(),
+        decision: cleanInput(decisionMatch ? decisionMatch[1] : "").toLowerCase()
+      };
+    }
+
+    function scenarioAssetSlug(value) {
+      return cleanInput(value)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function scenarioImagePath(text) {
+      const meta = parseScenarioVisualMeta(text);
+      if (meta.kind === "coastal") {
+        if (meta.decision) {
+          return "/assets/scenarios/coastal/decisions/coastal-decision-" + meta.decision + ".svg";
+        }
+        if (meta.path) {
+          return "/assets/scenarios/coastal/paths/coastal-path-" + meta.path + ".svg";
+        }
+        return "/assets/scenarios/coastal/entry/coastal-entry-01.svg";
+      }
+
+      if (meta.kind === "mountain") {
+        if (meta.decision) {
+          return "/assets/scenarios/mountain/decisions/mountain-decision-" + scenarioAssetSlug(meta.decision) + ".svg";
+        }
+        if (meta.path) {
+          return "/assets/scenarios/mountain/paths/mountain-path-" + scenarioAssetSlug(meta.path) + ".svg";
+        }
+        return "/assets/scenarios/mountain/entry/mountain-entry-01.svg";
+      }
+
+      if (meta.kind === "forest") {
+        if (meta.decision) {
+          return "/assets/scenarios/forest/decisions/forest-decision-" + meta.decision + ".svg";
+        }
+        if (meta.path) {
+          return "/assets/scenarios/forest/paths/forest-path-" + meta.path + ".svg";
+        }
+        return "/assets/scenarios/forest/entry/forest-entry-01.svg";
+      }
+
+      return "";
+    }
+
+    function setScenarioOutput(text, extra = "") {
+      const normalized = normalizeRealmText(text);
+      const imagePath = scenarioImagePath(normalized);
+      if (!imagePath) {
+        setOutput(extra ? normalized + "\n\n" + extra : normalized);
+        return;
+      }
+
+      const body = extra ? normalized + "\n\n" + extra : normalized;
+      setOutputHtml(
+        '<div class="scenario-output">' +
+        '<img class="scenario-visual" src="' + escapeHtml(imagePath) + '" alt="Scenario illustration">' +
+        '<div class="output-text">' + escapeHtml(body) + '</div>' +
+        '</div>'
+      );
+    }
+
+    function pairSeed(from, to) {
+      const source = String(from || "").trim().toLowerCase() + "::" + String(to || "").trim().toLowerCase();
+      let sum = 0;
+      for (let i = 0; i < source.length; i += 1) {
+        sum += source.charCodeAt(i) * (i + 1);
+      }
+      return (sum % 251) + 1;
+    }
+
+    function decodeCodedMessage(from, to, coded) {
+      const hex = String(coded || "").trim();
+      if (!hex || /[^0-9a-f]/i.test(hex) || hex.length % 2 !== 0) {
+        return coded;
+      }
+
+      const seed = pairSeed(from, to);
+      let out = "";
+      for (let i = 0; i < hex.length; i += 2) {
+        const encoded = parseInt(hex.slice(i, i + 2), 16);
+        const mask = (seed + ((i / 2) * 17)) % 256;
+        out += String.fromCharCode(encoded ^ mask);
+      }
+      return out;
+    }
+
+    function syncStatus() {
+      document.getElementById("status-player").textContent = playerNameInput.value.trim() || "Nisse";
+      document.getElementById("status-action").textContent = actionNameInput.value.trim() || "read";
+      document.getElementById("status-place").textContent = actionPlaceInput.value.trim() || "library";
+      document.getElementById("status-time").textContent = actionTimeInput.value.trim() || "day";
+    }
+
+    function persistIdentity() {
+      try {
+        localStorage.setItem(storageKeyName, keyNameInput.value.trim() || "mykey");
+        localStorage.setItem(storagePlayerName, playerNameInput.value.trim() || "Nisse");
+      } catch (err) {
+        // Ignore storage errors in restricted browser modes.
+      }
+    }
+
+    function loadIdentity() {
+      try {
+        const savedKey = localStorage.getItem(storageKeyName);
+        const savedPlayer = localStorage.getItem(storagePlayerName);
+
+        if (savedKey) {
+          keyNameInput.value = savedKey;
+        }
+        if (savedPlayer) {
+          playerNameInput.value = savedPlayer;
+          diaryPlayerNameInput.value = savedPlayer;
+        }
+      } catch (err) {
+        // Ignore storage errors in restricted browser modes.
+      }
+    }
+
+    function clearIdentity() {
+      try {
+        localStorage.removeItem(storageKeyName);
+        localStorage.removeItem(storagePlayerName);
+      } catch (err) {
+        // Ignore storage errors in restricted browser modes.
+      }
+
+      keyNameInput.value = "";
+      playerNameInput.value = "";
+      diaryPlayerNameInput.value = "";
+      syncStatus();
+    }
+
+    function samePosition(left, right) {
+      return !!left && !!right && Number(left.x) === Number(right.x) && Number(left.y) === Number(right.y);
+    }
+
+    function persistPendingTravel() {
+      try {
+        if (!pendingTravelTarget) {
+          localStorage.removeItem(storagePendingTravelName);
+          return;
+        }
+        localStorage.setItem(storagePendingTravelName, JSON.stringify({
+          x: pendingTravelTarget.x,
+          y: pendingTravelTarget.y,
+          at: Date.now()
+        }));
+      } catch (err) {
+        // Ignore storage errors in restricted browser modes.
+      }
+    }
+
+    function clearPendingTravel() {
+      pendingTravelTarget = null;
+      stopTravelPolling();
+      try {
+        localStorage.removeItem(storagePendingTravelName);
+      } catch (err) {
+        // Ignore storage errors in restricted browser modes.
+      }
+    }
+
+    function pendingTravelIsFresh(target = pendingTravelTarget) {
+      if (!target || !Number.isFinite(Number(target.at))) {
+        return false;
+      }
+      return Date.now() - Number(target.at) <= pendingTravelMaxAgeMs;
+    }
+
+    function loadPendingTravel() {
+      try {
+        const raw = localStorage.getItem(storagePendingTravelName);
+        if (!raw) {
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Number.isFinite(Number(parsed.x)) || !Number.isFinite(Number(parsed.y))) {
+          localStorage.removeItem(storagePendingTravelName);
+          return;
+        }
+        pendingTravelTarget = {
+          x: Number(parsed.x),
+          y: Number(parsed.y),
+          at: Number(parsed.at) || Date.now()
+        };
+        if (!pendingTravelIsFresh()) {
+          clearPendingTravel();
+          return;
+        }
+        travelPosition = { x: pendingTravelTarget.x, y: pendingTravelTarget.y };
+        tileXInput.value = String(pendingTravelTarget.x);
+        tileYInput.value = String(pendingTravelTarget.y);
+      } catch (err) {
+        pendingTravelTarget = null;
+      }
+    }
+
+    async function switchIdentity(name) {
+      const nextName = cleanInput(name);
+      if (!nextName) {
+        setOutput("Tell me which player identity to use.");
+        return false;
+      }
+
+      playerNameInput.value = nextName;
+      diaryPlayerNameInput.value = nextName;
+      persistIdentity();
+      syncStatus();
+      await syncPlayerPositionFromRealm();
+      await refreshMailboxPreview();
+      await refreshPearlPouchPreview();
+      await refreshUGNOTPouchPreview();
+      return true;
+    }
+
+    function startTerminalOnboarding() {
+      onboardingMode = "playerName";
+      composer.value = "";
+      setOutput(
+        "Hello.\n\n" +
+        "Tell me your player name and press Enter."
+      );
+      composer.focus();
+    }
+
+    function startHelloFlow(resetIdentity = false) {
+      if (resetIdentity) {
+        clearIdentity();
+      }
+      startTerminalOnboarding();
+    }
+
+    function finishTerminalOnboarding() {
+      persistIdentity();
+      syncStatus();
+      onboardingMode = "";
+      composer.value = buildMintPlayerCommand();
+      setOutput(
+        "Welcome to Nisse.\n\n" +
+        "Your first signed command is staged below.\n" +
+        "Run it in your terminal to mint the player, then come back here and use `player` or `realm`."
+      );
+      refreshMailboxPreview();
+      refreshPearlPouchPreview();
+      refreshUGNOTPouchPreview();
+    }
+
+    function firstRunIdentityPrompt() {
+      let hasSavedIdentity = false;
+
+      try {
+        const savedKey = cleanInput(localStorage.getItem(storageKeyName) || "");
+        const savedPlayer = cleanInput(localStorage.getItem(storagePlayerName) || "");
+        hasSavedIdentity = !!(savedKey && savedPlayer);
+      } catch (err) {
+        hasSavedIdentity = false;
+      }
+
+      if (hasSavedIdentity) {
+        return;
+      }
+      onboardingMode = "";
+      composer.value = "hello";
+      setOutput(
+        "Hello.\n\n" +
+        "Type `hello` and press Enter to set up your player name and gnokey name."
+      );
+      composer.focus();
+    }
+
+    async function showCurrentPlaceLanding() {
+      const playerName = playerNameInput.value.trim() || "Nisse";
+      const playerText = normalizeRealmText(await runQeval(pkgPath + ".DescribePlayer(" + JSON.stringify(playerName) + ")"));
+      if (!playerText || playerText.startsWith("QEval error:") || /player not found/i.test(playerText)) {
+        return false;
+      }
+
+      const synced = await syncPlayerPositionFromRealm();
+      if (!synced) {
+        return false;
+      }
+
+      const sceneText = normalizeRealmText(await runQeval(pkgPath + ".DescribeTileScene(" + JSON.stringify(playerName) + ")"));
+      const sceneMeta = await window.NisseStoryRunner.resolveTileSceneMeta(parseTileSceneMeta(sceneText));
+      const placeTitle = cleanInput(sceneMeta?.title) || "Current place";
+      const placeText = cleanInput(sceneMeta?.text) || "You are standing in a place on the island.";
+      const prompt = [
+        placeTitle,
+        "",
+        placeText,
+        "",
+        "Type `explore` for a closer look, or `help` for commands."
+      ].join("\n");
+
+      composer.value = "";
+      setOutput(prompt);
+      return true;
+    }
+
+    function decodeProxyResult(json) {
+      const response = json?.result?.response?.ResponseBase;
+
+      if (!response) {
+        return JSON.stringify(json, null, 2);
+      }
+
+      if (response.Error) {
+        throw new Error(response.Error);
+      }
+
+      if (response.Data) {
+        return atob(response.Data);
+      }
+
+      if (response.Log) {
+        return response.Log;
+      }
+
+      return JSON.stringify(json, null, 2);
+    }
+
+    async function runQeval(expr) {
+      const trimmed = expr.trim();
+
+      if (!trimmed) {
+        return "Enter a qeval expression.";
+      }
+
+      try {
+        const res = await fetch(proxyUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: trimmed
+        });
+
+        if (!res.ok) {
+          throw new Error("Proxy returned " + res.status);
+        }
+
+        const json = await res.json();
+        return decodeProxyResult(json);
+      } catch (err) {
+        return "QEval error:\n" + (err?.message || String(err));
+      }
+    }
+
+    function buildMintPlayerCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedFieldValue(playerNameInput.value, "Nisse");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("MintPlayer"),
+        "--args", shellQuote(playerName)
+      ].join(" ");
+    }
+
+    function buildTakeActionCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const action = normalizedFieldValue(actionNameInput.value, "read");
+      const place = normalizedFieldValue(actionPlaceInput.value, "library");
+      const time = normalizedFieldValue(actionTimeInput.value, "day");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("TakeAction"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(action),
+        "--args", shellQuote(place),
+        "--args", shellQuote(time)
+      ].join(" ");
+    }
+
+    function stageTakeActionPreset(action, place, time) {
+      actionNameInput.value = action;
+      actionPlaceInput.value = place;
+      actionTimeInput.value = time;
+      return buildTakeActionCommand();
+    }
+
+    function buildSearchTileCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("SearchTile"),
+        "--args", shellQuote(playerName)
+      ].join(" ");
+    }
+
+    function buildAdventureCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const mode = normalizedFieldValue(adventureModeInput.value, "careful");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("GoOnAdventure"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(mode)
+      ].join(" ");
+    }
+
+    function stageAdventurePreset(mode) {
+      adventureModeInput.value = mode;
+      return buildAdventureCommand();
+    }
+
+    function buildCommitScenarioDecisionCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const path = normalizedFieldValue(pendingScenarioPath, "tracks");
+      const decision = normalizedFieldValue(pendingScenarioDecision, "observe");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("CommitScenarioDecision"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(path),
+        "--args", shellQuote(decision)
+      ].join(" ");
+    }
+
+    function buildCommitStoryDecisionCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const storyId = normalizedFieldValue(pendingTileStoryMeta?.id, "reindeer");
+      const pathCode = normalizedFieldValue(pendingTileStoryCommitPathCode || pendingTileStoryPathCode, "1");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("CommitStoryDecision"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(storyId),
+        "--args", shellQuote(pathCode)
+      ].join(" ");
+    }
+
+    function buildNameTileCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const placeName = normalizedFieldValue(pendingTileName, "Unnamed Place");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("NameTile"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(placeName)
+      ].join(" ");
+    }
+
+    function buildTravelPlayerCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const x = normalizedFieldValue(tileXInput.value, String(travelPosition.x));
+      const y = normalizedFieldValue(tileYInput.value, String(travelPosition.y));
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("TravelPlayer"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(x),
+        "--args", shellQuote(y)
+      ].join(" ");
+    }
+
+    function buildWriteToFriendCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const fromPlayerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const toPlayerName = normalizedPlayerArg(friendNameInput.value, "Friend");
+      const body = normalizedFieldValue(messageBodyInput.value, "Hello from Nisse.");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("WriteToFriend"),
+        "--args", shellQuote(fromPlayerName),
+        "--args", shellQuote(toPlayerName),
+        "--args", shellQuote(body)
+      ].join(" ");
+    }
+
+    function buildSendPearlsCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const fromPlayerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const toPlayerName = normalizedPlayerArg(pearlFriendNameInput.value, "Friend");
+      const amount = normalizedFieldValue(pearlAmountInput.value, "10");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("SendPearls"),
+        "--args", shellQuote(fromPlayerName),
+        "--args", shellQuote(toPlayerName),
+        "--args", shellQuote(amount)
+      ].join(" ");
+    }
+
+    function buildDepositUGNOTCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const amount = normalizedFieldValue(ugnotAmountInput.value, "10");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--send", shellQuote(amount + "ugnot"),
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("DepositUGNOT"),
+        "--args", shellQuote(playerName)
+      ].join(" ");
+    }
+
+    function buildSendUGNOTCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const fromPlayerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const toPlayerName = normalizedPlayerArg(ugnotFriendNameInput.value, "Friend");
+      const amount = normalizedFieldValue(ugnotAmountInput.value, "10");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("SendUGNOT"),
+        "--args", shellQuote(fromPlayerName),
+        "--args", shellQuote(toPlayerName),
+        "--args", shellQuote(amount)
+      ].join(" ");
+    }
+
+    function buildWithdrawUGNOTCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const amount = normalizedFieldValue(ugnotWithdrawAmountInput.value, "10");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("WithdrawUGNOT"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(amount)
+      ].join(" ");
+    }
+
+    function buildOpenPeddlerCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const playerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const pearlAmount = normalizedFieldValue(peddlerPearlAmountInput.value, "10");
+      const ugnotAmount = normalizedFieldValue(peddlerUGNOTAmountInput.value, "2000000");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("OpenPeddler"),
+        "--args", shellQuote(playerName),
+        "--args", shellQuote(pearlAmount),
+        "--args", shellQuote(ugnotAmount)
+      ].join(" ");
+    }
+
+    function peddlerRoundedUGNOT(pearlAmount, ugnotAmount) {
+      const pearls = Number(pearlAmount);
+      const ugnot = Number(ugnotAmount);
+      if (!Number.isFinite(pearls) || !Number.isFinite(ugnot) || pearls <= 0 || ugnot <= 0) {
+        return null;
+      }
+      return Math.floor(ugnot / pearls) * pearls;
+    }
+
+    function maybePromptPeddlerRounding(pearlAmount, ugnotAmount) {
+      const rounded = peddlerRoundedUGNOT(pearlAmount, ugnotAmount);
+      if (rounded === null) {
+        return false;
+      }
+      if (rounded === Number(ugnotAmount)) {
+        return false;
+      }
+      if (rounded <= 0) {
+        setOutput("That ugnot amount is too small for the number of pearls. Increase the ugnot side and try again.");
+        return true;
+      }
+
+      pendingPeddlerRound = {
+        pearls: String(pearlAmount),
+        ugnot: String(ugnotAmount),
+        rounded: String(rounded)
+      };
+      peddlerRoundConfirmMode = true;
+      composer.value = "";
+      setOutput(
+        "That price is not evenly divisible.\n\n" +
+        String(ugnotAmount) + " ugnot cannot split evenly across " + String(pearlAmount) + " pearls.\n" +
+        "Round the ugnot side down to " + String(rounded) + " and continue?\n\n" +
+        "Type y or n and press Enter."
+      );
+      return true;
+    }
+
+    function buildBuyPearlsCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const buyerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const sellerName = normalizedPlayerArg(peddlerTargetNameInput.value, "Trader");
+      const pearlAmount = normalizedFieldValue(peddlerPearlAmountInput.value, "1");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("BuyPearlsFromPeddler"),
+        "--args", shellQuote(buyerName),
+        "--args", shellQuote(sellerName),
+        "--args", shellQuote(pearlAmount)
+      ].join(" ");
+    }
+
+    function buildBuyUGNOTCommand() {
+      const keyName = normalizedFieldValue(keyNameInput.value, "mykey");
+      const buyerName = normalizedPlayerArg(playerNameInput.value, "Nisse");
+      const sellerName = normalizedPlayerArg(peddlerTargetNameInput.value, "Trader");
+      const pearlAmount = normalizedFieldValue(peddlerPearlAmountInput.value, "1");
+
+      return [
+        "gnokey maketx call",
+        keyName,
+        "--broadcast",
+        "--chainid dev",
+        "--gas-fee", shellQuote(defaultGasFee),
+        "--gas-wanted", shellQuote(defaultGasWanted),
+        "--pkgpath", shellQuote(pkgPath),
+        "--func", shellQuote("BuyUGNOTFromPeddler"),
+        "--args", shellQuote(buyerName),
+        "--args", shellQuote(sellerName),
+        "--args", shellQuote(pearlAmount)
+      ].join(" ");
+    }
+
+    function latestDiaryExpr() {
+      return pkgPath + ".DescribeLatestDiaryEntry(" + JSON.stringify(diaryPlayerNameInput.value.trim() || "Nisse") + ")";
+    }
+
+    function latestMessageExpr() {
+      return pkgPath + ".DescribeLatestIncomingMessage(" + JSON.stringify(playerNameInput.value.trim() || "Nisse") + ")";
+    }
+
+    function messagesExpr(targetName) {
+      const target = cleanInput(targetName) || playerNameInput.value.trim() || "Nisse";
+      return pkgPath + ".GetMessages(" + JSON.stringify(target) + ")";
+    }
+
+    function pearlPouchExpr(targetName) {
+      const target = cleanInput(targetName) || playerNameInput.value.trim() || "Nisse";
+      return pkgPath + ".DescribePearlPouch(" + JSON.stringify(target) + ")";
+    }
+
+    function ugnotPouchExpr(targetName) {
+      const target = cleanInput(targetName) || playerNameInput.value.trim() || "Nisse";
+      return pkgPath + ".DescribeUGNOTPouch(" + JSON.stringify(target) + ")";
+    }
+
+    function cleanInput(value) {
+      return String(value || "").trim();
+    }
+
+    function normalizeStoryPathCode(value) {
+      return String(value || "").replace(/\D+/g, "");
+    }
+
+    function describeDiaryEntryExpr() {
+      const playerName = diaryPlayerNameInput.value.trim() || "Nisse";
+      const entryId = diaryEntryIdInput.value.trim() || "1";
+      return pkgPath + ".DescribeDiaryEntry(" + JSON.stringify(playerName) + ", " + entryId + ")";
+    }
+
+    function tileExpr(fnName) {
+      const x = tileXInput.value.trim() || "5";
+      const y = tileYInput.value.trim() || "4";
+      return fnName === "ListNearbyResources"
+        ? pkgPath + "." + fnName + "(" + x + ", " + y + ", 2)"
+        : pkgPath + "." + fnName + "(" + x + ", " + y + ")";
+    }
+
+    function describeResourceExpr() {
+      const id = resourceIdInput.value.trim() || "1";
+      return pkgPath + ".DescribeResource(" + id + ")";
+    }
+
+    function terrainColor(code) {
+      switch (code) {
+        case 0:
+          return "#1f5f8f";
+        case 1:
+          return "#c8b074";
+        case 2:
+          return "#88c46a";
+        case 3:
+          return "#1f5a2c";
+        case 4:
+          return "#7f8489";
+        case 10:
+          return "#68666e";
+        case 5:
+          return "#b89558";
+        case 6:
+          return "#7a4a21";
+        case 11:
+          return "#607269";
+        case 12:
+          return "#766456";
+        case 7:
+          return "#cfc7ae";
+        case 8:
+          return "#3f7a84";
+        case 9:
+          return "#181818";
+        case 13:
+          return "#24211d";
+        case 14:
+          return "#362d26";
+        default:
+          return "#444";
+      }
+    }
+
+    function parseMapText(value) {
+      const normalized = normalizeMapText(value);
+      const rows = normalized
+        .trim()
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => line.split(/\s+/).map((cell) => Number(cell)));
+
+      if (rows.length === 0) {
+        return null;
+      }
+
+      const width = rows[0].length;
+      const valid = rows.every((row) => row.length === width && row.every((cell) => Number.isInteger(cell) && cell >= 0));
+      return valid ? rows : null;
+    }
+
+    function normalizeMapText(value) {
+      let normalized = String(value).trim();
+
+      if (normalized.startsWith("(") && normalized.endsWith(")")) {
+        normalized = normalized.slice(1, -1).trim();
+      }
+
+      const stringSuffix = /"\s+string$/;
+      if (stringSuffix.test(normalized)) {
+        normalized = normalized.replace(stringSuffix, '"');
+      }
+
+      if (normalized.startsWith('"') && normalized.endsWith('"')) {
+        normalized = normalized.slice(1, -1);
+      }
+
+      normalized = normalized
+        .replace(/\\n/g, "\n")
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, "\\");
+
+      return normalized;
+    }
+
+    function normalizeRealmText(value) {
+      let normalized = String(value).trim();
+
+      if (normalized.startsWith("(") && normalized.endsWith(")")) {
+        normalized = normalized.slice(1, -1).trim();
+      }
+
+      const stringSuffix = /"\s+string$/;
+      if (stringSuffix.test(normalized)) {
+        normalized = normalized.replace(stringSuffix, '"');
+      }
+
+      if (normalized.startsWith('"') && normalized.endsWith('"')) {
+        normalized = normalized.slice(1, -1);
+      }
+
+      return normalized
+        .replace(/\\n/g, "\n")
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, "\\");
+    }
+
+    function tileCode(rows, x, y) {
+      if (y < 0 || y >= rows.length || x < 0 || x >= rows[y].length) {
+        return 0;
+      }
+      return rows[y][x];
+    }
+
+    function oceanTile(code) {
+      return code === 0;
+    }
+
+    function mapCellBackground(rows, x, y) {
+      const code = tileCode(rows, x, y);
+      const base = terrainColor(code);
+
+      if (code !== 1) {
+        return base;
+      }
+
+      const ocean = terrainColor(0);
+      const leftOcean = tileCode(rows, x - 1, y) === 0;
+      const rightOcean = tileCode(rows, x + 1, y) === 0;
+      const topOcean = tileCode(rows, x, y - 1) === 0;
+      const bottomOcean = tileCode(rows, x, y + 1) === 0;
+      if (!leftOcean && !rightOcean && !topOcean && !bottomOcean) {
+        return base;
+      }
+
+      return base;
+    }
+
+    function renderMapHtml(mapText, options = {}) {
+      const rows = parseMapText(mapText);
+      if (!rows) {
+        return '<div class="output-text">' + escapeHtml(mapText) + '</div>';
+      }
+
+      const marker = options.marker || null;
+      const playerCounts = options.playerCounts || {};
+      const tile = options.tileSize || 20;
+      const gap = 1;
+      const width = rows[0].length * tile + (rows[0].length - 1) * gap;
+      const height = rows.length * tile + (rows.length - 1) * gap;
+      const ocean = terrainColor(0);
+
+      const rects = [];
+      const coastLines = [];
+
+      rows.forEach((row, y) => {
+        row.forEach((code, x) => {
+          const px = x * (tile + gap);
+          const py = y * (tile + gap);
+          const fill = terrainColor(code);
+          const stroke = "rgba(12, 14, 10, 0.28)";
+          rects.push(
+            '<rect x="' + px + '" y="' + py + '" width="' + tile + '" height="' + tile + '" rx="2" ry="2" fill="' + fill + '" stroke="' + stroke + '" stroke-width="0.8"/>'
+          );
+
+          if (code === 1) {
+            const leftOcean = tileCode(rows, x - 1, y) === 0;
+            const rightOcean = tileCode(rows, x + 1, y) === 0;
+            const topOcean = tileCode(rows, x, y - 1) === 0;
+            const bottomOcean = tileCode(rows, x, y + 1) === 0;
+            const shore = Math.max(2, Math.round(tile * 0.18));
+
+            if (leftOcean) {
+              coastLines.push('<rect x="' + px + '" y="' + py + '" width="' + shore + '" height="' + tile + '" fill="' + ocean + '"/>');
+            }
+            if (rightOcean) {
+              coastLines.push('<rect x="' + (px + tile - shore) + '" y="' + py + '" width="' + shore + '" height="' + tile + '" fill="' + ocean + '"/>');
+            }
+            if (topOcean) {
+              coastLines.push('<rect x="' + px + '" y="' + py + '" width="' + tile + '" height="' + shore + '" fill="' + ocean + '"/>');
+            }
+            if (bottomOcean) {
+              coastLines.push('<rect x="' + px + '" y="' + (py + tile - shore) + '" width="' + tile + '" height="' + shore + '" fill="' + ocean + '"/>');
+            }
+          }
+        });
+      });
+
+      let markerSvg = "";
+      if (marker && marker.y >= 0 && marker.y < rows.length && marker.x >= 0 && marker.x < rows[marker.y].length) {
+        const hatX = marker.x * (tile + gap) + tile / 2;
+        const hatY = marker.y * (tile + gap) + tile / 2 - 1;
+        markerSvg = [
+          '<g transform="translate(', hatX, " ", hatY, ')">',
+          '<polygon points="-5,-1 5,-1 0,-9" fill="#c63d2f" stroke="#3a130e" stroke-width="0.8"/>',
+          '<rect x="-5.5" y="-1.5" width="11" height="2.2" rx="1" fill="#f1df8d" stroke="#3a130e" stroke-width="0.6"/>',
+          "</g>"
+        ].join("");
+      }
+
+      const playerOverlaySvg = Object.entries(playerCounts).map(([key, count]) => {
+        const parts = key.split(":");
+        const x = Number(parts[0]);
+        const y = Number(parts[1]);
+        if (tileCode(rows, x, y) === 0 || !count) {
+          return "";
+        }
+        const cx = x * (tile + gap) + tile - 4;
+        const cy = y * (tile + gap) + 5;
+        return [
+          '<g transform="translate(', cx, " ", cy, ')">',
+          '<circle r="5" fill="#20241b" stroke="#d7dfc8" stroke-width="0.8"/>',
+          '<text x="0" y="1.5" text-anchor="middle" font-size="6" font-family="Courier New, monospace" fill="#d7dfc8">', count, "</text>",
+          "</g>"
+        ].join("");
+      }).join("");
+
+      const svg = [
+        '<svg class="map-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ', width, " ", height, '" role="img" aria-label="Nisse island map">',
+        '<rect width="100%" height="100%" fill="', ocean, '"/>',
+        rects.join(""),
+        coastLines.join(""),
+        playerOverlaySvg,
+        markerSvg,
+        "</svg>"
+      ].join("");
+
+      return '<div class="map-block">' + svg + "</div>";
+    }
+
+    function fallbackMapText() {
+      return [
+        "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
+        "0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0",
+        "0 0 0 1 13 3 3 2 2 2 11 3 3 3 1 1 0 0",
+        "0 1 1 1 3 3 4 12 2 2 4 4 3 3 2 1 1 0",
+        "0 1 11 3 2 5 5 4 4 7 4 2 3 2 10 4 1 0",
+        "0 8 5 3 12 4 10 10 10 10 4 2 2 5 5 1 1 0",
+        "0 1 3 3 3 4 10 7 10 4 11 2 2 5 14 1 0 0",
+        "0 1 1 3 11 2 2 2 2 2 1 1 1 1 1 0 0 0",
+        "0 0 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0",
+        "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+      ].join("\n");
+    }
+
+    function syncTravelPositionFromInputs() {
+      travelPosition = {
+        x: Number(tileXInput.value || 0),
+        y: Number(tileYInput.value || 0)
+      };
+    }
+
+    function renderSidebarMap(mapText) {
+      currentMapText = mapText;
+      syncTravelPositionFromInputs();
+      document.getElementById("sidebarMap").innerHTML = renderMapHtml(mapText, { marker: travelPosition, tileSize: 16, playerCounts: playerOverlayCounts });
+    }
+
+    function renderSection(label, body) {
+      return '<div class="output-text">[' + escapeHtml(label) + ']\n' + escapeHtml(body) + '</div>';
+    }
+
+    function parseTravelBonus(playerText) {
+      const match = String(playerText).match(/TravelBonus:\s*\+?(\d+)/);
+      if (!match) {
+        return 0;
+      }
+      return Number(match[1]) || 0;
+    }
+
+    function parseBoatCarried(playerText) {
+      return /Boat:\s*.+\(carried\)/i.test(String(playerText));
+    }
+
+    function waterTileTravelable(code) {
+      return code === 0 || code === 1 || code === 8;
+    }
+
+    function tileMoveCost(code) {
+      if (code === 3) {
+        return 2;
+      }
+      if (code === 4) {
+        return 2;
+      }
+      if (code === 10) {
+        return 3;
+      }
+      return code === 0 ? Infinity : 1;
+    }
+
+    function tileMoveCostAt(rows, x, y, waterMode = false) {
+      if (!canTravelOn(rows, x, y, waterMode)) {
+        return Infinity;
+      }
+      if (waterMode) {
+        return 1;
+      }
+      return tileMoveCost(rows[y][x]);
+    }
+
+    function terrainLabelForCode(code) {
+      switch (Number(code)) {
+        case 0: return "ocean";
+        case 1: return "coastal";
+        case 2: return "grass";
+        case 3: return "forest";
+        case 4: return "hills";
+        case 5: return "farm";
+        case 6: return "village";
+        case 11: return "fishing_village";
+        case 12: return "mountain_village";
+        case 7: return "monastery";
+        case 8: return "harbor";
+        case 9: return "city";
+        case 10: return "mountain";
+        case 13: return "city_north";
+        case 14: return "city_south";
+        default: return "unknown";
+      }
+    }
+
+    function localTravelPreview(rows, x, y) {
+      const code = tileCode(rows, x, y);
+      const zone = terrainLabelForCode(code);
+      let label = zone;
+
+      if (zone === "city") label = "town streets";
+      else if (zone === "city_north") label = "northern city";
+      else if (zone === "city_south") label = "southern city";
+      else if (zone === "harbor") label = "harbor quarter";
+      else if (zone === "village") label = "village lane";
+      else if (zone === "fishing_village") label = "fishing village";
+      else if (zone === "mountain_village") label = "mountain village";
+      else if (zone === "monastery") label = "monastery quiet";
+      else if (zone === "farm") label = "farmstead";
+      else if (zone === "forest") label = "forest path";
+      else if (zone === "hills") label = "rolling hills";
+      else if (zone === "mountain") label = "mountainside";
+      else if (zone === "grass") label = "open grassland";
+      else if (zone === "coastal") label = "shore road";
+      else if (zone === "ocean") label = "open water";
+
+      return {
+        zone,
+        label
+      };
+    }
+
+    function decodeLatestMessageText(text, recipientName) {
+      const normalized = normalizeRealmText(text);
+      const fromMatch = normalized.match(/^From:\s*(.+)$/m);
+      const bodyMatch = normalized.match(/^Body:\s*(.+)$/m);
+      if (!fromMatch || !bodyMatch) {
+        return normalized;
+      }
+
+      const from = fromMatch[1].trim();
+      const coded = bodyMatch[1].trim();
+      const decoded = decodeCodedMessage(from, recipientName, coded);
+      return normalized.replace(/^Body:\s*(.+)$/m, "Body: " + decoded);
+    }
+
+    function decodeMailboxListText(text, recipientName) {
+      const normalized = normalizeRealmText(text);
+      return normalized.replace(/^- #(\d+) from ([^:]+): (.+)$/gm, (full, id, from, coded) => {
+        return "- #" + id + " from " + from + ": " + decodeCodedMessage(from.trim(), recipientName, coded.trim());
+      });
+    }
+
+    async function refreshMailboxPreview() {
+      const mailbox = document.getElementById("mailboxPreview");
+      const result = await runQeval(latestMessageExpr());
+      if (typeof result !== "string") {
+        mailbox.textContent = "No messages.";
+        return;
+      }
+
+      const recipient = playerNameInput.value.trim() || "Nisse";
+      mailbox.textContent = decodeLatestMessageText(result, recipient);
+    }
+
+    async function refreshPearlPouchPreview() {
+      const pouch = document.getElementById("pearlPouchPreview");
+      const result = await runQeval(pearlPouchExpr());
+      if (typeof result !== "string") {
+        pouch.textContent = "No pearls yet.";
+        return;
+      }
+      pouch.textContent = normalizeRealmText(result);
+    }
+
+    async function refreshUGNOTPouchPreview() {
+      const pouch = document.getElementById("ugnotPouchPreview");
+      const result = await runQeval(ugnotPouchExpr());
+      if (typeof result !== "string") {
+        pouch.textContent = "No ugnot yet.";
+        return;
+      }
+      pouch.textContent = normalizeRealmText(result);
+    }
+
+    function parsePlayerOverlay(text) {
+      const normalized = normalizeRealmText(text);
+      const counts = {};
+      const regex = /^- (.+) @ \((\d+), (\d+)\)$/gm;
+      let match;
+      while ((match = regex.exec(normalized)) !== null) {
+        const key = match[2] + ":" + match[3];
+        counts[key] = (counts[key] || 0) + 1;
+      }
+      return counts;
+    }
+
+    async function refreshPlayerOverlay() {
+      const result = await runQeval(pkgPath + ".ListPlayerPositions()");
+      if (typeof result !== "string" || result.startsWith("QEval error:") || normalizeRealmText(result) === "No players.") {
+        playerOverlayCounts = {};
+      } else {
+        playerOverlayCounts = parsePlayerOverlay(result);
+      }
+      renderSidebarMap(currentMapText || fallbackMapText());
+    }
+
+    function playerMascot() {
+      return [
+        "   /\\",
+        "  /__\\",
+        "  (oo)",
+        " /|  |\\",
+        "  /  \\",
+        " /_/\\_\\"
+      ].join("\n");
+    }
+
+    function readKeywordMap() {
+      const playerName = playerNameInput.value.trim() || "Nisse";
+      const diaryPlayer = diaryPlayerNameInput.value.trim() || "Nisse";
+
+      return {
+        realm: [
+          { label: "Realm", expr: pkgPath + '.Render("")' },
+          { label: "Players", expr: pkgPath + ".ListPlayers()" },
+          { label: "Resources", expr: pkgPath + ".ListResources()" }
+        ],
+        map: [
+          { label: "Map", expr: pkgPath + ".RenderMap()" }
+        ],
+        player: [
+          { label: "Player", expr: pkgPath + ".DescribePlayer(" + JSON.stringify(playerName) + ")" }
+        ],
+        players: [
+          { label: "Players", expr: pkgPath + ".ListPlayers()" },
+          { label: "Player Positions", expr: pkgPath + ".ListPlayerPositions()" }
+        ],
+        resources: [
+          { label: "Resources", expr: pkgPath + ".ListResources()" }
+        ],
+        resource: [
+          { label: "Resource", expr: describeResourceExpr() }
+        ],
+        latest: [
+          { label: "Latest Diary", expr: pkgPath + ".DescribeLatestDiaryEntry(" + JSON.stringify(diaryPlayer) + ")" }
+        ],
+        describe: [
+          { label: "Story", expr: pkgPath + ".DescribeLatestDiaryEntry(" + JSON.stringify(diaryPlayer) + ")" }
+        ],
+        forestbridge: [
+          { label: "Forest Bridge", expr: pkgPath + ".DescribeForestBridge(" + JSON.stringify(playerName) + ")" }
+        ],
+        boat: [
+          { label: "Boat", expr: pkgPath + ".DescribeBoat(" + JSON.stringify(playerName) + ")" }
+        ],
+        companion: [
+          { label: "Companion", expr: pkgPath + ".DescribeCompanion(" + JSON.stringify(playerName) + ")" }
+        ],
+        messages: [
+          { label: "Messages", expr: pkgPath + ".GetMessages(" + JSON.stringify(playerName) + ")" }
+        ],
+        pearls: [
+          { label: "Pearls", expr: pkgPath + ".DescribePearlPouch(" + JSON.stringify(playerName) + ")" }
+        ],
+        peddler: [
+          { label: "Peddler", expr: pkgPath + ".DescribePeddler(" + JSON.stringify(playerName) + ")" }
+        ],
+        peddlers: [
+          { label: "Peddlers", expr: pkgPath + ".ListPeddlers()" }
+        ],
+        ugnot: [
+          { label: "UGNOT", expr: pkgPath + ".DescribeUGNOTPouch(" + JSON.stringify(playerName) + ")" }
+        ],
+        pages: [
+          { label: "Diary Pages", expr: pkgPath + ".ListDiaryPages(" + JSON.stringify(diaryPlayer) + ")" }
+        ],
+        entry: [
+          { label: "Diary Entry", expr: describeDiaryEntryExpr() }
+        ],
+        tile: [
+          { label: "Tile", expr: tileExpr("DescribeTile") }
+        ],
+        nearby: [
+          { label: "Nearby", expr: tileExpr("ListNearbyResources") }
+        ],
+        help: [
+          { label: "Guide", expr: pkgPath + ".ActionGuide()" }
+        ],
+        guide: [
+          { label: "Guide", expr: pkgPath + ".ActionGuide()" }
+        ]
+      };
+    }
+
+    const signedKeywordBuilders = {
+      mint: buildMintPlayerCommand,
+      mintplayer: buildMintPlayerCommand,
+      start: buildMintPlayerCommand,
+      startgame: buildMintPlayerCommand,
+      search: buildSearchTileCommand,
+      adventure: buildAdventureCommand,
+      travelplayer: buildTravelPlayerCommand,
+      writefriend: buildWriteToFriendCommand,
+      depositugnot: buildDepositUGNOTCommand,
+      peddler: buildOpenPeddlerCommand,
+      pedler: buildOpenPeddlerCommand,
+      buypearls: buildBuyPearlsCommand,
+      buyugnot: buildBuyUGNOTCommand,
+      sendpearls: buildSendPearlsCommand,
+      sendugnot: buildSendUGNOTCommand,
+      withdrawugnot: buildWithdrawUGNOTCommand,
+      nametile: buildNameTileCommand,
+      nameplace: buildNameTileCommand,
+      act: buildTakeActionCommand,
+      action: buildTakeActionCommand,
+      takeaction: buildTakeActionCommand
+    };
+
+    function tokenizeKeywords(rawValue) {
+      return rawValue
+        .toLowerCase()
+        .split(/[\s,]+/)
+        .map((value) => value.trim())
+        .filter(Boolean);
+    }
+
+    function resetContextualModes() {
+      scenarioComposeMode = "";
+      pendingScenarioKind = "";
+      pendingScenarioPath = "";
+      pendingScenarioDecision = "";
+      storyComposeMode = "";
+      pendingTileStoryMeta = null;
+      pendingTileStory = null;
+      pendingTileStoryNode = "";
+      pendingTileStoryHistory = [];
+      pendingTileStoryPathCode = "";
+      pendingTileStoryCommitPathCode = "";
+      tileNamingMode = "";
+      pendingTileName = "";
+      exploreComposeMode = "";
+      tradeComposeMode = "";
+      pendingExploreProfile = null;
+      syncScenarioImmersion();
+    }
+
+    function scenarioPlayerName() {
+      return playerNameInput.value.trim() || "Nisse";
+    }
+
+    function describeScenarioExpr() {
+      return pkgPath + ".DescribeScenario(" + JSON.stringify(scenarioPlayerName()) + ")";
+    }
+
+    function exploreTileExpr() {
+      return pkgPath + ".ExploreTile(" + JSON.stringify(scenarioPlayerName()) + ")";
+    }
+
+    function previewScenarioPathExpr(path) {
+      return pkgPath + ".PreviewScenarioPath(" + JSON.stringify(scenarioPlayerName()) + ", " + JSON.stringify(path) + ")";
+    }
+
+    function previewScenarioDecisionExpr(path, decision) {
+      return pkgPath + ".PreviewScenarioDecision(" + JSON.stringify(scenarioPlayerName()) + ", " + JSON.stringify(path) + ", " + JSON.stringify(decision) + ")";
+    }
+
+    function parseScenarioMeta(text) {
+      const meta = parseScenarioVisualMeta(text);
+      return {
+        kind: meta.kind,
+        stage: meta.stage
+      };
+    }
+
+    function parseExploreStoryMeta(text) {
+      return window.NisseStoryRunner.parseExploreStoryMeta(text);
+    }
+
+    function parseTileSceneMeta(text) {
+      const normalized = normalizeRealmText(text);
+      const idMatch = normalized.match(/^\s*TileSceneID:\s*(.+)$/m);
+      const id = cleanInput(idMatch ? idMatch[1] : "").toLowerCase();
+      if (!id || id === "none") {
+        return null;
+      }
+
+      const titleMatch = normalized.match(/^\s*TileSceneTitle:\s*(.+)$/m);
+      const placeNameMatch = normalized.match(/^\s*TileScenePlaceName:\s*(.+)$/m);
+      const canNameMatch = normalized.match(/^\s*TileSceneCanName:\s*(.+)$/m);
+      const themeMatch = normalized.match(/^\s*TileSceneTheme:\s*(.+)$/m);
+      const imageMatch = normalized.match(/^\s*TileSceneImage:\s*(.+)$/m);
+      const fallbackMatch = normalized.match(/^\s*TileSceneFallbackImage:\s*(.+)$/m);
+      const keywordsMatch = normalized.match(/^\s*TileSceneKeywords:\s*(.+)$/m);
+      const textMatch = normalized.match(/^\s*TileSceneText:\s*(.+)$/m);
+      const promptMatch = normalized.match(/^\s*TileScenePrompt:\s*(.+)$/m);
+
+      return {
+        id,
+        title: cleanInput(titleMatch ? titleMatch[1] : ""),
+        placeName: cleanInput(placeNameMatch ? placeNameMatch[1] : ""),
+        canName: cleanInput(canNameMatch ? canNameMatch[1] : "").toLowerCase() === "yes",
+        theme: cleanInput(themeMatch ? themeMatch[1] : "").toLowerCase(),
+        image: cleanInput(imageMatch ? imageMatch[1] : ""),
+        fallbackImage: cleanInput(fallbackMatch ? fallbackMatch[1] : ""),
+        keywords: cleanInput(keywordsMatch ? keywordsMatch[1] : ""),
+        text: cleanInput(textMatch ? textMatch[1] : ""),
+        prompt: cleanInput(promptMatch ? promptMatch[1] : "")
+      };
+    }
+
+    async function loadStoryResource(resourcePath) {
+      return window.NisseStoryRunner.loadStoryResource(resourcePath);
+    }
+
+    function ambientTileStory(sceneMeta) {
+      return window.NisseStoryRunner.ambientTileStory(sceneMeta);
+    }
+
+    function currentTileStoryNode() {
+      if (!pendingTileStory) {
+        return null;
+      }
+      return pendingTileStory.nodes[pendingTileStoryNode] || null;
+    }
+
+    function storyChoicesForNode(node) {
+      return window.NisseStoryRunner.storyChoicesForNode(node);
+    }
+
+    function resolveStoryChoice(value, node) {
+      return window.NisseStoryRunner.resolveStoryChoice(value, node);
+    }
+
+    function storyResolvePreview(choice) {
+      return window.NisseStoryRunner.storyResolvePreview(pendingTileStory, pendingTileStoryPathCode, choice);
+    }
+
+    function activeTileStoryCommitChoice(node) {
+      if (!node || !pendingTileStoryCommitPathCode) {
+        return null;
+      }
+      return storyChoicesForNode(node).find((choice) =>
+        (pendingTileStoryPathCode || "") + cleanInput(choice.digit) === pendingTileStoryCommitPathCode
+      ) || null;
+    }
+
+    function tileStoryImageMeta(story, nodeId, meta) {
+      return window.NisseStoryRunner.tileStoryImageMeta(story, nodeId, meta);
+    }
+
+    function renderTileStory(extra = "") {
+      const story = pendingTileStory;
+      const node = currentTileStoryNode();
+      if (!story || !node) {
+        setOutput("I could not find the rest of this story.");
+        return;
+      }
+
+      const lines = [];
+      const title = story.title || pendingTileStoryMeta?.title || pendingTileStoryMeta?.id || "Story";
+      lines.push(title);
+      lines.push("");
+
+      if (pendingTileStoryNode === story.startNode && story.startText) {
+        lines.push(story.startText);
+        lines.push("");
+      }
+
+      if (node.text) {
+        lines.push(node.text);
+        lines.push("");
+      }
+
+      if (pendingTileStoryPathCode) {
+        lines.push("Route so far: " + pendingTileStoryPathCode);
+        lines.push("");
+      }
+
+      const choices = storyChoicesForNode(node);
+      if (node.isFinal) {
+        lines.push("How do you want to carry this through?");
+      } else if (choices.length > 0) {
+        lines.push("What do you do next?");
+      }
+
+      choices.forEach((choice, index) => {
+        const detailParts = [];
+        if (!node.isFinal && choice.hint) {
+          detailParts.push(choice.hint);
+        }
+
+        if (node.isFinal) {
+          const preview = storyResolvePreview(choice);
+          if (preview?.hint) {
+            detailParts.push(preview.hint);
+          } else if (choice.hint) {
+            detailParts.push(choice.hint);
+          }
+          if (preview?.pathCode) {
+            detailParts.push("route " + preview.pathCode);
+          }
+          if (preview && typeof preview.matchCount === "number") {
+            detailParts.push("+" + preview.bonus + "% from " + preview.matchCount + " pattern matches");
+          }
+          if (preview && typeof preview.successChance === "number") {
+            detailParts.push(preview.successChance + "% success");
+          }
+          if (preview && typeof preview.partialChance === "number") {
+            detailParts.push(preview.partialChance + "% partial or better");
+          }
+        }
+        const detail = detailParts.length ? " [" + detailParts.join(" | ") + "]" : "";
+        lines.push((index + 1) + ". " + choice.label + detail);
+      });
+
+      const activeChoice = activeTileStoryCommitChoice(node);
+      if (activeChoice) {
+        lines.push("");
+        lines.push("Chosen ending: " + activeChoice.label + " (route " + pendingTileStoryCommitPathCode + ")");
+      }
+
+      if (!node.isFinal && choices.length === 0 && pendingTileStoryMeta?.prompt) {
+        lines.push("");
+        lines.push(pendingTileStoryMeta.prompt);
+      }
+
+      if (extra) {
+        lines.push("");
+        lines.push(extra);
+      }
+
+      if (pendingTileStoryMeta?.canName && !pendingTileStoryMeta?.placeName) {
+        lines.push("");
+        lines.push("This frontier place still has no settled name. Type `nametile <name>` if you want to name it.");
+      }
+
+      const image = tileStoryImageMeta(story, pendingTileStoryNode, pendingTileStoryMeta);
+      const body = lines.join("\n");
+      if (!image.primary && !image.fallback) {
+        setOutput(body);
+        return;
+      }
+
+      const primaryImage = image.primary || image.fallback;
+      const fallbackAttr = image.fallback && image.fallback !== primaryImage
+        ? ' onerror="this.onerror=null;this.src=\'' + escapeHtml(image.fallback).replace(/'/g, "&#39;") + '\';"'
+        : "";
+
+      setOutputHtml(
+        '<div class="scenario-output">' +
+        '<img class="scenario-visual" src="' + escapeHtml(primaryImage) + '" alt="Story illustration"' + fallbackAttr + '>' +
+        '<div class="output-text">' + escapeHtml(body) + '</div>' +
+        '</div>'
+      );
+    }
+
+    async function startTileStoryFlow(options = {}) {
+      const requireBoundStory = !!options.requireBoundStory;
+      const result = normalizeRealmText(options.result || await runQeval(exploreTileExpr()));
+      const rawSceneMeta = parseTileSceneMeta(result);
+      const sceneMeta = rawSceneMeta ? await window.NisseStoryRunner.resolveTileSceneMeta(rawSceneMeta) : null;
+      const meta = parseExploreStoryMeta(result);
+      if (!meta && !sceneMeta) {
+        return false;
+      }
+
+      if (!meta && requireBoundStory) {
+        return false;
+      }
+
+      if (!meta && sceneMeta) {
+        resetContextualModes();
+        storyComposeMode = "ambient";
+        pendingTileStoryMeta = {
+          id: sceneMeta.id,
+          title: sceneMeta.title,
+          theme: sceneMeta.theme,
+          resourcePath: "",
+          endings: {},
+          image: sceneMeta.image,
+          fallbackImage: sceneMeta.fallbackImage,
+          keywords: sceneMeta.keywords,
+          prompt: sceneMeta.prompt,
+          placeName: sceneMeta.placeName,
+          canName: sceneMeta.canName,
+          ambient: true
+        };
+        pendingTileStory = ambientTileStory(sceneMeta);
+        pendingTileStoryNode = pendingTileStory.startNode || "start";
+        pendingTileStoryHistory = [];
+        pendingTileStoryPathCode = "";
+        pendingTileStoryCommitPathCode = "";
+        composer.value = "";
+        syncScenarioImmersion();
+        renderTileStory();
+        return true;
+      }
+
+      let story;
+      try {
+        story = await loadStoryResource(meta.resourcePath);
+      } catch (err) {
+        if (sceneMeta) {
+          resetContextualModes();
+          storyComposeMode = "ambient";
+          pendingTileStoryMeta = {
+            id: sceneMeta.id,
+            title: sceneMeta.title,
+            theme: sceneMeta.theme,
+            resourcePath: "",
+            endings: {},
+            image: sceneMeta.image,
+            fallbackImage: sceneMeta.fallbackImage,
+            keywords: sceneMeta.keywords,
+            prompt: sceneMeta.prompt,
+            placeName: sceneMeta.placeName,
+            canName: sceneMeta.canName,
+            ambient: true
+          };
+          pendingTileStory = ambientTileStory(sceneMeta);
+          pendingTileStoryNode = pendingTileStory.startNode || "start";
+          pendingTileStoryHistory = [];
+          pendingTileStoryPathCode = "";
+          pendingTileStoryCommitPathCode = "";
+          composer.value = "";
+          syncScenarioImmersion();
+          renderTileStory("The deeper story did not load, so only the place itself is with you for now.");
+          return true;
+        }
+        resetContextualModes();
+        setOutput("A story is bound to this tile, but `" + meta.resourcePath + "` could not be loaded.\n\n" + (err?.message || String(err)));
+        return true;
+      }
+
+      if (!story) {
+        resetContextualModes();
+        setOutput("A story is bound to this tile, but `" + meta.resourcePath + "` did not return any story data.");
+        return true;
+      }
+
+      const startNode = story.startNode || "start";
+      if (!story.nodes[startNode]) {
+        resetContextualModes();
+        setOutput("Story `" + meta.id + "` is missing its `" + startNode + "` node.");
+        return true;
+      }
+
+      resetContextualModes();
+      storyComposeMode = "choice";
+      pendingTileStoryMeta = {
+        ...meta,
+        image: sceneMeta?.image || "",
+        fallbackImage: sceneMeta?.fallbackImage || "",
+        keywords: sceneMeta?.keywords || "",
+        prompt: sceneMeta?.prompt || "",
+        placeName: sceneMeta?.placeName || "",
+        canName: !!sceneMeta?.canName,
+        ambient: false
+      };
+      pendingTileStory = story;
+      pendingTileStoryNode = startNode;
+      pendingTileStoryHistory = [];
+      pendingTileStoryPathCode = "";
+      pendingTileStoryCommitPathCode = "";
+      composer.value = "";
+      syncScenarioImmersion();
+      renderTileStory("Type a choice to continue, `back` to step out, or `retreat` to leave.");
+      return true;
+    }
+
+    async function startPlacedScenarioFlow() {
+      const result = normalizeRealmText(await runQeval(exploreTileExpr()));
+      if (await startTileStoryFlow({ requireBoundStory: true, result })) {
+        return true;
+      }
+      resetContextualModes();
+      setOutput(
+        "No special scenario is placed on this tile.\n\n" +
+        "Use `explore` to take in the place itself, or travel to a tile with a bound story."
+      );
+      return false;
+    }
+
+    function blockedScenarioCommand(value) {
+      const lowered = cleanInput(value).toLowerCase();
+      if (!lowered) {
+        return "";
+      }
+
+      const blockedPrefixes = [
+        "map",
+        "player",
+        "messages",
+        "mail",
+        "message",
+        "write",
+        "trade",
+        "market",
+        "travel",
+        "sail",
+        "boat",
+        "explore",
+        "scenario",
+        "realm",
+        "help",
+        "hello",
+        "friend",
+        "sendpearls",
+        "depositugnot",
+        "sendugnot",
+        "withdrawugnot"
+      ];
+
+      return blockedPrefixes.find((prefix) => lowered === prefix || lowered.startsWith(prefix + " ")) || "";
+    }
+
+    async function startScenarioExploreFlow() {
+      const result = normalizeRealmText(await runQeval(describeScenarioExpr()));
+      const meta = parseScenarioMeta(result);
+      if (!meta.kind || meta.kind === "none") {
+        return false;
+      }
+
+      resetContextualModes();
+      scenarioComposeMode = "path";
+      pendingScenarioKind = meta.kind;
+      composer.value = "";
+      syncScenarioImmersion();
+      setScenarioOutput(result, "Type a path to inspect it, or `retreat` to leave this " + meta.kind + " tale untouched.");
+      return true;
+    }
+
+    async function showScenarioStatus() {
+      const result = normalizeRealmText(await runQeval(describeScenarioExpr()));
+      setScenarioOutput(result, "No rich scenario is active here yet. Try `explore`, `travel`, or move onto a forest, coastal, or hills tile first.");
+    }
+
+    function parseTileZone(tileText) {
+      const zoneMatch = String(tileText).match(/^\s*Zone:\s*(.+)$/m);
+      const placeMatch = String(tileText).match(/^\s*Place:\s*(.+)$/m);
+      return {
+        zone: cleanInput(zoneMatch ? zoneMatch[1] : ""),
+        place: cleanInput(placeMatch ? placeMatch[1] : zoneMatch ? zoneMatch[1] : "")
+      };
+    }
+
+    function buildExploreProfile(zoneName, placeName) {
+      const zoneKey = cleanInput(zoneName).toLowerCase();
+      const placeLabel = placeName || zoneName || "this place";
+
+      if (zoneKey === "city" || zoneKey === "city_north" || zoneKey === "city_south") {
+        return {
+          heading: "You are in the " + zoneKey.replace("_", " ") + " at " + placeLabel + ".",
+          options: [
+            { key: "trade", aliases: ["1", "trade", "market"], label: "Trade", detail: "Open a stall or browse pearl and ugnot deals." },
+            { key: "search", aliases: ["2", "search", "look", "clue"], label: "Search", detail: "Look for clues, books, rumors, and small finds." },
+            { key: "venture", aliases: ["3", "venture", "adventure"], label: "Venture", detail: "Stage a city-flavored adventure." }
+          ]
+        };
+      }
+
+      if (zoneKey === "harbor" || zoneKey === "coastal") {
+        return {
+          heading: "You are by the water at " + placeLabel + ".",
+          options: [
+            { key: "trade", aliases: ["1", "trade", "market"], label: "Trade", detail: "Deal in imported goods, pearls, and ugnot." },
+            { key: "search", aliases: ["2", "search", "look", "clue"], label: "Search", detail: "Look for washed-up clues, rumors, and useful finds." },
+            { key: "venture", aliases: ["3", "venture", "adventure"], label: "Venture", detail: "Stage a risky outing from the shoreline." }
+          ]
+        };
+      }
+
+      if (zoneKey === "forest" || zoneKey === "hills") {
+        return {
+          heading: "You are out in the " + (zoneKey === "hills" ? "hills" : "forest") + " near " + placeLabel + ".",
+          options: [
+            { key: "search", aliases: ["1", "search", "look", "forage"], label: "Search", detail: "Hunt for tracks, rumors, companions, and odd finds." },
+            { key: "venture", aliases: ["2", "venture", "adventure"], label: "Venture", detail: "Press deeper into danger and stage an adventure." }
+          ]
+        };
+      }
+
+      if (zoneKey === "village" || zoneKey === "fishing_village" || zoneKey === "mountain_village") {
+        return {
+          heading: "You are in a " + zoneKey.replace("_", " ") + " at " + placeLabel + ".",
+          options: [
+            { key: "listen", aliases: ["1", "listen", "rumor"], label: "Listen", detail: "Listen in the square for rumors and passing talk." },
+            { key: "search", aliases: ["2", "search", "look"], label: "Search", detail: "Look around the lanes and edges for something useful." }
+          ]
+        };
+      }
+
+      if (zoneKey === "monastery") {
+        return {
+          heading: "You are at the monastery near " + placeLabel + ".",
+          options: [
+            { key: "read", aliases: ["1", "read", "study"], label: "Read", detail: "Spend a turn studying as if in a library." },
+            { key: "search", aliases: ["2", "search", "look"], label: "Search", detail: "Look for quiet clues, notes, and small discoveries." }
+          ]
+        };
+      }
+
+      return {
+        heading: "You are at " + placeLabel + ".",
+        options: [
+          { key: "search", aliases: ["1", "search", "look", "explore"], label: "Search", detail: "See what this tile is hiding." },
+          { key: "venture", aliases: ["2", "venture", "adventure"], label: "Venture", detail: "Try a riskier outing from here." }
+        ]
+      };
+    }
+
+    function renderExplorePrompt(profile) {
+      const lines = [profile.heading, "", "Choose an explore route:"];
+      profile.options.forEach((option, index) => {
+        lines.push((index + 1) + ". " + option.label + " - " + option.detail);
+      });
+      lines.push("");
+      lines.push("Type the word or number and press Enter.");
+      return lines.join("\n");
+    }
+
+    function renderTradePrompt(placeLabel) {
+      return [
+        "Trading is available at " + placeLabel + ".",
+        "",
+        "Choose a trade route:",
+        "1. Sell - open your own peddler stall",
+        "2. Buy pearls - buy from another player's stall",
+        "3. Buy ugnot - trade pearls for ugnot",
+        "",
+        "Type the word or number and press Enter."
+      ].join("\n");
+    }
+
+    async function fetchCurrentExploreProfile() {
+      const synced = await syncPlayerPositionFromRealm();
+      if (!synced) {
+        return null;
+      }
+
+      const x = Number(tileXInput.value || travelPosition.x || 0);
+      const y = Number(tileYInput.value || travelPosition.y || 0);
+      const tileText = await runQeval(pkgPath + ".DescribeTile(" + x + ", " + y + ")");
+      if (typeof tileText !== "string" || tileText.startsWith("QEval error:")) {
+        return null;
+      }
+
+      const tileContext = parseTileZone(tileText);
+      const profile = buildExploreProfile(tileContext.zone, tileContext.place);
+      return {
+        tileText,
+        zone: tileContext.zone,
+        place: tileContext.place,
+        x,
+        y,
+        ...profile
+      };
+    }
+
+    function resolveExploreOption(choice, profile) {
+      const lowered = cleanInput(choice).toLowerCase();
+      if (!profile) {
+        return null;
+      }
+      return profile.options.find((option) => option.aliases.includes(lowered) || option.key === lowered) || null;
+    }
+
+    async function startExploreFlow() {
+      resetContextualModes();
+      const profile = await fetchCurrentExploreProfile();
+      if (!profile) {
+        setOutput("I could not determine your current tile yet. Try `player` once, then `explore` again.");
+        return;
+      }
+
+      pendingExploreProfile = profile;
+      exploreComposeMode = "choice";
+      tradeComposeMode = "";
+      composer.value = "";
+      setOutput(renderExplorePrompt(profile));
+    }
+
+    function hasConfiguredIdentity() {
+      return !!(cleanInput(playerNameInput.value) && cleanInput(keyNameInput.value));
+    }
+
+    function looksLikeReservedIdentityWord(value) {
+      const normalized = cleanInput(value).toLowerCase();
+      if (!normalized) {
+        return false;
+      }
+
+      const reservedWords = new Set([
+        "hello",
+        "help",
+        "guide",
+        "realm",
+        "player",
+        "players",
+        "map",
+        "tile",
+        "nearby",
+        "mint",
+        "mintplayer",
+        "start",
+        "startgame",
+        "travel",
+        "adventure",
+        "search",
+        "nametile",
+        "nameplace",
+        "takeaction",
+        "action",
+        "act",
+        "messages",
+        "mail",
+        "clear",
+        "forget"
+      ]);
+
+      return reservedWords.has(normalized);
+    }
+
+    function parseInlineWriteCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(write|wrtite|message)\s+(to\s+)?([^:]+):\s+(.+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        to: cleanInput(match[3]),
+        body: cleanInput(match[4])
+      };
+    }
+
+    function parseInlinePearlCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(pearls|sendpearls)\s+(to\s+)?([^:]+):\s*(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        to: cleanInput(match[3]),
+        amount: cleanInput(match[4])
+      };
+    }
+
+    function parseInlineUGNOTSendCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(ugnot|sendugnot)\s+(to\s+)?([^:]+):\s*(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        to: cleanInput(match[3]),
+        amount: cleanInput(match[4])
+      };
+    }
+
+    function parseInlineUGNOTDepositCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(depositugnot|loadugnot)\s*:?\s*(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        amount: cleanInput(match[2])
+      };
+    }
+
+    function parseInlineUGNOTWithdrawCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(withdrawugnot)\s*:?\s*(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        amount: cleanInput(match[2])
+      };
+    }
+
+    function parseInlinePeddlerCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(peddler|pedler)\s+(\d+)\s+(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        pearls: cleanInput(match[2]),
+        ugnot: cleanInput(match[3])
+      };
+    }
+
+    function parseInlineBuyPearlsCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(buypearls)\s+([^\s]+)\s+(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        seller: cleanInput(match[2]),
+        pearls: cleanInput(match[3])
+      };
+    }
+
+    function parseInlineBuyUGNOTCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(buyugnot)\s+([^\s]+)\s+(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        seller: cleanInput(match[2]),
+        pearls: cleanInput(match[3])
+      };
+    }
+
+    function parseInlineAdventureCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^adventure\s+(bold|careful|sneaky|withdrawn)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        mode: cleanInput(match[1]).toLowerCase()
+      };
+    }
+
+    function parseInlineNameTileCommand(rawValue) {
+      const match = String(rawValue).trim().match(/^(nametile|nameplace)\s+(.+)$/i);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        name: cleanInput(match[2])
+      };
+    }
+
+    function classifyComposerInput(rawValue) {
+      const trimmed = rawValue.trim();
+      const lowered = trimmed.toLowerCase();
+
+      if (!trimmed) {
+        return { kind: "empty" };
+      }
+
+      if (trimmed.startsWith(pkgPath + ".")) {
+        return { kind: "qeval", value: trimmed };
+      }
+
+      if (trimmed.startsWith("gnokey ")) {
+        return { kind: "command", value: trimmed };
+      }
+
+      const inlineWrite = parseInlineWriteCommand(trimmed);
+      if (inlineWrite) {
+        return { kind: "writefriend-inline", to: inlineWrite.to, body: inlineWrite.body };
+      }
+
+      const inlinePearls = parseInlinePearlCommand(trimmed);
+      if (inlinePearls) {
+        return { kind: "sendpearls-inline", to: inlinePearls.to, amount: inlinePearls.amount };
+      }
+
+      const inlineUGNOTSend = parseInlineUGNOTSendCommand(trimmed);
+      if (inlineUGNOTSend) {
+        return { kind: "sendugnot-inline", to: inlineUGNOTSend.to, amount: inlineUGNOTSend.amount };
+      }
+
+      const inlineUGNOTDeposit = parseInlineUGNOTDepositCommand(trimmed);
+      if (inlineUGNOTDeposit) {
+        return { kind: "depositugnot-inline", amount: inlineUGNOTDeposit.amount };
+      }
+
+      const inlineUGNOTWithdraw = parseInlineUGNOTWithdrawCommand(trimmed);
+      if (inlineUGNOTWithdraw) {
+        return { kind: "withdrawugnot-inline", amount: inlineUGNOTWithdraw.amount };
+      }
+
+      const inlinePeddler = parseInlinePeddlerCommand(trimmed);
+      if (inlinePeddler) {
+        return { kind: "peddler-inline", pearls: inlinePeddler.pearls, ugnot: inlinePeddler.ugnot };
+      }
+
+      const inlineBuyPearls = parseInlineBuyPearlsCommand(trimmed);
+      if (inlineBuyPearls) {
+        return { kind: "buypearls-inline", seller: inlineBuyPearls.seller, pearls: inlineBuyPearls.pearls };
+      }
+
+      const inlineBuyUGNOT = parseInlineBuyUGNOTCommand(trimmed);
+      if (inlineBuyUGNOT) {
+        return { kind: "buyugnot-inline", seller: inlineBuyUGNOT.seller, pearls: inlineBuyUGNOT.pearls };
+      }
+
+      const inlineAdventure = parseInlineAdventureCommand(trimmed);
+      if (inlineAdventure) {
+        return { kind: "adventure-inline", mode: inlineAdventure.mode };
+      }
+
+      const inlineNameTile = parseInlineNameTileCommand(trimmed);
+      if (inlineNameTile) {
+        return { kind: "nametile-inline", name: inlineNameTile.name };
+      }
+
+      if (lowered === "clear") {
+        return { kind: "clear" };
+      }
+
+      if (lowered === "explore") {
+        return { kind: "explore" };
+      }
+
+      if (lowered === "scenario") {
+        return { kind: "scenario" };
+      }
+
+      if (lowered === "hello") {
+        return { kind: "hello" };
+      }
+
+      if (lowered === "forget" || lowered === "reset identity") {
+        return { kind: "forget" };
+      }
+
+      if (lowered.startsWith("identity ") || lowered.startsWith("become ")) {
+        const nextName = trimmed.split(/\s+/, 2)[1] || "";
+        return { kind: "identity", name: nextName };
+      }
+
+      if (lowered === "seed mint") {
+        return { kind: "seed", value: "mint" };
+      }
+
+      if (lowered === "seed action") {
+        return { kind: "seed", value: "takeaction" };
+      }
+
+      if (lowered === "seed search") {
+        return { kind: "seed", value: "search" };
+      }
+
+      if (lowered === "seed adventure") {
+        return { kind: "seed", value: "adventure" };
+      }
+
+      if (lowered === "travel") {
+        return { kind: "travel" };
+      }
+
+      if (lowered === "sail") {
+        return { kind: "sail" };
+      }
+
+      if (lowered === "adventure" || lowered === "go adventure") {
+        return { kind: "adventure" };
+      }
+
+      if (lowered === "nametile" || lowered === "nameplace") {
+        return { kind: "nametile" };
+      }
+
+      if (lowered === "writefriend" || lowered === "message" || lowered === "write") {
+        return { kind: "writefriend" };
+      }
+
+      if (lowered === "sendpearls" || lowered === "send pearls") {
+        return { kind: "sendpearls" };
+      }
+
+      if (lowered === "depositugnot" || lowered === "loadugnot" || lowered === "deposit ugnot") {
+        return { kind: "depositugnot" };
+      }
+
+      if (lowered === "sendugnot" || lowered === "send ugnot") {
+        return { kind: "sendugnot" };
+      }
+
+      if (lowered === "withdrawugnot" || lowered === "withdraw ugnot") {
+        return { kind: "withdrawugnot" };
+      }
+
+      if (lowered === "peddler" || lowered === "pedler") {
+        return { kind: "peddler" };
+      }
+
+      if (lowered === "buypearls" || lowered === "buy pearls") {
+        return { kind: "buypearls" };
+      }
+
+      if (lowered === "buyugnot" || lowered === "buy ugnot") {
+        return { kind: "buyugnot" };
+      }
+
+      if (lowered.startsWith("messages ") || lowered.startsWith("mail ")) {
+        const target = trimmed.split(/\s+/, 2)[1] || "";
+        return { kind: "messages-target", target };
+      }
+
+      const tokens = tokenizeKeywords(trimmed);
+      const reads = readKeywordMap();
+      const readTokens = tokens.filter((token) => reads[token]);
+      const signedTokens = tokens.filter((token) => signedKeywordBuilders[token]);
+      const unknownTokens = tokens.filter((token) => !reads[token] && !signedKeywordBuilders[token]);
+
+      if (signedTokens.length > 0) {
+        return { kind: "command-keywords", signedTokens, unknownTokens };
+      }
+
+      if (readTokens.length > 0) {
+        return { kind: "keyword", readTokens, unknownTokens };
+      }
+
+      return { kind: "qeval", value: trimmed };
+    }
+
+    async function runKeywordCommands(tokens, unknownTokens) {
+      const reads = readKeywordMap();
+      const commands = [];
+
+      tokens.forEach((token) => {
+        reads[token].forEach((command) => commands.push(command));
+      });
+
+      const parts = [];
+      for (const command of commands) {
+        const result = await runQeval(command.expr);
+        if (command.label === "Map") {
+          parts.push('<div class="output-text">[Map]</div>' + renderMapHtml(result, { marker: travelPosition, tileSize: 20, playerCounts: playerOverlayCounts }));
+          continue;
+        }
+
+        let body = result;
+        if (command.label === "Player") {
+          body = playerMascot() + "\n\n" + result;
+        }
+        if (command.label === "Messages") {
+          body = decodeMailboxListText(result, playerNameInput.value.trim() || "Nisse");
+        }
+        parts.push(renderSection(command.label, body));
+      }
+
+      if (unknownTokens.length > 0) {
+        parts.push(renderSection("Ignored", unknownTokens.join(" ")));
+      }
+
+      setOutputHtml(parts.join(""));
+    }
+
+    function stageCommandLines(lines, unknownTokens) {
+      const body = lines.join("\n\n");
+      composer.value = body;
+      const parts = [
+        "Terminal command staged below.",
+        body,
+        "This page does not execute shell commands directly. Copy it into your terminal."
+      ];
+
+      if (unknownTokens.length > 0) {
+        parts.push("Ignored words: " + unknownTokens.join(" "));
+      }
+
+      setOutput(parts.join("\n\n"));
+      composer.focus();
+    }
+
+    function resetTravelState() {
+      travelMode = false;
+      travelConfirmMode = false;
+      travelWaterMode = false;
+      travelMovesTotal = 0;
+      travelMovesLeft = 0;
+      travelTouchedOcean = false;
+    }
+
+    function parsePlayerPosition(playerText) {
+      const match = String(playerText).match(/Position:\s*\((\d+),\s*(\d+)\)/);
+      if (!match) {
+        return null;
+      }
+      return { x: Number(match[1]), y: Number(match[2]) };
+    }
+
+    async function syncPlayerPositionFromRealm(options = {}) {
+      const playerName = playerNameInput.value.trim() || "Nisse";
+      const result = await runQeval(pkgPath + ".DescribePlayer(" + JSON.stringify(playerName) + ")");
+      if (typeof result !== "string" || result.startsWith("QEval error:")) {
+        return false;
+      }
+
+      const pos = parsePlayerPosition(result);
+      if (!pos) {
+        return false;
+      }
+
+      if (pendingTravelTarget && samePosition(pos, pendingTravelTarget)) {
+        clearPendingTravel();
+      }
+
+      if (pendingTravelTarget && pendingTravelIsFresh() && !samePosition(pos, pendingTravelTarget)) {
+        travelPosition = { x: pendingTravelTarget.x, y: pendingTravelTarget.y };
+        tileXInput.value = String(pendingTravelTarget.x);
+        tileYInput.value = String(pendingTravelTarget.y);
+        renderSidebarMap(currentMapText || fallbackMapText());
+        startPendingTravelPolling();
+        if (options.showOutput) {
+          setOutput(
+            "Travel commit pending.\n\n" +
+            "The realm still reports (" + pos.x + ", " + pos.y + "), so the frontend is holding your staged destination at (" +
+            pendingTravelTarget.x + ", " + pendingTravelTarget.y + ") while it waits for the commit to appear."
+          );
+        }
+        return true;
+      }
+
+      travelPosition = { x: pos.x, y: pos.y };
+      tileXInput.value = String(pos.x);
+      tileYInput.value = String(pos.y);
+      renderSidebarMap(currentMapText || fallbackMapText());
+      refreshCurrentPlaceVisual();
+
+      if (options.showOutput) {
+        setOutput(result);
+      }
+
+      return true;
+    }
+
+    function startPendingTravelPolling() {
+      if (!pendingTravelTarget || !pendingTravelIsFresh() || travelPollTimer) {
+        return;
+      }
+
+      travelPollTimer = setInterval(async () => {
+        if (!pendingTravelTarget) {
+          stopTravelPolling();
+          return;
+        }
+        if (!pendingTravelIsFresh()) {
+          clearPendingTravel();
+          await syncPlayerPositionFromRealm();
+          return;
+        }
+
+        const playerName = playerNameInput.value.trim() || "Nisse";
+        const result = await runQeval(pkgPath + ".DescribePlayer(" + JSON.stringify(playerName) + ")");
+        if (typeof result !== "string" || result.startsWith("QEval error:")) {
+          return;
+        }
+
+        const pos = parsePlayerPosition(result);
+        if (!pos) {
+          return;
+        }
+
+        if (!samePosition(pos, pendingTravelTarget)) {
+          return;
+        }
+
+        clearPendingTravel();
+        travelPosition = { x: pos.x, y: pos.y };
+        tileXInput.value = String(pos.x);
+        tileYInput.value = String(pos.y);
+        renderSidebarMap(currentMapText || fallbackMapText());
+        refreshCurrentPlaceVisual();
+      }, pendingTravelPollIntervalMs);
+    }
+
+    function stopTravelPolling() {
+      if (travelPollTimer) {
+        clearInterval(travelPollTimer);
+        travelPollTimer = null;
+      }
+    }
+
+    function seedComposer(value) {
+      composer.value = value;
+      composer.focus();
+    }
+
+    function canStandOn(rows, x, y) {
+      return !!rows && y >= 0 && y < rows.length && x >= 0 && x < rows[y].length && rows[y][x] !== 0;
+    }
+
+    function canTravelOn(rows, x, y, waterMode = false) {
+      if (!rows || y < 0 || y >= rows.length || x < 0 || x >= rows[y].length) {
+        return false;
+      }
+      return waterMode ? waterTileTravelable(rows[y][x]) : rows[y][x] !== 0;
+    }
+
+    async function beginTravelMode(waterMode = false) {
+      const rows = parseMapText(currentMapText || fallbackMapText());
+      const playerName = playerNameInput.value.trim() || "Nisse";
+      const playerText = normalizeRealmText(await runQeval(pkgPath + ".DescribePlayer(" + JSON.stringify(playerName) + ")"));
+      if (!playerText || playerText.startsWith("QEval error:")) {
+        setOutput("Could not read the current player card. Try `player` once and then start travel again.");
+        return;
+      }
+
+      const pos = parsePlayerPosition(playerText);
+      if (pos) {
+        travelPosition = { x: pos.x, y: pos.y };
+        tileXInput.value = String(pos.x);
+        tileYInput.value = String(pos.y);
+      } else {
+        syncTravelPositionFromInputs();
+      }
+
+      if (!canTravelOn(rows, travelPosition.x, travelPosition.y, waterMode)) {
+        setOutput(waterMode
+          ? "Sailing must begin from a water, coastal, or harbor tile."
+          : "Travel start tile must be on land. Adjust Tile X and Tile Y first.");
+        return;
+      }
+
+      if (waterMode && !parseBoatCarried(playerText)) {
+        setOutput("You need to be carrying a boat before you can sail. Try `boat`, or explore the coast until fortune turns your way.");
+        return;
+      }
+
+      const bonus = parseTravelBonus(playerText);
+      travelOrigin = { x: travelPosition.x, y: travelPosition.y };
+      travelMode = true;
+      travelConfirmMode = false;
+      travelWaterMode = waterMode;
+      travelMovesTotal = waterMode ? 20 : 3 + bonus;
+      travelMovesLeft = travelMovesTotal;
+      travelTouchedOcean = waterMode && oceanTile(tileCode(rows, travelPosition.x, travelPosition.y));
+      renderSidebarMap(currentMapText || fallbackMapText());
+      if (waterMode) {
+        setTravelModeOutput(
+          "Sailing mode active.\n\n" +
+          "Use the arrow keys for straight steps and `q/e/z/c` for diagonals across water, coastal, and harbor tiles.\n" +
+          "Boat budget: 20 moves.\n" +
+          "Current tile: (" + travelPosition.x + ", " + travelPosition.y + ")\n" +
+          "Open water must be part of the route. Shore-only movement should use `travel`.\n" +
+          "Water steps always cost 1.\n\n" +
+          "Press Enter at any time to stage the signed travel command. Type `x` to exit travel mode."
+        );
+        return;
+      }
+
+      setTravelModeOutput(
+        "Travel mode active.\n\n" +
+        "Use the arrow keys to move straight and `q/e/z/c` for diagonals.\n" +
+        "Travel budget: " + travelMovesTotal + " move" + (travelMovesTotal === 1 ? "" : "s") + ".\n" +
+        "Terrain cost: forest 2, hills 2, mountains 3, most other land 1.\n" +
+        "Current tile: (" + travelPosition.x + ", " + travelPosition.y + ")\n" +
+        "Unused movement can bank up to +1 for next turn.\n\n" +
+        "Press Enter at any time to stage the signed travel command. Type `x` to exit travel mode."
+      );
+    }
+
+    function promptTravelConfirmation() {
+      if (travelPosition.x === travelOrigin.x && travelPosition.y === travelOrigin.y) {
+        resetTravelState();
+        renderSidebarMap(currentMapText || fallbackMapText());
+        setOutput(
+          "Travel reset.\n\n" +
+          "You returned to your starting tile at (" + travelOrigin.x + ", " + travelOrigin.y + ").\n\n" +
+          "Type `travel` again when you want to start a new route."
+        );
+        return;
+      }
+
+      if (travelWaterMode && !travelTouchedOcean) {
+        setOutput(
+          "Sailing mode active.\n\n" +
+          "This route never leaves the shore, so it should count as land travel instead.\n" +
+          "Use `travel` for coastal-to-coastal movement unless you actually move onto an ocean tile."
+        );
+        return;
+      }
+
+      travelMode = false;
+      travelConfirmMode = true;
+      const spent = travelMovesTotal - travelMovesLeft;
+      const saved = Math.min(1, travelMovesLeft);
+      const label = travelWaterMode ? "Sail proposal." : "Travel proposal.";
+      const costLabel = travelWaterMode ? "Water cost used: " : "Travel cost used: ";
+      composer.value = "";
+      composer.focus();
+      setTravelModeOutput(
+        label + '\n\n' +
+        'Origin: (' + travelOrigin.x + ', ' + travelOrigin.y + ')\n' +
+        'Destination: (' + travelPosition.x + ', ' + travelPosition.y + ')\n' +
+        costLabel + spent + ' move' + (spent === 1 ? '' : 's') + '\n' +
+        (travelWaterMode ? 'Boat budget remaining: ' + travelMovesLeft + '\n\n' : 'Saved for next trip: +' + saved + '\n\n') +
+        'Commit this travel? Type `y` or `n`. Type `x` to leave travel mode.'
+      );
+    }
+
+    function confirmTravelYes() {
+      travelConfirmMode = false;
+      travelMode = false;
+      const command = buildTravelPlayerCommand();
+      pendingTravelTarget = { x: travelPosition.x, y: travelPosition.y, at: Date.now() };
+      persistPendingTravel();
+      startPendingTravelPolling();
+      composer.value = command;
+      setTravelModeOutput(
+        (travelWaterMode ? "Sailing route ready.\n\n" : "Travel route ready.\n\n") +
+        command +
+        "\n\nCopy this signed command into your terminal to commit the move. Type `x` to leave map mode."
+      );
+      composer.focus();
+    }
+
+    function confirmTravelNo() {
+      travelConfirmMode = false;
+      travelMode = true;
+      travelPosition = { x: travelOrigin.x, y: travelOrigin.y };
+      tileXInput.value = String(travelOrigin.x);
+      tileYInput.value = String(travelOrigin.y);
+      travelMovesLeft = travelMovesTotal;
+      const rows = parseMapText(currentMapText || fallbackMapText());
+      travelTouchedOcean = travelWaterMode && oceanTile(tileCode(rows, travelOrigin.x, travelOrigin.y));
+      composer.value = "";
+      renderSidebarMap(currentMapText || fallbackMapText());
+      setTravelModeOutput(
+        (travelWaterMode ? "Sailing resumed.\n\n" : "Travel resumed.\n\n") +
+        "You are back at your origin tile: (" + travelOrigin.x + ", " + travelOrigin.y + ").\n" +
+        "Moves reset: " + travelMovesLeft + "\n\n" +
+        "Use the arrow keys for straight steps, `q/e/z/c` for diagonals, or type `x` to exit travel mode."
+      );
+    }
+
+    async function moveTravel(dx, dy) {
+      if (!travelMode || travelMovesLeft <= 0) {
+        return;
+      }
+
+      const rows = parseMapText(currentMapText || fallbackMapText());
+      const nextX = travelPosition.x + dx;
+      const nextY = travelPosition.y + dy;
+
+      if (!canTravelOn(rows, nextX, nextY, travelWaterMode)) {
+        setOutput(
+          (travelWaterMode ? "That way leaves the water route.\n\n" : "That way is blocked by sea.\n\n") +
+          "Moves left: " + travelMovesLeft + "\n" +
+          "Current tile: (" + travelPosition.x + ", " + travelPosition.y + ")"
+        );
+        return;
+      }
+
+      const stepCost = tileMoveCostAt(rows, nextX, nextY, travelWaterMode);
+      if (stepCost > travelMovesLeft) {
+        setOutput(
+          "That tile costs " + stepCost + " moves and you only have " + travelMovesLeft + " left.\n\n" +
+          "Current tile: (" + travelPosition.x + ", " + travelPosition.y + ")\n" +
+          (travelWaterMode ? "Water steps always cost 1." : "Terrain cost: forest 2, hills 2, mountains 3, most other land 1.")
+        );
+        return;
+      }
+
+      travelPosition = { x: nextX, y: nextY };
+      tileXInput.value = String(nextX);
+      tileYInput.value = String(nextY);
+      travelMovesLeft -= stepCost;
+      if (travelWaterMode && oceanTile(tileCode(rows, nextX, nextY))) {
+        travelTouchedOcean = true;
+      }
+      renderSidebarMap(currentMapText || fallbackMapText());
+
+      const preview = localTravelPreview(rows, nextX, nextY);
+      const backAtOrigin = nextX === travelOrigin.x && nextY === travelOrigin.y;
+      const previewToken = ++travelPreviewRefreshToken;
+
+      let sceneMeta = null;
+      try {
+        sceneMeta = await loadTileSceneMetaAt(nextX, nextY);
+      } catch (err) {
+        sceneMeta = null;
+      }
+
+      if (previewToken !== travelPreviewRefreshToken) {
+        return;
+      }
+
+      if (sceneMeta) {
+        currentPlaceVisualMeta = sceneMeta;
+      }
+
+      if (travelMovesLeft <= 0) {
+        promptTravelConfirmation();
+        return;
+      }
+
+      setTravelModeOutput(
+        (travelWaterMode ? "Sailing.\n\n" : "Traveling.\n\n") +
+        "Current tile: (" + travelPosition.x + ", " + travelPosition.y + ")\n" +
+        "Terrain: " + (sceneMeta?.theme || preview.zone) + "\n" +
+        "Place: " + (sceneMeta?.placeName || "unknown name") + "\n" +
+        "Step cost: " + stepCost + "\n" +
+        "Moves left: " + travelMovesLeft + "\n\n" +
+        (backAtOrigin
+          ? "You are back at your origin. Press Enter to cancel this route cleanly."
+          : "Press Enter to stage the signed travel command. Type `x` to exit travel mode.")
+      );
+    }
+
+    async function executeComposer() {
+      const terminalValue = composer.value.trim();
+      const loweredTerminal = cleanInput(terminalValue).toLowerCase();
+
+      if (travelConfirmMode) {
+        if (loweredTerminal === "y" || loweredTerminal === "yes") {
+          confirmTravelYes();
+          return;
+        }
+        if (loweredTerminal === "n" || loweredTerminal === "no") {
+          confirmTravelNo();
+          return;
+        }
+        if (loweredTerminal === "x" || loweredTerminal === "exit") {
+          resetTravelState();
+          composer.value = "";
+          setOutput("Travel mode closed.");
+          return;
+        }
+        setTravelModeOutput("Commit this travel? Type `y` or `n`. Type `x` to leave travel mode.");
+        return;
+      }
+
+      if (travelMode) {
+        if (loweredTerminal === "x" || loweredTerminal === "exit") {
+          resetTravelState();
+          composer.value = "";
+          setOutput("Travel mode closed.");
+          return;
+        }
+        if (loweredTerminal) {
+          setTravelModeOutput("Use the arrow keys for straight travel, `q/e/z/c` for diagonals, press Enter to stage the route, or type `x` to exit travel mode.");
+          composer.value = "";
+          return;
+        }
+        return;
+      }
+
+      if (storyComposeMode === "choice") {
+        const lowered = cleanInput(terminalValue).toLowerCase();
+        const node = currentTileStoryNode();
+        if (!node) {
+          resetContextualModes();
+          setOutput("The story slips out of reach before the next line can be spoken.");
+          return;
+        }
+
+        if (!lowered) {
+          renderTileStory(
+            node.isFinal
+              ? "Choose an ending to weigh it, `back` to return, or `retreat` to leave."
+              : "Type a choice to continue, `back` to return, or `retreat` to leave."
+          );
+          return;
+        }
+
+        if (lowered === "back") {
+          if (pendingTileStoryHistory.length > 0) {
+            const previous = pendingTileStoryHistory.pop();
+            pendingTileStoryNode = previous?.nodeId || "";
+            pendingTileStoryPathCode = previous?.pathCode || "";
+            pendingTileStoryCommitPathCode = "";
+            composer.value = "";
+            renderTileStory("Type a choice to continue, `back` to return, or `retreat` to leave.");
+            return;
+          }
+          resetContextualModes();
+          composer.value = "";
+          setOutput("You close the page before anything is made real.");
+          return;
+        }
+
+        if (lowered === "retreat" || lowered === "leave") {
+          resetContextualModes();
+          composer.value = "";
+          setOutput("You step back from the story before anything is made real.");
+          return;
+        }
+
+        const choice = resolveStoryChoice(lowered, node);
+        const blocked = blockedScenarioCommand(lowered);
+        if (!choice && blocked) {
+          setOutput("The story is still in your hands.\n\nChoose a line, type `back`, or `retreat` before stepping out of it.");
+          return;
+        }
+        if (!choice) {
+          renderTileStory("That line is not on this page. Try one of the choices shown.");
+          return;
+        }
+
+        if (node.isFinal) {
+          pendingTileStoryCommitPathCode = (pendingTileStoryPathCode || "") + cleanInput(choice.digit);
+          storyComposeMode = "commit";
+          composer.value = "";
+          renderTileStory("Type `commit` to make this ending real, another ending to compare it, or `back` to return.");
+          return;
+        }
+
+        const nextNode = cleanInput(choice.next).toLowerCase();
+        if (!nextNode || !pendingTileStory.nodes[nextNode]) {
+          renderTileStory("That choice points to a missing part of the story.");
+          return;
+        }
+
+        pendingTileStoryHistory.push({
+          nodeId: pendingTileStoryNode,
+          pathCode: pendingTileStoryPathCode
+        });
+        pendingTileStoryNode = nextNode;
+        pendingTileStoryPathCode += cleanInput(choice.digit);
+        pendingTileStoryCommitPathCode = "";
+        composer.value = "";
+        renderTileStory(
+          pendingTileStory.nodes[nextNode].isFinal
+            ? "Choose an ending to weigh it, `back` to return, or `retreat` to leave."
+            : "Type a choice to continue, `back` to return, or `retreat` to leave."
+        );
+        return;
+      }
+
+      if (storyComposeMode === "commit") {
+        const lowered = cleanInput(terminalValue).toLowerCase();
+        const node = currentTileStoryNode();
+        if (!node || !node.isFinal) {
+          resetContextualModes();
+          setOutput("The ending is no longer where you left it.");
+          return;
+        }
+
+        if (lowered === "commit") {
+          const command = buildCommitStoryDecisionCommand();
+          const title = pendingTileStory?.title || pendingTileStoryMeta?.title || "Story";
+          const pathCode = pendingTileStoryCommitPathCode || pendingTileStoryPathCode;
+          resetContextualModes();
+          composer.value = command;
+          setOutput(
+            title + " commitment staged.\n\n" +
+            command +
+            "\n\nThis will commit route `" + pathCode + "` and write the outcome into the realm."
+          );
+          return;
+        }
+
+        if (lowered === "back") {
+          storyComposeMode = "choice";
+          pendingTileStoryCommitPathCode = "";
+          composer.value = "";
+          renderTileStory("Choose an ending to weigh it, `back` to return, or `retreat` to leave.");
+          return;
+        }
+
+        if (lowered === "retreat" || lowered === "leave") {
+          resetContextualModes();
+          composer.value = "";
+          setOutput("You leave the story uncommitted. Nothing changes yet.");
+          return;
+        }
+
+        const choice = resolveStoryChoice(lowered, node);
+        const blocked = blockedScenarioCommand(lowered);
+        if (!choice && blocked) {
+          setOutput("This ending is still waiting.\n\nType `commit`, another ending, `back`, or `retreat`.");
+          return;
+        }
+        if (!choice) {
+          renderTileStory("Type `commit`, another ending, `back`, or `retreat`.");
+          return;
+        }
+
+        pendingTileStoryCommitPathCode = (pendingTileStoryPathCode || "") + cleanInput(choice.digit);
+        composer.value = "";
+        renderTileStory("Type `commit` to make this ending real, another ending to compare it, or `back` to return.");
+        return;
+      }
+
+      if (storyComposeMode === "ambient") {
+        const lowered = cleanInput(terminalValue).toLowerCase();
+        if (!lowered) {
+          renderTileStory();
+          return;
+        }
+
+        const inlineNameTile = parseInlineNameTileCommand(terminalValue);
+        if (inlineNameTile) {
+          pendingTileName = inlineNameTile.name;
+          const command = buildNameTileCommand();
+          resetContextualModes();
+          composer.value = command;
+          setOutput(
+            "Place naming command staged.\n\n" +
+            command +
+            "\n\nThis will give your current unnamed frontier tile the permanent name `" + inlineNameTile.name + "`."
+          );
+          return;
+        }
+
+        if (lowered === "nametile" || lowered === "nameplace") {
+          resetContextualModes();
+          tileNamingMode = "name";
+          pendingTileName = "";
+          composer.value = "";
+          setOutput("What do you want to call this place? Type the name and press Enter.");
+          return;
+        }
+
+        if (lowered === "back" || lowered === "retreat" || lowered === "leave") {
+          resetContextualModes();
+          composer.value = "";
+          setOutput("You let the place settle back into the island and move on.");
+          return;
+        }
+
+        const blocked = blockedScenarioCommand(lowered);
+        if (blocked || lowered === "explore" || lowered === "scenario") {
+          setOutput("The place is still around you.\n\nType `back` or `retreat` before stepping out of it.");
+          return;
+        }
+
+        renderTileStory("This scene is only a passing impression for now. Type `back` or `retreat` to move on.");
+        return;
+      }
+
+      if (scenarioComposeMode === "path") {
+        const lowered = cleanInput(terminalValue).toLowerCase();
+        if (!lowered) {
+          const result = normalizeRealmText(await runQeval(describeScenarioExpr()));
+          setScenarioOutput(result, "Type a path to inspect it, or `retreat` to leave this " + pendingScenarioKind + " tale untouched.");
+          return;
+        }
+
+        const blocked = blockedScenarioCommand(lowered);
+        if (blocked) {
+          setOutput("The rest of the island falls away while this " + pendingScenarioKind + " scene holds you.\n\nFinish the scenario first, or type `retreat` to step back out of it.");
+          return;
+        }
+
+        if (["retreat", "leave", "back"].includes(lowered)) {
+          const farewell = pendingScenarioKind === "coastal"
+            ? "You leave the coast uncommitted. Nothing is written, and the tide keeps its own counsel."
+            : pendingScenarioKind === "mountain"
+              ? "You leave the mountain uncommitted. Nothing is written, and the high silence keeps what it almost showed you."
+            : "You leave the forest uncommitted. Nothing is written, and the trees keep what they almost showed you.";
+          resetContextualModes();
+          composer.value = "";
+          setOutput(farewell);
+          return;
+        }
+
+        const preview = normalizeRealmText(await runQeval(previewScenarioPathExpr(lowered)));
+        if (preview.startsWith("QEval error:") || /Unknown .* path\./.test(preview)) {
+          setScenarioOutput(preview);
+          return;
+        }
+
+        pendingScenarioPath = lowered;
+        pendingScenarioDecision = "";
+        scenarioComposeMode = "decision";
+        composer.value = "";
+        setScenarioOutput(preview, "Type a decision to preview it, `back` to choose a different path, or `retreat` to leave.");
+        return;
+      }
+
+      if (scenarioComposeMode === "decision") {
+        const lowered = cleanInput(terminalValue).toLowerCase();
+        if (!lowered) {
+          const preview = normalizeRealmText(await runQeval(previewScenarioPathExpr(pendingScenarioPath)));
+          setScenarioOutput(preview, "Type a decision to preview it, `back` to choose a different path, or `retreat` to leave.");
+          return;
+        }
+
+        const blocked = blockedScenarioCommand(lowered);
+        if (blocked) {
+          setOutput("You are still inside the " + pendingScenarioKind + " scenario.\n\nChoose a decision, type `back`, or `retreat` before using the rest of the terminal again.");
+          return;
+        }
+
+        if (lowered === "back") {
+          await startScenarioExploreFlow();
+          return;
+        }
+
+        const preview = normalizeRealmText(await runQeval(previewScenarioDecisionExpr(pendingScenarioPath, lowered)));
+        if (preview.startsWith("QEval error:") || /Unknown .* decision\./.test(preview)) {
+          setScenarioOutput(preview);
+          return;
+        }
+
+        if (lowered === "retreat" || preview.includes("Stage: withdrawn")) {
+          resetContextualModes();
+          composer.value = "";
+          setScenarioOutput(preview);
+          return;
+        }
+
+        pendingScenarioDecision = lowered;
+        scenarioComposeMode = "commit";
+        composer.value = "";
+        setScenarioOutput(preview, "Type `commit` to make this " + pendingScenarioKind + " choice real, another decision to compare it, or `back` to return.");
+        return;
+      }
+
+      if (scenarioComposeMode === "commit") {
+        const lowered = cleanInput(terminalValue).toLowerCase();
+        const blocked = blockedScenarioCommand(lowered);
+        if (blocked) {
+          setOutput("This choice is still hanging in the air.\n\nType `commit` to make it real, another decision to compare it, or `back`/`retreat` to leave the scene.");
+          return;
+        }
+
+        if (lowered === "commit") {
+          const command = buildCommitScenarioDecisionCommand();
+          const commitKind = pendingScenarioKind || "scenario";
+          resetContextualModes();
+          composer.value = command;
+          setOutput(
+            commitKind.charAt(0).toUpperCase() + commitKind.slice(1) + " commitment staged.\n\n" +
+            command +
+            "\n\nThis will commit your chosen " + commitKind + " path and write the outcome into the realm."
+          );
+          return;
+        }
+
+        if (lowered === "back") {
+          scenarioComposeMode = "decision";
+          composer.value = "";
+          const preview = normalizeRealmText(await runQeval(previewScenarioPathExpr(pendingScenarioPath)));
+          setScenarioOutput(preview, "Type a decision to preview it, `back` to choose a different path, or `retreat` to leave.");
+          return;
+        }
+
+        if (lowered === "retreat" || lowered === "leave") {
+          const retreatText = pendingScenarioKind === "coastal"
+            ? "You step back from the shoreline before making the choice real. Nothing changes yet."
+            : pendingScenarioKind === "mountain"
+              ? "You step back from the mountain scene before making the choice real. Nothing changes yet."
+              : "You step back before making the forest choice real. Nothing changes yet.";
+          resetContextualModes();
+          composer.value = "";
+          setOutput(retreatText);
+          return;
+        }
+
+        const preview = normalizeRealmText(await runQeval(previewScenarioDecisionExpr(pendingScenarioPath, lowered)));
+        if (preview.startsWith("QEval error:") || /Unknown .* decision\./.test(preview)) {
+          setOutput("Type `commit`, another decision, `back`, or `retreat`.");
+          return;
+        }
+
+        pendingScenarioDecision = lowered;
+        composer.value = "";
+        setScenarioOutput(preview, "Type `commit` to make this " + pendingScenarioKind + " choice real, another decision to compare it, or `back` to return.");
+        return;
+      }
+
+      if (exploreComposeMode === "choice") {
+        const activeProfile = pendingExploreProfile;
+        const option = resolveExploreOption(terminalValue, pendingExploreProfile);
+        if (!option) {
+          setOutput(renderExplorePrompt(pendingExploreProfile));
+          return;
+        }
+
+        resetContextualModes();
+
+        if (option.key === "trade") {
+          pendingExploreProfile = activeProfile;
+          tradeComposeMode = "choice";
+          composer.value = "";
+          setOutput(renderTradePrompt(activeProfile?.place || activeProfile?.zone || "this place"));
+          return;
+        }
+
+        if (option.key === "search") {
+          const command = buildSearchTileCommand();
+          composer.value = command;
+          setOutput(
+            "Search command staged.\n\n" +
+            command +
+            "\n\nThis will search your current tile for clues, companions, rumors, and small finds."
+          );
+          return;
+        }
+
+        if (option.key === "venture") {
+          adventureComposeMode = "mode";
+          composer.value = "";
+          setOutput("Choose an adventure mode: bold, careful, sneaky, or withdrawn.");
+          return;
+        }
+
+        if (option.key === "listen") {
+          const command = stageTakeActionPreset("listen", "square", "day");
+          composer.value = command;
+          setOutput(
+            "Listening command staged.\n\n" +
+            command +
+            "\n\nThis will spend a turn listening for rumors in the square."
+          );
+          return;
+        }
+
+        if (option.key === "read") {
+          const command = stageTakeActionPreset("read", "library", "day");
+          composer.value = command;
+          setOutput(
+            "Reading command staged.\n\n" +
+            command +
+            "\n\nThis will spend a turn studying in the library."
+          );
+          return;
+        }
+      }
+
+      if (tradeComposeMode === "choice") {
+        const lowered = terminalValue.toLowerCase();
+        tradeComposeMode = "";
+
+        if (["1", "sell", "stall", "peddler"].includes(lowered)) {
+          peddlerComposeMode = "pearls";
+          composer.value = "";
+          setOutput("How many pearls should the peddler list first? Type the amount and press Enter.");
+          return;
+        }
+
+        if (["2", "buy pearls", "buypearls", "pearls"].includes(lowered)) {
+          buyPearlsComposeMode = "seller";
+          composer.value = "";
+          setOutput("Whose peddler do you want to buy from? Type a player name and press Enter.");
+          return;
+        }
+
+        if (["3", "buy ugnot", "buyugnot", "ugnot"].includes(lowered)) {
+          buyUGNOTComposeMode = "seller";
+          composer.value = "";
+          setOutput("Whose peddler do you want to buy ugnot from? Type a player name and press Enter.");
+          return;
+        }
+
+        tradeComposeMode = "choice";
+        composer.value = "";
+        setOutput(renderTradePrompt(pendingExploreProfile?.place || pendingExploreProfile?.zone || "this place"));
+        return;
+      }
+
+      if (peddlerRoundConfirmMode) {
+        const lowered = terminalValue.toLowerCase();
+        if (lowered === "y" || lowered === "yes") {
+          peddlerPearlAmountInput.value = pendingPeddlerRound.pearls;
+          peddlerUGNOTAmountInput.value = pendingPeddlerRound.rounded;
+          peddlerRoundConfirmMode = false;
+          const command = buildOpenPeddlerCommand();
+          composer.value = command;
+          setOutput(
+            "Peddler command staged.\n\n" +
+            command +
+            "\n\nRounded down from " + pendingPeddlerRound.ugnot + " ugnot to " + pendingPeddlerRound.rounded + " so the fixed price divides evenly."
+          );
+          pendingPeddlerRound = null;
+          return;
+        }
+        if (lowered === "n" || lowered === "no") {
+          peddlerRoundConfirmMode = false;
+          pendingPeddlerRound = null;
+          composer.value = "";
+          setOutput("Peddler opening cancelled.");
+          return;
+        }
+        setOutput("Type y to accept the rounded ugnot amount, or n to cancel.");
+        return;
+      }
+
+      if (adventureComposeMode === "mode") {
+        const mode = terminalValue.toLowerCase();
+        if (!["bold", "careful", "sneaky", "withdrawn"].includes(mode)) {
+          setOutput("Choose one of: bold, careful, sneaky, withdrawn.");
+          return;
+        }
+
+        adventureModeInput.value = mode;
+        adventureComposeMode = "";
+        const command = buildAdventureCommand();
+        composer.value = command;
+        setOutput(
+          "Adventure command staged.\n\n" +
+          command +
+          "\n\nThis will resolve a one-transaction mini-adventure in " + mode + " mode."
+        );
+        return;
+      }
+
+      if (peddlerComposeMode === "pearls") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of pearls and press Enter.");
+          return;
+        }
+
+        peddlerPearlAmountInput.value = terminalValue;
+        peddlerComposeMode = "ugnot";
+        composer.value = "";
+        setOutput(
+          "Pearls set to " + terminalValue + ".\n\n" +
+          "Now type the ugnot side of the stall and press Enter."
+        );
+        return;
+      }
+
+      if (peddlerComposeMode === "ugnot") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of ugnot and press Enter.");
+          return;
+        }
+
+        peddlerUGNOTAmountInput.value = terminalValue;
+        peddlerComposeMode = "";
+        if (maybePromptPeddlerRounding(peddlerPearlAmountInput.value, peddlerUGNOTAmountInput.value)) {
+          return;
+        }
+        const command = buildOpenPeddlerCommand();
+        composer.value = command;
+        setOutput(
+          "Peddler command staged.\n\n" +
+          command +
+          "\n\nThis will open a fixed-price stall with " + peddlerPearlAmountInput.value.trim() + " pearls and " + peddlerUGNOTAmountInput.value.trim() + " ugnot."
+        );
+        return;
+      }
+
+      if (buyPearlsComposeMode === "seller") {
+        if (!terminalValue) {
+          setOutput("Whose peddler do you want to buy from? Type a player name and press Enter.");
+          return;
+        }
+
+        peddlerTargetNameInput.value = terminalValue;
+        buyPearlsComposeMode = "pearls";
+        composer.value = "";
+        setOutput(
+          "Buying from " + terminalValue + ".\n\n" +
+          "Now type how many pearls you want and press Enter."
+        );
+        return;
+      }
+
+      if (buyPearlsComposeMode === "pearls") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of pearls and press Enter.");
+          return;
+        }
+
+        peddlerPearlAmountInput.value = terminalValue;
+        buyPearlsComposeMode = "";
+        const command = buildBuyPearlsCommand();
+        composer.value = command;
+        setOutput(
+          "Buy pearls command staged.\n\n" +
+          command +
+          "\n\nThis will buy " + peddlerPearlAmountInput.value.trim() + " pearls from " + peddlerTargetNameInput.value.trim() + "."
+        );
+        return;
+      }
+
+      if (buyUGNOTComposeMode === "seller") {
+        if (!terminalValue) {
+          setOutput("Whose peddler do you want to buy ugnot from? Type a player name and press Enter.");
+          return;
+        }
+
+        peddlerTargetNameInput.value = terminalValue;
+        buyUGNOTComposeMode = "pearls";
+        composer.value = "";
+        setOutput(
+          "Buying ugnot from " + terminalValue + ".\n\n" +
+          "Now type how many pearls you want to spend and press Enter."
+        );
+        return;
+      }
+
+      if (buyUGNOTComposeMode === "pearls") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of pearls and press Enter.");
+          return;
+        }
+
+        peddlerPearlAmountInput.value = terminalValue;
+        buyUGNOTComposeMode = "";
+        const command = buildBuyUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "Buy ugnot command staged.\n\n" +
+          command +
+          "\n\nThis will spend " + peddlerPearlAmountInput.value.trim() + " pearls at " + peddlerTargetNameInput.value.trim() + "'s peddler."
+        );
+        return;
+      }
+
+      if (ugnotDepositMode === "amount") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of ugnot and press Enter.");
+          return;
+        }
+
+        ugnotAmountInput.value = terminalValue;
+        ugnotDepositMode = "";
+        const command = buildDepositUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "UGNOT deposit command staged.\n\n" +
+          command +
+          "\n\nThis will load " + ugnotAmountInput.value.trim() + " ugnot into " + (playerNameInput.value.trim() || "Nisse") + "'s pouch."
+        );
+        return;
+      }
+
+      if (ugnotSendMode === "friendName") {
+        if (!terminalValue) {
+          setOutput("Who do you want to send ugnot to? Type a player name and press Enter.");
+          return;
+        }
+
+        ugnotFriendNameInput.value = terminalValue;
+        ugnotSendMode = "amount";
+        composer.value = "";
+        setOutput(
+          "UGNOT for " + terminalValue + ".\n\n" +
+          "Now type the amount and press Enter."
+        );
+        return;
+      }
+
+      if (ugnotSendMode === "amount") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of ugnot and press Enter.");
+          return;
+        }
+
+        ugnotAmountInput.value = terminalValue;
+        ugnotSendMode = "";
+        const command = buildSendUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "UGNOT transfer command staged.\n\n" +
+          command +
+          "\n\nThis will send " + ugnotAmountInput.value.trim() + " ugnot to " + ugnotFriendNameInput.value.trim() + " onchain."
+        );
+        return;
+      }
+
+      if (ugnotWithdrawMode === "amount") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of ugnot and press Enter.");
+          return;
+        }
+
+        ugnotWithdrawAmountInput.value = terminalValue;
+        ugnotWithdrawMode = "";
+        const command = buildWithdrawUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "UGNOT withdrawal command staged.\n\n" +
+          command +
+          "\n\nThis will withdraw " + ugnotWithdrawAmountInput.value.trim() + " ugnot back to your owner wallet."
+        );
+        return;
+      }
+
+      if (tileNamingMode === "name") {
+        if (!terminalValue) {
+          setOutput("What do you want to call this place? Type the name and press Enter.");
+          return;
+        }
+
+        if (["back", "retreat", "leave"].includes(cleanInput(terminalValue).toLowerCase())) {
+          tileNamingMode = "";
+          pendingTileName = "";
+          composer.value = "";
+          setOutput("You leave the place unnamed for now.");
+          return;
+        }
+
+        pendingTileName = terminalValue;
+        tileNamingMode = "";
+        const command = buildNameTileCommand();
+        composer.value = command;
+        setOutput(
+          "Place naming command staged.\n\n" +
+          command +
+          "\n\nThis will give your current unnamed frontier tile the permanent name `" + terminalValue + "`."
+        );
+        return;
+      }
+
+      if (pearlComposeMode === "friendName") {
+        if (!terminalValue) {
+          setOutput("Who do you want to send pearls to? Type a player name and press Enter.");
+          return;
+        }
+
+        pearlFriendNameInput.value = terminalValue;
+        pearlComposeMode = "amount";
+        composer.value = "";
+        setOutput(
+          "Pearls for " + terminalValue + ".\n\n" +
+          "Now type the amount and press Enter."
+        );
+        return;
+      }
+
+      if (pearlComposeMode === "amount") {
+        if (!terminalValue || !/^\d+$/.test(terminalValue) || Number(terminalValue) <= 0) {
+          setOutput("Type a whole number of pearls and press Enter.");
+          return;
+        }
+
+        pearlAmountInput.value = terminalValue;
+        pearlComposeMode = "";
+        const command = buildSendPearlsCommand();
+        composer.value = command;
+        setOutput(
+          "Pearl transfer command staged.\n\n" +
+          command +
+          "\n\nThis will send " + pearlAmountInput.value.trim() + " pearls to " + pearlFriendNameInput.value.trim() + " onchain."
+        );
+        return;
+      }
+
+      if (messageComposeMode === "friendName") {
+        if (!terminalValue) {
+          setOutput("Who do you want to write to? Type a player name and press Enter.");
+          return;
+        }
+
+        friendNameInput.value = terminalValue;
+        messageComposeMode = "messageBody";
+        composer.value = "";
+        setOutput(
+          "Writing to " + terminalValue + ".\n\n" +
+          "Now type your message and press Enter."
+        );
+        return;
+      }
+
+      if (messageComposeMode === "messageBody") {
+        if (!terminalValue) {
+          setOutput("Type the message body and press Enter.");
+          return;
+        }
+
+        messageBodyInput.value = terminalValue;
+        messageComposeMode = "";
+        const command = buildWriteToFriendCommand();
+        composer.value = command;
+        setOutput(
+          "Message command staged.\n\n" +
+          command +
+          "\n\nThis will write to " + friendNameInput.value.trim() + "'s mailbox onchain."
+        );
+        return;
+      }
+
+      if (onboardingMode === "playerName") {
+        if (!terminalValue) {
+          setOutput("Hello.\n\nTell me your player name and press Enter.");
+          return;
+        }
+
+        if (looksLikeReservedIdentityWord(terminalValue)) {
+          composer.value = "";
+          setOutput(
+            "That looks like a terminal command, not a player name.\n\n" +
+            "Tell me your player name and press Enter."
+          );
+          return;
+        }
+
+        playerNameInput.value = terminalValue;
+        diaryPlayerNameInput.value = terminalValue;
+        onboardingMode = "keyName";
+        composer.value = "";
+        syncStatus();
+        setOutput(
+          "Hello, " + terminalValue + ".\n\n" +
+          "Now tell me your gnokey name and press Enter."
+        );
+        return;
+      }
+
+      if (onboardingMode === "keyName") {
+        if (!terminalValue) {
+          setOutput("Tell me your gnokey name and press Enter.");
+          return;
+        }
+
+        if (looksLikeReservedIdentityWord(terminalValue)) {
+          composer.value = "";
+          setOutput(
+            "That looks like a terminal command, not a gnokey name.\n\n" +
+            "Tell me your gnokey name and press Enter."
+          );
+          return;
+        }
+
+        keyNameInput.value = terminalValue;
+        finishTerminalOnboarding();
+        return;
+      }
+
+      const resolved = classifyComposerInput(composer.value);
+
+      if (resolved.kind === "empty") {
+        setOutput("Type a keyword or qeval expression.");
+        return;
+      }
+
+      if (resolved.kind === "clear") {
+        composer.value = "";
+        resetTravelState();
+        stopTravelPolling();
+        clearPendingTravel();
+        resetContextualModes();
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        tileNamingMode = "";
+        pendingTileName = "";
+        peddlerComposeMode = "";
+        peddlerRoundConfirmMode = false;
+        pendingPeddlerRound = null;
+        buyPearlsComposeMode = "";
+        buyUGNOTComposeMode = "";
+        adventureComposeMode = "";
+        setOutput("Output cleared.");
+        return;
+      }
+
+      if (resolved.kind === "hello") {
+        startHelloFlow(true);
+        return;
+      }
+
+      if (resolved.kind === "explore") {
+        if (await startTileStoryFlow()) {
+          return;
+        }
+        await startExploreFlow();
+        return;
+      }
+
+      if (resolved.kind === "scenario") {
+        await startPlacedScenarioFlow();
+        return;
+      }
+
+      if (resolved.kind === "forget") {
+        clearIdentity();
+        resetContextualModes();
+        startTerminalOnboarding();
+        return;
+      }
+
+      if (resolved.kind === "identity") {
+        const changed = await switchIdentity(resolved.name);
+        if (changed) {
+          setOutput(
+            "Identity changed.\n\n" +
+            "You are now looking as " + playerNameInput.value.trim() + ".\n" +
+            "Use `messages` or check the mailbox panel."
+          );
+        }
+        return;
+      }
+
+      if (resolved.kind === "seed") {
+        seedComposer(resolved.value);
+        setOutput("Seeded `" + resolved.value + "` into the terminal.");
+        return;
+      }
+
+      if (resolved.kind === "travel") {
+        await beginTravelMode();
+        return;
+      }
+
+      if (resolved.kind === "sail") {
+        await beginTravelMode(true);
+        return;
+      }
+
+      if (resolved.kind === "nametile") {
+        tileNamingMode = "name";
+        pendingTileName = "";
+        composer.value = "";
+        setOutput("What do you want to call this place? Type the name and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "writefriend-inline") {
+        friendNameInput.value = resolved.to;
+        messageBodyInput.value = resolved.body;
+        const command = buildWriteToFriendCommand();
+        composer.value = command;
+        setOutput(
+          "Message command staged.\n\n" +
+          command +
+          "\n\nThis will write to " + resolved.to + "'s mailbox onchain."
+        );
+        return;
+      }
+
+      if (resolved.kind === "sendpearls-inline") {
+        pearlFriendNameInput.value = resolved.to;
+        pearlAmountInput.value = resolved.amount;
+        const command = buildSendPearlsCommand();
+        composer.value = command;
+        setOutput(
+          "Pearl transfer command staged.\n\n" +
+          command +
+          "\n\nThis will send " + resolved.amount + " pearls to " + resolved.to + " onchain."
+        );
+        return;
+      }
+
+      if (resolved.kind === "depositugnot-inline") {
+        ugnotAmountInput.value = resolved.amount;
+        const command = buildDepositUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "UGNOT deposit command staged.\n\n" +
+          command +
+          "\n\nThis will load " + resolved.amount + " ugnot into " + (playerNameInput.value.trim() || "Nisse") + "'s pouch."
+        );
+        return;
+      }
+
+      if (resolved.kind === "sendugnot-inline") {
+        ugnotFriendNameInput.value = resolved.to;
+        ugnotAmountInput.value = resolved.amount;
+        const command = buildSendUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "UGNOT transfer command staged.\n\n" +
+          command +
+          "\n\nThis will send " + resolved.amount + " ugnot to " + resolved.to + " onchain."
+        );
+        return;
+      }
+
+      if (resolved.kind === "withdrawugnot-inline") {
+        ugnotWithdrawAmountInput.value = resolved.amount;
+        const command = buildWithdrawUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "UGNOT withdrawal command staged.\n\n" +
+          command +
+          "\n\nThis will withdraw " + resolved.amount + " ugnot back to your owner wallet."
+        );
+        return;
+      }
+
+      if (resolved.kind === "peddler-inline") {
+        peddlerPearlAmountInput.value = resolved.pearls;
+        peddlerUGNOTAmountInput.value = resolved.ugnot;
+        if (maybePromptPeddlerRounding(resolved.pearls, resolved.ugnot)) {
+          return;
+        }
+        const command = buildOpenPeddlerCommand();
+        composer.value = command;
+        setOutput(
+          "Peddler command staged.\n\n" +
+          command +
+          "\n\nThis will open a fixed-price stall with " + resolved.pearls + " pearls and " + resolved.ugnot + " ugnot."
+        );
+        return;
+      }
+
+      if (resolved.kind === "buypearls-inline") {
+        peddlerTargetNameInput.value = resolved.seller;
+        peddlerPearlAmountInput.value = resolved.pearls;
+        const command = buildBuyPearlsCommand();
+        composer.value = command;
+        setOutput(
+          "Buy pearls command staged.\n\n" +
+          command +
+          "\n\nThis will buy " + resolved.pearls + " pearls from " + resolved.seller + "."
+        );
+        return;
+      }
+
+      if (resolved.kind === "buyugnot-inline") {
+        peddlerTargetNameInput.value = resolved.seller;
+        peddlerPearlAmountInput.value = resolved.pearls;
+        const command = buildBuyUGNOTCommand();
+        composer.value = command;
+        setOutput(
+          "Buy ugnot command staged.\n\n" +
+          command +
+          "\n\nThis will spend " + resolved.pearls + " pearls at " + resolved.seller + "'s peddler."
+        );
+        return;
+      }
+
+      if (resolved.kind === "adventure-inline") {
+        adventureModeInput.value = resolved.mode;
+        const command = buildAdventureCommand();
+        composer.value = command;
+        setOutput(
+          "Adventure command staged.\n\n" +
+          command +
+          "\n\nThis will resolve a mini-adventure in " + resolved.mode + " mode."
+        );
+        return;
+      }
+
+      if (resolved.kind === "nametile-inline") {
+        pendingTileName = resolved.name;
+        const command = buildNameTileCommand();
+        composer.value = command;
+        setOutput(
+          "Place naming command staged.\n\n" +
+          command +
+          "\n\nThis will give your current unnamed frontier tile the permanent name `" + resolved.name + "`."
+        );
+        return;
+      }
+
+      if (resolved.kind === "writefriend") {
+        messageComposeMode = "friendName";
+        pearlComposeMode = "";
+        composer.value = "";
+        setOutput("Who do you want to write to? Type a player name and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "sendpearls") {
+        pearlComposeMode = "friendName";
+        messageComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        composer.value = "";
+        setOutput("Who do you want to send pearls to? Type a player name and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "depositugnot") {
+        ugnotDepositMode = "amount";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        composer.value = "";
+        setOutput("How much ugnot do you want to load into the pouch? Type the amount and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "sendugnot") {
+        ugnotSendMode = "friendName";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotWithdrawMode = "";
+        composer.value = "";
+        setOutput("Who do you want to send ugnot to? Type a player name and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "withdrawugnot") {
+        ugnotWithdrawMode = "amount";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        peddlerComposeMode = "";
+        buyPearlsComposeMode = "";
+        buyUGNOTComposeMode = "";
+        composer.value = "";
+        setOutput("How much ugnot do you want to withdraw? Type the amount and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "adventure") {
+        adventureComposeMode = "mode";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        peddlerComposeMode = "";
+        buyPearlsComposeMode = "";
+        buyUGNOTComposeMode = "";
+        composer.value = "";
+        setOutput("Choose an adventure mode: bold, careful, sneaky, or withdrawn.");
+        return;
+      }
+
+      if (resolved.kind === "peddler") {
+        peddlerComposeMode = "pearls";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        buyPearlsComposeMode = "";
+        buyUGNOTComposeMode = "";
+        peddlerRoundConfirmMode = false;
+        pendingPeddlerRound = null;
+        composer.value = "";
+        setOutput("How many pearls should the peddler list first? Type the amount and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "buypearls") {
+        buyPearlsComposeMode = "seller";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        peddlerComposeMode = "";
+        buyUGNOTComposeMode = "";
+        composer.value = "";
+        setOutput("Whose peddler do you want to buy from? Type a player name and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "buyugnot") {
+        buyUGNOTComposeMode = "seller";
+        messageComposeMode = "";
+        pearlComposeMode = "";
+        ugnotDepositMode = "";
+        ugnotSendMode = "";
+        ugnotWithdrawMode = "";
+        peddlerComposeMode = "";
+        buyPearlsComposeMode = "";
+        composer.value = "";
+        setOutput("Whose peddler do you want to buy ugnot from? Type a player name and press Enter.");
+        return;
+      }
+
+      if (resolved.kind === "messages-target") {
+        const result = await runQeval(messagesExpr(resolved.target));
+        const target = cleanInput(resolved.target);
+        const currentPlayer = playerNameInput.value.trim() || "Nisse";
+        setOutput(
+          target && target.toLowerCase() === currentPlayer.toLowerCase()
+            ? decodeMailboxListText(result, currentPlayer)
+            : result
+        );
+        return;
+      }
+
+      if (resolved.kind === "keyword") {
+        await runKeywordCommands(resolved.readTokens, resolved.unknownTokens);
+        if (resolved.readTokens.includes("player")) {
+          await syncPlayerPositionFromRealm();
+        }
+        if (resolved.readTokens.includes("player") || resolved.readTokens.includes("players")) {
+          await refreshPlayerOverlay();
+        }
+        if (resolved.readTokens.includes("player") || resolved.readTokens.includes("messages")) {
+          await refreshMailboxPreview();
+        }
+        if (resolved.readTokens.includes("player") || resolved.readTokens.includes("pearls")) {
+          await refreshPearlPouchPreview();
+        }
+        if (resolved.readTokens.includes("player") || resolved.readTokens.includes("ugnot")) {
+          await refreshUGNOTPouchPreview();
+        }
+        return;
+      }
+
+      if (resolved.kind === "command-keywords") {
+        if (resolved.signedTokens.some((token) => ["mint", "mintplayer", "start", "startgame"].includes(token)) && !hasConfiguredIdentity()) {
+          startHelloFlow();
+          return;
+        }
+        const lines = resolved.signedTokens.map((token) => signedKeywordBuilders[token]());
+        stageCommandLines(lines, resolved.unknownTokens);
+        return;
+      }
+
+      if (resolved.kind === "qeval") {
+        setOutput(await runQeval(resolved.value));
+        return;
+      }
+
+      composer.value = resolved.value;
+      setOutput(
+        "Terminal command staged below.\n\n" +
+        resolved.value +
+        "\n\nThis page does not execute shell commands directly. Copy it into your terminal."
+      );
+    }
+
+    [
+      keyNameInput,
+      playerNameInput,
+      actionNameInput,
+      actionPlaceInput,
+      actionTimeInput
+    ].forEach((input) => {
+      input.addEventListener("input", () => {
+        syncStatus();
+        persistIdentity();
+      });
+    });
+
+    composer.addEventListener("keydown", (event) => {
+      const diagonalTravelSteps = {
+        q: [-1, -1],
+        e: [1, -1],
+        z: [-1, 1],
+        c: [1, 1],
+        Q: [-1, -1],
+        E: [1, -1],
+        Z: [-1, 1],
+        C: [1, 1]
+      };
+
+      if (peddlerRoundConfirmMode && event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        executeComposer();
+        return;
+      }
+
+      if (travelMode && ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+        event.preventDefault();
+        if (event.key === "ArrowUp") void moveTravel(0, -1);
+        if (event.key === "ArrowDown") void moveTravel(0, 1);
+        if (event.key === "ArrowLeft") void moveTravel(-1, 0);
+        if (event.key === "ArrowRight") void moveTravel(1, 0);
+        return;
+      }
+
+      if (travelMode && diagonalTravelSteps[event.key]) {
+        event.preventDefault();
+        const [dx, dy] = diagonalTravelSteps[event.key];
+        void moveTravel(dx, dy);
+        return;
+      }
+
+      if (travelMode && event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        if (composer.value.trim()) {
+          executeComposer();
+          return;
+        }
+        promptTravelConfirmation();
+        return;
+      }
+
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        executeComposer();
+      }
+    });
+
+    window.onload = async () => {
+      loadIdentity();
+      syncStatus();
+      syncScenarioImmersion();
+      loadPendingTravel();
+      if (!pendingTravelTarget) {
+        tileXInput.value = "14";
+        tileYInput.value = "3";
+      }
+      renderSidebarMap(fallbackMapText());
+      runQeval(pkgPath + ".RenderMap()").then((result) => {
+        renderSidebarMap(result);
+      });
+      await syncPlayerPositionFromRealm();
+      startPendingTravelPolling();
+      refreshPlayerOverlay();
+      refreshMailboxPreview();
+      refreshPearlPouchPreview();
+      refreshUGNOTPouchPreview();
+      if (!cleanInput(playerNameInput.value) || !cleanInput(keyNameInput.value)) {
+        firstRunIdentityPrompt();
+        return;
+      }
+
+      if (await showCurrentPlaceLanding()) {
+        return;
+      }
+
+      composer.value = "help";
+      setOutput(
+        "Nisse terminal online.\n\n" +
+        "Your identity is loaded, but no player could be read from the realm yet.\n\n" +
+        "Type `mint` to stage the mint command, or `help` for the guide."
+      );
+    };
+  </script>
+</body>
+</html>

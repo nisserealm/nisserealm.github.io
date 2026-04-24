@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="./">
+  <title>Nisse Realm Click Client</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Nisse Realm</p>
+        <h1>Click Client</h1>
+      </div>
+      <div class="topbar-actions">
+        <div class="mode-chip">Gno Readonly</div>
+        <button id="portraitJumpButton" type="button">Portrait</button>
+        <button id="refreshButton" type="button">Refresh</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <div class="left-column">
+        <section id="mapPanel" class="panel map-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">World</p>
+              <h2>Island Map</h2>
+            </div>
+            <div id="travelBadge" class="travel-badge hidden">Travel Mode</div>
+          </div>
+          <div class="map-toolbar">
+            <button id="attitudeButton" type="button">Attitude: Cautious</button>
+            <button id="travelToggleButton" type="button">Begin Travel</button>
+            <button id="travelCommitButton" type="button" disabled>Commit Travel</button>
+            <button id="travelCancelButton" type="button" disabled>Cancel Travel</button>
+            <button id="tileLabelsButton" type="button">Hide Tile Labels</button>
+            <button id="mapFullscreenButton" type="button">Fullscreen Map</button>
+          </div>
+          <div id="mapRoot" class="map-root"></div>
+        </section>
+
+        <section class="panel mail-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Roadside Links</p>
+              <h2>Pigeon Post</h2>
+            </div>
+          </div>
+          <div class="mail-grid">
+            <div class="companion-registry-box mail-box">
+              <p class="eyebrow">Send a Note</p>
+              <div class="identity-fields">
+                <label class="identity-label">
+                  <span>To</span>
+                  <input id="messageToInput" type="text" placeholder="friend name">
+                </label>
+                <label class="identity-label">
+                  <span>Body</span>
+                  <textarea id="messageBodyInput" rows="4" placeholder="A short message for the road."></textarea>
+                </label>
+              </div>
+              <div class="identity-actions">
+                <button id="messageSendButton" type="button">Stage Message</button>
+                <button id="messageRefreshButton" type="button">Refresh Mail</button>
+              </div>
+              <pre id="messageInboxResult" class="companion-registry-result message-result">Refresh mail to read your latest pigeon post.</pre>
+            </div>
+            <div class="companion-registry-box mail-box">
+              <p class="eyebrow">UGNOT Pouch</p>
+              <div class="identity-fields">
+                <label class="identity-label">
+                  <span>Load UGNOT</span>
+                  <input id="ugnotDepositInput" type="number" min="1" step="1" placeholder="100">
+                </label>
+                <label class="identity-label">
+                  <span>Withdraw UGNOT</span>
+                  <input id="ugnotWithdrawInput" type="number" min="1" step="1" placeholder="50">
+                </label>
+              </div>
+              <div class="identity-actions">
+                <button id="ugnotDepositButton" type="button">Stage Load</button>
+                <button id="ugnotWithdrawButton" type="button">Stage Withdraw</button>
+              </div>
+              <pre id="ugnotPouchResult" class="companion-registry-result message-result">Your in-game UGNOT pouch will show here.</pre>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel place-panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Place</p>
+            <h2 id="placeTitle">Loading</h2>
+          </div>
+          <div id="placeMeta" class="place-meta"></div>
+        </div>
+        <div class="place-visual-wrap">
+          <img id="placeVisual" class="place-visual" alt="Current place">
+        </div>
+        <p id="placeText" class="place-text"></p>
+        <div id="placeActions" class="place-actions"></div>
+        <div id="travelNotice" class="travel-notice hidden"></div>
+        <div class="name-row">
+          <input id="nameInput" type="text" placeholder="Name this place">
+          <button id="nameButton" type="button">Name Tile</button>
+        </div>
+      </section>
+
+      <section class="panel sidebar-panel">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Player</p>
+            <h2 id="playerName">Loading</h2>
+          </div>
+        </div>
+        <div class="identity-box">
+          <p class="eyebrow">Identity</p>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Player Name</span>
+              <input id="identityPlayerName" type="text" placeholder="Existing player name">
+            </label>
+            <label class="identity-label">
+              <span>Key Name</span>
+              <input id="identityKeyName" type="text" placeholder="gnokey name">
+            </label>
+          </div>
+          <div class="identity-actions">
+            <button id="importIdentityButton" type="button">Import Player</button>
+            <button id="stageMintButton" type="button">Stage Mint</button>
+          </div>
+        </div>
+        <dl class="stats">
+          <div>
+            <dt>Committed Position</dt>
+            <dd id="playerPosition">-</dd>
+          </div>
+          <div>
+            <dt>Pearls</dt>
+            <dd id="playerPearls">-</dd>
+          </div>
+          <div>
+            <dt>Level</dt>
+            <dd id="playerLevel">-</dd>
+          </div>
+          <div>
+            <dt>Travel Bonus</dt>
+            <dd id="playerTravelBonus">-</dd>
+          </div>
+          <div>
+            <dt>Spirit</dt>
+            <dd id="playerSpiritStats">-</dd>
+          </div>
+          <div>
+            <dt>Companions</dt>
+            <dd id="playerCompanions">-</dd>
+          </div>
+          <div>
+            <dt>Monsters</dt>
+            <dd id="playerMonsters">-</dd>
+          </div>
+        </dl>
+        <div id="avatarBox" class="avatar-box">
+          <p class="eyebrow">Portrait</p>
+          <div class="avatar-shell">
+            <canvas id="avatarPreview" class="avatar-preview" width="16" height="16" aria-label="Avatar preview"></canvas>
+            <canvas id="avatarEditor" class="avatar-editor" width="16" height="16" aria-label="Avatar editor"></canvas>
+          </div>
+          <div id="avatarPalette" class="avatar-palette"></div>
+          <div class="identity-actions">
+            <button id="avatarEraseButton" type="button">Erase</button>
+            <button id="avatarClearButton" type="button">Clear</button>
+            <button id="avatarSaveButton" type="button">Save to Chain</button>
+          </div>
+        </div>
+        <div id="inheritanceBox" class="inheritance-box hidden">
+          <p class="eyebrow">Inheritance</p>
+          <div id="inheritanceText" class="inheritance-text"></div>
+          <div class="identity-actions">
+            <button id="claimInheritanceButton" type="button" disabled>Claim Inheritance</button>
+          </div>
+        </div>
+        <div class="companion-registry-box">
+          <p class="eyebrow">Companion Registry</p>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Kind</span>
+              <input id="companionRegistryInput" type="text" placeholder="reindeer">
+            </label>
+          </div>
+          <div class="identity-actions">
+            <button id="companionRegistryButton" type="button">Search Companions</button>
+          </div>
+          <pre id="companionRegistryResult" class="companion-registry-result">Search a kind like reindeer to see names and owners.</pre>
+        </div>
+        <div class="companion-registry-box">
+          <p class="eyebrow">Loads & Frens</p>
+          <div class="identity-actions">
+            <button id="loadPlayersButton" type="button">Load Players</button>
+            <button id="clearLoadsButton" type="button">Clear Loads</button>
+          </div>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Frens</span>
+              <input id="frensInput" type="text" placeholder="peter paul">
+            </label>
+          </div>
+          <div class="identity-actions">
+            <button id="loadFrensButton" type="button">Load Frens</button>
+            <button id="clearFrensButton" type="button">Clear Frens</button>
+          </div>
+          <pre id="frensResult" class="companion-registry-result">Loads show living player counts. Frens show named players with their saved appearance.</pre>
+        </div>
+        <div class="companion-registry-box">
+          <p class="eyebrow">Companion Market</p>
+          <div class="identity-actions">
+            <button id="marketRefreshButton" type="button">Refresh Market</button>
+            <button id="openPeddlerButton" type="button">Open Stall</button>
+            <button id="closePeddlerButton" type="button">Close Stall</button>
+          </div>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Owner Filter</span>
+              <input id="marketOwnerFilter" type="text" placeholder="owner name">
+            </label>
+            <label class="identity-label">
+              <span>Kind Filter</span>
+              <input id="marketKindFilter" type="text" placeholder="dog donkey mule reindeer">
+            </label>
+          </div>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Your Companion</span>
+              <select id="marketCompanionSelect">
+                <option value="">Choose companion</option>
+              </select>
+            </label>
+            <label class="identity-label">
+              <span>Pearl Price</span>
+              <input id="marketPriceInput" type="number" min="1" step="1" placeholder="120">
+            </label>
+          </div>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Buy Listing</span>
+              <select id="marketListingSelect">
+                <option value="">Choose listing</option>
+              </select>
+            </label>
+          </div>
+          <div class="identity-actions">
+            <button id="marketListButton" type="button">Add Listing</button>
+            <button id="marketBuyButton" type="button">Buy Selected</button>
+          </div>
+          <pre id="marketResult" class="companion-registry-result market-result">Refresh the market to see the top active companion listings.</pre>
+        </div>
+        <div class="companion-registry-box">
+          <p class="eyebrow">Money Market</p>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Pearl Reserve</span>
+              <input id="moneyPearlReserveInput" type="number" min="1" step="1" placeholder="100">
+            </label>
+            <label class="identity-label">
+              <span>UGNOT Reserve</span>
+              <input id="moneyUGNOTReserveInput" type="number" min="1" step="1" placeholder="100">
+            </label>
+          </div>
+          <div class="identity-actions">
+            <button id="moneyOpenButton" type="button">Open Money Stall</button>
+            <button id="moneyRefreshButton" type="button">Refresh Changers</button>
+          </div>
+          <div class="identity-fields">
+            <label class="identity-label">
+              <span>Peddler</span>
+              <select id="moneyPeddlerSelect">
+                <option value="">Choose peddler</option>
+              </select>
+            </label>
+            <label class="identity-label">
+              <span>Pearl Amount</span>
+              <input id="moneyPearlAmountInput" type="number" min="1" step="1" placeholder="10">
+            </label>
+          </div>
+          <div class="identity-actions">
+            <button id="moneyBuyPearlsButton" type="button">Buy Pearls</button>
+            <button id="moneyBuyUGNOTButton" type="button">Buy UGNOT</button>
+          </div>
+          <pre id="moneyMarketResult" class="companion-registry-result market-result">Refresh changers to inspect current pearl/UGNOT offers.</pre>
+        </div>
+
+        <div class="panel-header compact">
+          <div>
+            <p class="eyebrow">Session</p>
+            <h2>Log</h2>
+          </div>
+        </div>
+        <div id="eventLog" class="event-log"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./story/story_runner.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

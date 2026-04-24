@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mountain entry placeholder</title>
+  <desc id="desc">Placeholder illustration for the mountain scenario entry scene.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d8e4ef"/>
+      <stop offset="100%" stop-color="#607287"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <path d="M0 630 L280 420 L460 520 L720 250 L980 560 L1200 360 L1420 560 L1600 470 L1600 900 L0 900 Z" fill="#4b5660"/>
+  <path d="M260 450 L330 390 L400 460 Z M690 290 L760 220 L830 300 Z M1180 390 L1240 330 L1310 410 Z" fill="#f4f7fb" opacity="0.9"/>
+  <circle cx="1270" cy="190" r="64" fill="#f7f3df" opacity="0.85"/>
+  <text x="96" y="130" fill="#f7fbff" font-size="66" font-family="Georgia, serif">mountain-entry-01</text>
+  <text x="96" y="202" fill="#e5edf5" font-size="34" font-family="Georgia, serif">Grey ridges, valley lights, and an old pass waiting in the snow.</text>
+</svg>

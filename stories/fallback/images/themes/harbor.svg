@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#d7e5ec"/>
+  <rect y="390" width="1200" height="330" fill="#5c8ca6"/>
+  <rect y="320" width="1200" height="80" fill="#93734f"/>
+  <rect x="250" y="180" width="16" height="220" fill="#5f4632"/>
+  <polygon points="266,190 420,250 266,310" fill="#ebe7da"/>
+  <rect x="760" y="155" width="16" height="245" fill="#5f4632"/>
+  <polygon points="776,170 940,240 776,310" fill="#e7e0cf"/>
+  <text x="70" y="94" fill="#24404d" font-size="42" font-family="Georgia, serif">fallback / harbor</text>
+</svg>

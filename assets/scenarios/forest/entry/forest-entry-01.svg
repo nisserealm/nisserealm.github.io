@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#27331f"/>
+      <stop offset="100%" stop-color="#0f140d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#sky)"/>
+  <circle cx="870" cy="120" r="70" fill="#d6e8a0" opacity="0.22"/>
+  <rect y="380" width="1200" height="220" fill="#172013"/>
+  <path d="M0 440 C160 390, 280 500, 420 450 S700 390, 860 455 S1070 500, 1200 430 L1200 600 L0 600 Z" fill="#22321a"/>
+  <path d="M170 420 L230 180 L290 420 Z" fill="#0f180d"/>
+  <path d="M380 430 L455 150 L530 430 Z" fill="#10190e"/>
+  <path d="M640 430 L705 170 L770 430 Z" fill="#0d170c"/>
+  <path d="M890 430 L960 160 L1030 430 Z" fill="#12200f"/>
+  <path d="M535 600 C560 520, 620 430, 700 360" stroke="#7b8e58" stroke-width="18" fill="none" opacity="0.85"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="44" font-family="Georgia, serif">Forest Entry</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">The pines gather close and the paths wait to be named.</text>
+</svg>

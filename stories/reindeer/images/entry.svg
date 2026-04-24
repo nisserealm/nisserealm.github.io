@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#dfe8ef"/>
+  <rect y="430" width="1200" height="290" fill="#cdd9e5"/>
+  <circle cx="960" cy="110" r="70" fill="#f7f4df"/>
+  <polygon points="0,470 240,280 430,470" fill="#8da0af"/>
+  <polygon points="260,500 560,220 860,500" fill="#738796"/>
+  <polygon points="620,520 940,260 1200,520" fill="#627684"/>
+  <rect x="540" y="360" width="16" height="120" fill="#6b4d33"/>
+  <circle cx="548" cy="330" r="58" fill="#566c4f"/>
+  <ellipse cx="420" cy="520" rx="90" ry="54" fill="#b96b51"/>
+  <ellipse cx="690" cy="500" rx="120" ry="70" fill="#f7f5ef" fill-opacity="0.92"/>
+  <text x="74" y="86" fill="#35424e" font-size="42" font-family="Georgia, serif">reindeer / entry</text>
+  <text x="74" y="134" fill="#35424e" font-size="24" font-family="Georgia, serif">Snow rise, old spruce, herder and Lumi</text>
+</svg>

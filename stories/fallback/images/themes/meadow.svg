@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#deefd0"/>
+  <rect y="320" width="1200" height="400" fill="#88b86d"/>
+  <path d="M0 430 C190 380 330 470 520 420 S870 370 1200 430 L1200 720 L0 720 Z" fill="#72a458"/>
+  <circle cx="920" cy="110" r="72" fill="#f6efbf"/>
+  <text x="70" y="94" fill="#304629" font-size="42" font-family="Georgia, serif">fallback / meadow</text>
+</svg>

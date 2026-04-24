@@ -1,0 +1,141 @@
+{
+  "id": "dog",
+  "title": "Dog",
+  "theme": "farm",
+  "startNode": "start",
+  "tileHint": "A sheep farm with hedges, low barking, and a restless yard",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Ask whether the farm dog might choose your road.",
+        "baseChance": 44,
+        "levelGain": 1,
+        "successTitle": "A keen hound answers",
+        "successBody": "$companionName circles once, tests your scent and step, and then settles as if your road now belongs partly to it.",
+        "failureTitle": "The flock still needs its guard",
+        "failureBody": "The dog likes you well enough, but the fields still call louder than the road."
+      },
+      "2": {
+        "hint": "Help with flock, fence, and evening watch.",
+        "baseChance": 52,
+        "levelGain": 1,
+        "successTitle": "Trust is earned at dusk",
+        "successBody": "You work until the sheep quiet down and the yard grows still. When night comes, $companionName chooses to keep watch at your side instead.",
+        "failureTitle": "A friendly watch, but not a parting",
+        "failureBody": "You earn a warm welcome and a good dog's respect, but not its departure."
+      },
+      "3": {
+        "hint": "Meet the yard's trouble before it reaches the flock.",
+        "baseChance": 58,
+        "levelGain": 1,
+        "successTitle": "The yard takes your measure",
+        "successBody": "You answer trouble quickly enough that even the dog must admit it. By evening, $companionName follows you like a challenge accepted.",
+        "failureTitle": "Too much haste in the yard",
+        "failureBody": "You move fast and boldly, but the dog decides boldness is not yet the same thing as trust."
+      }
+    }
+  },
+  "startText": "The farm is full of quick motion: sheep shifting in the field, loose hens in the lane, and one sharp-eyed dog weaving through it all with the serious focus of a creature that believes the whole place depends on it.\n\nWhen it notices you, it stops at once and waits to see what sort of stranger you are.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The dog does not bark again. It simply watches.",
+      "choices": [
+        {
+          "id": "observe",
+          "digit": "1",
+          "label": "Observe the yard before making a move",
+          "next": "observe1"
+        },
+        {
+          "id": "assist",
+          "digit": "2",
+          "label": "Offer to help with the farm's evening work",
+          "next": "assist1"
+        },
+        {
+          "id": "intervene",
+          "digit": "3",
+          "label": "Step in the moment something goes wrong",
+          "next": "intervene1"
+        }
+      ]
+    },
+    "observe1": {
+      "text": "You let the pattern of the place show itself: the dog's rounds, the weak point in the fence, the way the sheep lean together when wind shifts.",
+      "choices": [
+        {
+          "id": "speak-low",
+          "digit": "1",
+          "label": "Speak low and let the dog approach first",
+          "next": "final"
+        },
+        {
+          "id": "watch-flock",
+          "digit": "2",
+          "label": "Help simply by watching what the dog watches",
+          "next": "final"
+        }
+      ]
+    },
+    "assist1": {
+      "text": "The farmer sets you to real work without fuss. Buckets, gates, and scattered animals all need one more pair of hands, and the dog measures whether your kindness holds up under pressure.",
+      "choices": [
+        {
+          "id": "fence",
+          "digit": "1",
+          "label": "Mend the weak point in the fence",
+          "next": "final"
+        },
+        {
+          "id": "gather",
+          "digit": "2",
+          "label": "Help gather the flock before dark",
+          "next": "final"
+        }
+      ]
+    },
+    "intervene1": {
+      "text": "A sharp movement in the yard gives you your chance. Whether it is a broken gate, a bolting sheep, or something worrying the field edge, the moment asks whether you act well or only quickly.",
+      "choices": [
+        {
+          "id": "rush",
+          "digit": "1",
+          "label": "Rush the trouble and stop it fast",
+          "next": "final"
+        },
+        {
+          "id": "hold-line",
+          "digit": "2",
+          "label": "Take the line the dog itself would have taken",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By evening, the dog has decided what kind of stranger you are.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "ask-road",
+          "digit": "1",
+          "label": "Ask whether the farm dog might choose your road"
+        },
+        {
+          "id": "help-watch",
+          "digit": "2",
+          "label": "Help with flock, fence, and evening watch"
+        },
+        {
+          "id": "meet-trouble",
+          "digit": "3",
+          "label": "Meet the yard's trouble before it reaches the flock"
+        }
+      ]
+    }
+  }
+}

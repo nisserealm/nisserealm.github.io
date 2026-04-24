@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#e7edf0"/>
+  <rect y="430" width="1200" height="290" fill="#d1dce3"/>
+  <polygon points="0,500 260,250 520,500" fill="#8a9ca8"/>
+  <polygon points="430,520 760,220 1080,520" fill="#6f808c"/>
+  <circle cx="540" cy="458" r="58" fill="#efb06b"/>
+  <circle cx="540" cy="458" r="30" fill="#f8d8a1"/>
+  <ellipse cx="770" cy="495" rx="120" ry="70" fill="#f7f5ef"/>
+  <ellipse cx="360" cy="506" rx="98" ry="58" fill="#b96f55"/>
+  <text x="74" y="86" fill="#33404a" font-size="42" font-family="Georgia, serif">reindeer / final</text>
+  <text x="74" y="134" fill="#33404a" font-size="24" font-family="Georgia, serif">The final choice by the fire</text>
+</svg>

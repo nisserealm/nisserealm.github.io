@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#dde6eb"/>
+  <rect y="430" width="1200" height="290" fill="#c8d5dd"/>
+  <polygon points="40,500 310,260 560,500" fill="#8697a5"/>
+  <polygon points="430,520 770,235 1080,520" fill="#6b7b89"/>
+  <ellipse cx="420" cy="500" rx="108" ry="64" fill="#bf7257"/>
+  <ellipse cx="770" cy="495" rx="116" ry="68" fill="#f5f3eb"/>
+  <line x1="640" y1="252" x2="820" y2="190" stroke="#9fb5c3" stroke-width="10" stroke-linecap="round"/>
+  <text x="74" y="86" fill="#34424c" font-size="42" font-family="Georgia, serif">reindeer / ask1</text>
+  <text x="74" y="134" fill="#34424c" font-size="24" font-family="Georgia, serif">Questions about the lost herd</text>
+</svg>

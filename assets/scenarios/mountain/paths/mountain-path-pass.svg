@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mountain pass placeholder</title>
+  <desc id="desc">Placeholder illustration for the mountain pass path scene.</desc>
+  <rect width="1600" height="900" fill="#c8d4de"/>
+  <path d="M0 500 L240 360 L440 470 L640 320 L820 470 L1040 340 L1280 490 L1600 390 L1600 900 L0 900 Z" fill="#6b7883"/>
+  <path d="M0 760 C300 670 470 700 680 620 C910 535 1110 590 1600 510" fill="none" stroke="#eef5fa" stroke-width="44" stroke-linecap="round"/>
+  <circle cx="1170" cy="565" r="18" fill="#d6b463"/>
+  <text x="96" y="126" fill="#24313a" font-size="62" font-family="Georgia, serif">mountain-path-pass</text>
+  <text x="96" y="196" fill="#3a4954" font-size="32" font-family="Georgia, serif">A quiet white pass, tiny hoofprints, and a bell half-lost in the drift.</text>
+</svg>

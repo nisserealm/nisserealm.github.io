@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#ddd8d1"/>
+  <rect y="450" width="1200" height="270" fill="#b7aa99"/>
+  <rect x="160" y="210" width="130" height="240" fill="#8c7c6f"/>
+  <rect x="330" y="170" width="170" height="280" fill="#78695d"/>
+  <rect x="540" y="120" width="210" height="330" fill="#6c5e54"/>
+  <rect x="800" y="210" width="160" height="240" fill="#85766a"/>
+  <circle cx="930" cy="125" r="52" fill="#f1e1b4"/>
+  <text x="70" y="94" fill="#42372f" font-size="42" font-family="Georgia, serif">fallback / city</text>
+</svg>

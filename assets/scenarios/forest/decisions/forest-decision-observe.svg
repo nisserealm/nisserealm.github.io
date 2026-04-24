@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#131810"/>
+  <circle cx="650" cy="240" r="120" fill="#dce6b2" opacity="0.18"/>
+  <path d="M0 480 C180 430, 380 540, 600 470 S960 390, 1200 480 L1200 600 L0 600 Z" fill="#1b2415"/>
+  <path d="M250 470 L320 170 L390 470 Z" fill="#0e140c"/>
+  <path d="M780 470 L850 150 L920 470 Z" fill="#0f150d"/>
+  <circle cx="590" cy="320" r="12" fill="#d7dfc8"/>
+  <circle cx="710" cy="320" r="12" fill="#d7dfc8"/>
+  <path d="M600 330 Q650 355 700 330" stroke="#d7dfc8" stroke-width="8" fill="none"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="42" font-family="Georgia, serif">Observe</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">Hold still. Let the forest explain itself before you act.</text>
+</svg>

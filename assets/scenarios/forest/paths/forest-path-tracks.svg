@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#12180f"/>
+  <rect y="360" width="1200" height="240" fill="#1a2314"/>
+  <path d="M540 600 C560 520, 580 430, 630 320 S740 150, 860 70" stroke="#695840" stroke-width="44" fill="none" opacity="0.85"/>
+  <ellipse cx="585" cy="454" rx="18" ry="28" fill="#332519"/>
+  <ellipse cx="628" cy="412" rx="18" ry="28" fill="#332519"/>
+  <ellipse cx="672" cy="366" rx="18" ry="28" fill="#332519"/>
+  <ellipse cx="722" cy="313" rx="18" ry="28" fill="#332519"/>
+  <path d="M160 450 L230 160 L300 450 Z" fill="#0b1209"/>
+  <path d="M360 470 L440 120 L520 470 Z" fill="#0f170c"/>
+  <path d="M900 460 L975 140 L1050 460 Z" fill="#0d150b"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="42" font-family="Georgia, serif">Tracks</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">Heavy prints, broken brush, and something that moved without fear.</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#10140d"/>
+  <rect y="360" width="1200" height="240" fill="#1a2213"/>
+  <path d="M120 470 C210 330, 300 520, 390 350" stroke="#495538" stroke-width="16" fill="none"/>
+  <path d="M350 500 C430 310, 520 520, 610 330" stroke="#5d6c45" stroke-width="18" fill="none"/>
+  <path d="M620 520 C700 340, 800 520, 890 320" stroke="#4d5b37" stroke-width="18" fill="none"/>
+  <path d="M870 500 C940 350, 1030 510, 1110 330" stroke="#64744a" stroke-width="16" fill="none"/>
+  <path d="M210 460 L280 190 L350 460 Z" fill="#0b1209"/>
+  <path d="M760 460 L835 150 L910 460 Z" fill="#0c1309"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="42" font-family="Georgia, serif">Thicket</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">Thorns close around hidden pockets where silence feels intentional.</text>
+</svg>

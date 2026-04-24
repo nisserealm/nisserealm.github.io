@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#efece3"/>
+  <rect y="430" width="1200" height="290" fill="#d7d1c2"/>
+  <polygon points="80,520 360,260 600,520" fill="#857d74"/>
+  <polygon points="480,520 820,250 1120,520" fill="#6d675f"/>
+  <circle cx="560" cy="470" r="54" fill="#f1a14e"/>
+  <circle cx="560" cy="470" r="28" fill="#f7d38f"/>
+  <ellipse cx="760" cy="510" rx="120" ry="66" fill="#f7f5ef"/>
+  <rect x="410" y="428" width="90" height="40" rx="10" fill="#875842"/>
+  <text x="74" y="86" fill="#3f403e" font-size="42" font-family="Georgia, serif">reindeer / help1</text>
+  <text x="74" y="134" fill="#3f403e" font-size="24" font-family="Georgia, serif">Helping with the fire and camp</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#18150f"/>
+  <rect y="380" width="1200" height="220" fill="#231b14"/>
+  <path d="M210 470 L290 150 L370 470 Z" fill="#0c1008"/>
+  <path d="M760 470 L840 130 L920 470 Z" fill="#0c1008"/>
+  <circle cx="640" cy="280" r="130" fill="#f2d489" opacity="0.14"/>
+  <polygon points="620,215 655,260 715,270 672,310 683,370 620,340 557,370 568,310 525,270 585,260" fill="#f4d977" opacity="0.8"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="42" font-family="Georgia, serif">Seize</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">Reach fast for the moment before it closes or bites back.</text>
+</svg>

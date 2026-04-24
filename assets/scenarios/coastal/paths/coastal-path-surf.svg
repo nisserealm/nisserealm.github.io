@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Surf path</title>
+  <desc id="desc">A harder shoreline with white water and a dark sail beyond.</desc>
+  <rect width="960" height="540" fill="#a4c4de"/>
+  <rect y="205" width="960" height="335" fill="#174868"/>
+  <path d="M0 308c164-51 298 17 439-15 141-32 259 37 521-11V540H0Z" fill="#bca36b"/>
+  <path d="M0 250c92-27 154 33 247 9 122-32 188 56 327 28 93-18 177 21 386-20" fill="none" stroke="#f6fbff" stroke-width="10" stroke-linecap="round"/>
+  <path d="M730 196l26-40 57 36-5 24h-65z" fill="#2e2f35"/>
+  <path d="M757 156l5 86" stroke="#1b1b1f" stroke-width="6" stroke-linecap="round"/>
+  <path d="M763 165l46 26-46 14z" fill="#0f1014"/>
+</svg>

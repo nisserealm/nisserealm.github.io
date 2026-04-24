@@ -1,0 +1,141 @@
+{
+  "id": "donkey",
+  "title": "Donkey",
+  "theme": "farm",
+  "startNode": "start",
+  "tileHint": "A weathered farm with stone walls and a muddy yard",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Ask whether the donkey might follow your road.",
+        "baseChance": 44,
+        "levelGain": 1,
+        "successTitle": "A patient beast chooses you",
+        "successBody": "$companionName lowers its head, listens to your voice, and decides your road is worth trusting.",
+        "failureTitle": "The yard keeps its old worker",
+        "failureBody": "The donkey watches you kindly, but the farm still needs its patient strength."
+      },
+      "2": {
+        "hint": "Work beside the farmer until the day settles.",
+        "baseChance": 52,
+        "levelGain": 1,
+        "successTitle": "Work earns a quiet bond",
+        "successBody": "By dusk the old farm feels less guarded. When you turn to leave, $companionName is already standing at your shoulder.",
+        "failureTitle": "A good day, but no parting",
+        "failureBody": "You are thanked warmly, yet the farmer keeps the donkey close for another season."
+      },
+      "3": {
+        "hint": "Take the hardest task in the yard and prove your mettle.",
+        "baseChance": 58,
+        "levelGain": 1,
+        "successTitle": "Stubbornness meets stubbornness",
+        "successBody": "The yard tests you and finds you steady. $companionName seems to approve that more than anyone.",
+        "failureTitle": "The farm outlasts your boldness",
+        "failureBody": "You throw yourself into the work, but the beast remains unconvinced and the farm returns to its own rhythm."
+      }
+    }
+  },
+  "startText": "A farm lies low against the weather, with stacked stones, damp straw, and the slow sound of work that began before you arrived.\n\nNear the byre stands a grey donkey with clever eyes, as if it has already judged every traveler who ever crossed this yard.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The farmer notices you, but it is the donkey that truly studies you.",
+      "choices": [
+        {
+          "id": "watch",
+          "digit": "1",
+          "label": "Watch the farm work before speaking",
+          "next": "watch1"
+        },
+        {
+          "id": "help",
+          "digit": "2",
+          "label": "Offer to help with the day's labor",
+          "next": "help1"
+        },
+        {
+          "id": "stride",
+          "digit": "3",
+          "label": "Step straight into the hardest work in the yard",
+          "next": "stride1"
+        }
+      ]
+    },
+    "watch1": {
+      "text": "You keep your distance and let the place show itself first: creaking cart wheels, muttered weather signs, and the patient timing of a beast that wastes no motion.",
+      "choices": [
+        {
+          "id": "offer-water",
+          "digit": "1",
+          "label": "Bring water and speak gently",
+          "next": "final"
+        },
+        {
+          "id": "ask-road",
+          "digit": "2",
+          "label": "Ask about the donkey's road sense",
+          "next": "final"
+        }
+      ]
+    },
+    "help1": {
+      "text": "The farmer hands you work without ceremony. Fences lean, buckets knock against stone, and the donkey watches to see if your kindness lasts longer than a greeting.",
+      "choices": [
+        {
+          "id": "carry",
+          "digit": "1",
+          "label": "Carry feed and tools without complaint",
+          "next": "final"
+        },
+        {
+          "id": "mend",
+          "digit": "2",
+          "label": "Help mend what the weather has worn down",
+          "next": "final"
+        }
+      ]
+    },
+    "stride1": {
+      "text": "You take the roughest task in sight and meet the farm on its own terms. Mud grips your boots, rope burns your hands, and the donkey's ears flick once in approval or warning.",
+      "choices": [
+        {
+          "id": "haul",
+          "digit": "1",
+          "label": "Haul the burden through to the end",
+          "next": "final"
+        },
+        {
+          "id": "brace",
+          "digit": "2",
+          "label": "Stand firm when the work goes sideways",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By evening, the farm has taken your measure. The donkey has as well.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "ask-follow",
+          "digit": "1",
+          "label": "Ask whether the donkey might follow your road"
+        },
+        {
+          "id": "work-day",
+          "digit": "2",
+          "label": "Work beside the farmer until the day settles"
+        },
+        {
+          "id": "prove-mettle",
+          "digit": "3",
+          "label": "Take the hardest task in the yard and prove your mettle"
+        }
+      ]
+    }
+  }
+}

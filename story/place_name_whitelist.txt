@@ -1,0 +1,21 @@
+Place name whitelist
+
+Use these as candidate names for fixed places, generated maps, frontier discoveries, and later map-painting tools.
+
+Minde
+Hop
+Sletten
+Skjold
+Nesttun
+Fantoft
+Midtun
+Fana
+Floen
+Lyder
+Floyen
+Lodde
+Lakse
+Hyse
+Lyse
+Voss
+Geilo

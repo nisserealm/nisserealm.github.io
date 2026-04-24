@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Seize the coastal chance</title>
+  <desc id="desc">A gleam in wreckage on the shoreline with harsher surf behind.</desc>
+  <rect width="960" height="540" fill="#b5c9cf"/>
+  <rect y="215" width="960" height="325" fill="#204e64"/>
+  <path d="M0 324c163-50 284 4 428-25 146-30 284 40 532-19V540H0Z" fill="#c0a16f"/>
+  <path d="M601 366l55-71 66 48-7 28h-100z" fill="#5a3d27"/>
+  <path d="M396 381c15-23 28-49 37-80" fill="none" stroke="#fff8cc" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="432" cy="294" r="10" fill="#ffe08f"/>
+  <path d="M71 267c94-25 156 22 239 3 115-26 171 41 282 19 76-15 167 9 290-18" fill="none" stroke="#eef8ff" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,141 @@
+{
+  "id": "mule",
+  "title": "Mule",
+  "theme": "farm",
+  "startNode": "start",
+  "tileHint": "A hill farm where loads are hauled between fields and stone",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Ask whether the mule would trust your road.",
+        "baseChance": 44,
+        "levelGain": 1,
+        "successTitle": "A sure-footed companion answers",
+        "successBody": "$companionName studies you with long patience, then falls into step as though it had chosen this road before you spoke.",
+        "failureTitle": "The field keeps its strength",
+        "failureBody": "The mule does not refuse you harshly. It simply remains where the work is still unfinished."
+      },
+      "2": {
+        "hint": "Labor with the farm until the burden lightens.",
+        "baseChance": 52,
+        "levelGain": 1,
+        "successTitle": "Labor wins respect",
+        "successBody": "The day wears both of you down in the same honest way. When the load is finally eased, $companionName seems unwilling to part from you.",
+        "failureTitle": "Respect without release",
+        "failureBody": "The farm comes to respect you, but the mule is still needed where stone and burden meet."
+      },
+      "3": {
+        "hint": "Take the steep path and prove you can keep pace.",
+        "baseChance": 58,
+        "levelGain": 1,
+        "successTitle": "The high path is shared",
+        "successBody": "You take the hardest rise without yielding. When you reach the crest, $companionName is there beside you, breath steaming in the same cold air.",
+        "failureTitle": "The slope humbles you",
+        "failureBody": "You test yourself against the steep road and the weight of the day, but the mule remains loyal to the farm that shaped it."
+      }
+    }
+  },
+  "startText": "The farm climbs the land instead of spreading across it. Stone walls bite into the slope, and every burden here seems to have been hauled uphill by stubborn will.\n\nA dark mule stands near a loaded sled, quiet, hard-eyed, and perfectly at home where weaker creatures would already be complaining.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The mule looks less impressed by you than by the gradient of the hill.",
+      "choices": [
+        {
+          "id": "measure",
+          "digit": "1",
+          "label": "Measure the farm before stepping in",
+          "next": "measure1"
+        },
+        {
+          "id": "shoulder",
+          "digit": "2",
+          "label": "Shoulder part of the day's burden",
+          "next": "shoulder1"
+        },
+        {
+          "id": "climb",
+          "digit": "3",
+          "label": "Take the steepest path first",
+          "next": "climb1"
+        }
+      ]
+    },
+    "measure1": {
+      "text": "You watch the rhythm of the slope, the pauses before each pull, and the small choices that keep work from becoming waste.",
+      "choices": [
+        {
+          "id": "ask-pack",
+          "digit": "1",
+          "label": "Ask about the mule's load and temper",
+          "next": "final"
+        },
+        {
+          "id": "ease-path",
+          "digit": "2",
+          "label": "Clear the roughest stretch of the track",
+          "next": "final"
+        }
+      ]
+    },
+    "shoulder1": {
+      "text": "The farmer says little, only points to the weight that needs moving. The mule keeps one ear turned toward you, judging whether your willingness survives effort.",
+      "choices": [
+        {
+          "id": "lift",
+          "digit": "1",
+          "label": "Lift with patience instead of pride",
+          "next": "final"
+        },
+        {
+          "id": "steady",
+          "digit": "2",
+          "label": "Steady the load when it slips",
+          "next": "final"
+        }
+      ]
+    },
+    "climb1": {
+      "text": "You choose the steep road first, where stone, mud, and bad footing quickly reveal whether resolve is real or only loud.",
+      "choices": [
+        {
+          "id": "crest",
+          "digit": "1",
+          "label": "Push on until the ridge is won",
+          "next": "final"
+        },
+        {
+          "id": "brace",
+          "digit": "2",
+          "label": "Brace the weight when the path gives way",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By the end of the climb, the mule has reached its judgment.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "ask-trust",
+          "digit": "1",
+          "label": "Ask whether the mule would trust your road"
+        },
+        {
+          "id": "labor-beside",
+          "digit": "2",
+          "label": "Labor with the farm until the burden lightens"
+        },
+        {
+          "id": "take-steep",
+          "digit": "3",
+          "label": "Take the steep path and prove you can keep pace"
+        }
+      ]
+    }
+  }
+}

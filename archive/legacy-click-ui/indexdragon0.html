@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dragon0 QEval Console</title>
+</head>
+<body>
+
+<h2>Dragon0 QEval Console</h2>
+<p>This page talks to <strong>http://localhost:3000/proxy</strong> and keeps browser interaction focused on read-only <code>qeval</code> calls.</p>
+
+<button id="overview">Realm Overview</button>
+<button id="count">Count Dragons</button>
+<button id="first">Describe Dragon 1</button>
+<button id="townCount">Count Towns</button>
+<button id="citizenCount">Count Citizens</button>
+
+<p>
+  <label for="expr">Custom qeval expression</label><br>
+  <input id="expr" size="96">
+  <button id="run">Run Expression</button>
+</p>
+
+<p>
+  <strong>MintTown CLI helper</strong><br>
+  <label for="keyName">Key name</label>
+  <input id="keyName" value="mykey">
+  <label for="townName">Town name</label>
+  <input id="townName" value="first-town">
+  <label for="townAmount">Amount</label>
+  <input id="townAmount" type="number" min="1" value="100">
+  <button id="mintTownHelp">Show MintTown CLI Command</button>
+</p>
+
+<p>
+  <strong>MintCitizen CLI helper</strong><br>
+  <label for="citizenTownName">Town name</label>
+  <input id="citizenTownName" value="nissetown">
+  <label for="citizenName">Citizen name</label>
+  <input id="citizenName" value="nisse">
+  <button id="mintCitizenHelp">Show MintCitizen CLI Command</button>
+</p>
+
+<p>
+  <strong>MoveCitizenTown CLI helper</strong><br>
+  <label for="fromTownName">From town</label>
+  <input id="fromTownName" value="trollheim">
+  <label for="moveCitizenName">Citizen name</label>
+  <input id="moveCitizenName" value="Tom">
+  <label for="toTownName">To town</label>
+  <input id="toTownName" value="nisseheim">
+  <button id="moveCitizenHelp">Show MoveCitizenTown CLI Command</button>
+</p>
+
+<pre id="output"></pre>
+
+<script>
+const output = document.getElementById("output");
+const exprInput = document.getElementById("expr");
+const keyNameInput = document.getElementById("keyName");
+const townNameInput = document.getElementById("townName");
+const townAmountInput = document.getElementById("townAmount");
+const citizenTownNameInput = document.getElementById("citizenTownName");
+const citizenNameInput = document.getElementById("citizenName");
+const fromTownNameInput = document.getElementById("fromTownName");
+const moveCitizenNameInput = document.getElementById("moveCitizenName");
+const toTownNameInput = document.getElementById("toTownName");
+const pkgPath = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/dragon0";
+const proxyUrl = "http://localhost:3000/proxy";
+const defaultGasFee = "2000000ugnot";
+const defaultGasWanted = "30000000";
+
+exprInput.value = pkgPath + '.Render("")';
+
+function setOutput(message) {
+  output.textContent = message;
+}
+
+function decodeProxyResult(json) {
+  const response = json?.result?.response?.ResponseBase;
+
+  if (!response) {
+    return JSON.stringify(json, null, 2);
+  }
+
+  if (response.Error) {
+    throw new Error(response.Error);
+  }
+
+  if (response.Data) {
+    return atob(response.Data);
+  }
+
+  if (response.Log) {
+    return response.Log;
+  }
+
+  return JSON.stringify(json, null, 2);
+}
+
+async function runQeval(expr) {
+  const trimmed = expr.trim();
+
+  if (!trimmed) {
+    setOutput("Enter a qeval expression.");
+    return;
+  }
+
+  setOutput("Running:\n" + trimmed);
+
+  try {
+    const res = await fetch(proxyUrl, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: trimmed
+    });
+
+    if (!res.ok) {
+      throw new Error("Proxy returned " + res.status);
+    }
+
+    const json = await res.json();
+    setOutput(decodeProxyResult(json));
+  } catch (err) {
+    setOutput("QEval error:\n" + (err?.message || String(err)));
+  }
+}
+
+function shellQuote(value) {
+  return "'" + String(value).replace(/'/g, "'\\''") + "'";
+}
+
+function buildMintTownCommand() {
+  const keyName = keyNameInput.value.trim() || "mykey";
+  const townName = townNameInput.value.trim() || "first-town";
+  const amount = townAmountInput.value.trim() || "100";
+
+  return [
+    "gnokey maketx call",
+    shellQuote(keyName),
+    "--broadcast",
+    "--chainid dev",
+    "--gas-fee", shellQuote(defaultGasFee),
+    "--gas-wanted", shellQuote(defaultGasWanted),
+    "--pkgpath", shellQuote(pkgPath),
+    "--func", shellQuote("MintTown"),
+    "--args", shellQuote(townName),
+    "--args", shellQuote(amount)
+  ].join(" ");
+}
+
+function buildMintCitizenCommand() {
+  const keyName = keyNameInput.value.trim() || "mykey";
+  const townName = citizenTownNameInput.value.trim() || "nissetown";
+  const citizenName = citizenNameInput.value.trim() || "nisse";
+
+  return [
+    "gnokey maketx call",
+    shellQuote(keyName),
+    "--broadcast",
+    "--chainid dev",
+    "--gas-fee", shellQuote(defaultGasFee),
+    "--gas-wanted", shellQuote(defaultGasWanted),
+    "--pkgpath", shellQuote(pkgPath),
+    "--func", shellQuote("MintCitizen"),
+    "--args", shellQuote(townName),
+    "--args", shellQuote(citizenName)
+  ].join(" ");
+}
+
+function buildMoveCitizenCommand() {
+  const keyName = keyNameInput.value.trim() || "mykey";
+  const fromTownName = fromTownNameInput.value.trim() || "trollheim";
+  const citizenName = moveCitizenNameInput.value.trim() || "Tom";
+  const toTownName = toTownNameInput.value.trim() || "nisseheim";
+
+  return [
+    "gnokey maketx call",
+    shellQuote(keyName),
+    "--broadcast",
+    "--chainid dev",
+    "--gas-fee", shellQuote(defaultGasFee),
+    "--gas-wanted", shellQuote(defaultGasWanted),
+    "--pkgpath", shellQuote(pkgPath),
+    "--func", shellQuote("MoveCitizenTown"),
+    "--args", shellQuote(fromTownName),
+    "--args", shellQuote(citizenName),
+    "--args", shellQuote(toTownName)
+  ].join(" ");
+}
+
+document.getElementById("overview").onclick = () => {
+  const expr = pkgPath + '.Render("")';
+  exprInput.value = expr;
+  runQeval(expr);
+};
+
+document.getElementById("count").onclick = () => {
+  const expr = pkgPath + ".ListAllDragons()";
+  exprInput.value = expr;
+  runQeval(expr);
+};
+
+document.getElementById("first").onclick = () => {
+  const expr = pkgPath + ".DescribeDragon(1)";
+  exprInput.value = expr;
+  runQeval(expr);
+};
+
+document.getElementById("townCount").onclick = () => {
+  const expr = pkgPath + ".ListAllTowns()";
+  exprInput.value = expr;
+  runQeval(expr);
+};
+
+document.getElementById("citizenCount").onclick = () => {
+  const expr = pkgPath + ".ListAllCitizens()";
+  exprInput.value = expr;
+  runQeval(expr);
+};
+
+document.getElementById("run").onclick = () => {
+  runQeval(exprInput.value);
+};
+
+document.getElementById("mintTownHelp").onclick = () => {
+  const townName = townNameInput.value.trim() || "first-town";
+  setOutput(
+    "Run this signed terminal command to mint a town:\n\n" +
+    buildMintTownCommand() +
+    "\n\nAfter broadcasting, you can inspect it with qeval:\n" +
+    pkgPath + ".DescribeTown(" + JSON.stringify(townName) + ")"
+  );
+};
+
+document.getElementById("mintCitizenHelp").onclick = () => {
+  const townName = citizenTownNameInput.value.trim() || "nissetown";
+  const citizenName = citizenNameInput.value.trim() || "nisse";
+  setOutput(
+    "Run this signed terminal command to mint a citizen:\n\n" +
+    buildMintCitizenCommand() +
+    "\n\nIf the town does not exist yet, MintCitizen will create it with amount 1.\n\n" +
+    "After broadcasting, inspect it with qeval:\n" +
+    pkgPath + ".DescribeCitizen(" + JSON.stringify(townName) + ", " + JSON.stringify(citizenName) + ")\n" +
+    pkgPath + ".DescribeTown(" + JSON.stringify(townName) + ")"
+  );
+};
+
+document.getElementById("moveCitizenHelp").onclick = () => {
+  const citizenName = moveCitizenNameInput.value.trim() || "Tom";
+  const toTownName = toTownNameInput.value.trim() || "nisseheim";
+  setOutput(
+    "Run this signed terminal command to move a citizen to another town:\n\n" +
+    buildMoveCitizenCommand() +
+    "\n\nTown and citizen lookups are now case-insensitive.\n" +
+    "If the destination town does not exist yet, MoveCitizenTown will create it with amount 1.\n\n" +
+    "After broadcasting, inspect it with qeval:\n" +
+    pkgPath + ".DescribeCitizen(" + JSON.stringify(toTownName) + ", " + JSON.stringify(citizenName) + ")\n" +
+    pkgPath + ".DescribeTown(" + JSON.stringify(toTownName) + ")"
+  );
+};
+
+window.onload = () => {
+  setOutput(
+    "Dragon0 is now running in qeval-first mode.\n" +
+    "Use the preset buttons or run your own expression.\n\n" +
+    "Suggested expressions:\n" +
+    pkgPath + '.Render("")\n' +
+    pkgPath + ".ListAllDragons()\n" +
+    pkgPath + ".DescribeDragon(1)\n" +
+    pkgPath + ".ListAllTowns()\n" +
+    pkgPath + ".ListAllCitizens()\n\n" +
+    "Use the MintTown, MintCitizen, and MoveCitizenTown helpers to print signed gnokey commands."
+  );
+};
+
+/*
+  Adena integration is intentionally disabled while we build around qeval.
+  Keep this shape around for later staging/testnet wallet work.
+
+  async function connectWallet() {
+    const adena = window.adena;
+    return adena.AddEstablish("Dragon0");
+  }
+
+  async function mintDragonWithWallet(currentAddress, constitution) {
+    const adena = window.adena;
+    return adena.DoContract({
+      messages: [{
+        type: "/vm.m_call",
+        value: {
+          caller: currentAddress,
+          send: "",
+          pkg_path: pkgPath,
+          func: "MintDragon",
+          args: [constitution]
+        }
+      }],
+      gasFee: 1000000,
+      gasWanted: 2000000
+    });
+  }
+*/
+</script>
+
+</body>
+</html>

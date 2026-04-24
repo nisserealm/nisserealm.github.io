@@ -1,0 +1,141 @@
+{
+  "id": "deepforest",
+  "title": "Deep Forest",
+  "theme": "forest",
+  "startNode": "start",
+  "tileHint": "A darker forest tile where old paths, watchful creatures, and stranger bonds may still be found",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Move slowly, make no sudden claim, and let the forest choose whether to trust you.",
+        "baseChance": 46,
+        "levelGain": 1,
+        "successTitle": "A quiet creature accepts your road",
+        "successBody": "$companionName steps close as if the choice had been ripening for some time.",
+        "failureTitle": "The deep forest keeps its own counsel",
+        "failureBody": "The creature of the wood leaves no anger behind it, only distance."
+      },
+      "2": {
+        "hint": "Offer your kindness freely and expect nothing back from the wild.",
+        "baseChance": 50,
+        "levelGain": 1,
+        "successTitle": "The woods answer a gentle heart",
+        "successBody": "$companionName joins you as though kindness were a path the forest itself remembered.",
+        "failureTitle": "Kindness is seen, but not answered",
+        "failureBody": "The small lives of the forest settle around you, then return to their own hidden order."
+      },
+      "3": {
+        "hint": "Step into danger without shrinking and prove that your courage can shelter more than yourself.",
+        "baseChance": 56,
+        "levelGain": 1,
+        "successTitle": "A fierce bond is forged",
+        "successBody": "$companionName rises from pain and chooses to walk beside you rather than vanish back into the trees.",
+        "failureTitle": "The forest takes the wound and the lesson",
+        "failureBody": "You enter the struggle with a brave heart, but the wild does not always grant a lasting bond."
+      }
+    }
+  },
+  "startText": "The deeper wood has a different silence from the forest edge. Here the shade feels older, the tracks are harder to read, and every living thing seems to be listening for the measure of your heart before it reveals itself.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The path narrows under darker boughs. You sense at once that the forest will answer you differently depending on how you carry yourself through it.",
+      "choices": [
+        {
+          "id": "tread-lightly",
+          "digit": "1",
+          "label": "Tread lightly and watch before acting",
+          "next": "watch1"
+        },
+        {
+          "id": "be-gentle",
+          "digit": "2",
+          "label": "Move gently through every living thing you meet",
+          "next": "kind1"
+        },
+        {
+          "id": "meet-danger",
+          "digit": "3",
+          "label": "Step toward the first sign of danger without hesitation",
+          "next": "bold1"
+        }
+      ]
+    },
+    "watch1": {
+      "text": "You slow your breath and let the forest come back into focus around you. Hoofprints, bent fern tips, and small absences in the birdsong begin to tell their own story.",
+      "choices": [
+        {
+          "id": "follow-tracks",
+          "digit": "1",
+          "label": "Follow the tracks with patience",
+          "next": "final"
+        },
+        {
+          "id": "wait-still",
+          "digit": "2",
+          "label": "Wait still until the wood grows unafraid of you",
+          "next": "final"
+        }
+      ]
+    },
+    "kind1": {
+      "text": "You pass as though the forest were not yours to interrupt. Small creatures test your gentleness first, and the trees themselves seem to lean closer to see what sort of traveler you are.",
+      "choices": [
+        {
+          "id": "offer-food",
+          "digit": "1",
+          "label": "Share what little food you can spare",
+          "next": "final"
+        },
+        {
+          "id": "honor-branches",
+          "digit": "2",
+          "label": "Take nothing living that does not freely give itself",
+          "next": "final"
+        }
+      ]
+    },
+    "bold1": {
+      "text": "A harsher sound reaches you through the trees: snarling, crashing brush, and the deep rough pain of something large refusing to fall quietly.",
+      "choices": [
+        {
+          "id": "charge-in",
+          "digit": "1",
+          "label": "Charge toward the struggle at once",
+          "next": "final"
+        },
+        {
+          "id": "circle-and-strike",
+          "digit": "2",
+          "label": "Circle wide and come in where the wolves least expect you",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By the time the deep forest has answered you, it has already decided what kind of bond, if any, your road deserves.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "cautious-path",
+          "digit": "1",
+          "label": "Move slowly and let the forest choose whether to trust you"
+        },
+        {
+          "id": "kind-path",
+          "digit": "2",
+          "label": "Offer kindness freely to every life along the path"
+        },
+        {
+          "id": "bold-path",
+          "digit": "3",
+          "label": "Step into danger and prove your courage there"
+        }
+      ]
+    }
+  }
+}

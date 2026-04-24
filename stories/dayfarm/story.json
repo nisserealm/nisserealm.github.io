@@ -1,0 +1,10 @@
+{
+  "id": "dayfarm",
+  "title": "Day Farm",
+  "theme": "farm",
+  "tileHint": "Cultivated fields, hedged lanes, and bright rural tracks under open daylight",
+  "structure": {
+    "attitudes": ["cautious", "kind", "bold"],
+    "outcomes": ["success"]
+  }
+}

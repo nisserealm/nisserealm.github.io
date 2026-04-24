@@ -1,0 +1,141 @@
+{
+  "id": "dawnmeadow",
+  "title": "Dawn Meadow",
+  "theme": "meadow",
+  "startNode": "start",
+  "tileHint": "A meadow in the first cold light of morning, where frost, mist, and waking creatures shape the encounter",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Move quietly through the cold light and let the meadow reveal its shy keeper.",
+        "baseChance": 46,
+        "levelGain": 1,
+        "successTitle": "A meadow creature trusts your stillness",
+        "successBody": "$companionName chooses your road as though dawn itself had approved of you.",
+        "failureTitle": "The cold meadow closes again",
+        "failureBody": "You see the waking life of the meadow, but it slips back into distance before trust can form."
+      },
+      "2": {
+        "hint": "Meet the waking world with warmth, care, and no demand for reward.",
+        "baseChance": 50,
+        "levelGain": 1,
+        "successTitle": "The first light leaves you a friend",
+        "successBody": "$companionName remains beside you, drawn by the warmth you carried into the cold morning.",
+        "failureTitle": "Kindness is felt, but not kept",
+        "failureBody": "The little life you comforted leaves better than you found it, though it does not follow."
+      },
+      "3": {
+        "hint": "Answer the morning's danger quickly and without hesitation.",
+        "baseChance": 56,
+        "levelGain": 1,
+        "successTitle": "A fierce morning bond is made",
+        "successBody": "$companionName stays with the one who stood against danger before the sun was fully risen.",
+        "failureTitle": "The rescue holds, but the bond does not",
+        "failureBody": "Your courage changes the morning for the better, yet the creature keeps its freedom rather than its company."
+      }
+    }
+  },
+  "startText": "Dawn lies cold over the meadow. Frost clings to the lower grass, mist drifts close to the ground, and every living thing seems caught between sleep and waking.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The meadow at dawn answers each traveler differently. In the half-light, caution, kindness, and boldness do not lead to the same creature, or the same kind of trust.",
+      "choices": [
+        {
+          "id": "walk-softly",
+          "digit": "1",
+          "label": "Walk softly through the frost and listen before acting",
+          "next": "watch1"
+        },
+        {
+          "id": "offer-warmth",
+          "digit": "2",
+          "label": "Offer warmth and care to whatever the morning reveals",
+          "next": "kind1"
+        },
+        {
+          "id": "meet-danger",
+          "digit": "3",
+          "label": "Go at once toward the first sign of danger",
+          "next": "bold1"
+        }
+      ]
+    },
+    "watch1": {
+      "text": "You keep your tread light on the silvered grass and let the waking meadow grow accustomed to your presence before you ask anything from it.",
+      "choices": [
+        {
+          "id": "follow-fine-tracks",
+          "digit": "1",
+          "label": "Follow the fine tracks at the edge of the mist",
+          "next": "final"
+        },
+        {
+          "id": "wait-still",
+          "digit": "2",
+          "label": "Stand still until the small sounds return around you",
+          "next": "final"
+        }
+      ]
+    },
+    "kind1": {
+      "text": "The cold hour before full sunrise is hardest on the smallest lives. You begin by noticing who among them most needs gentleness rather than haste.",
+      "choices": [
+        {
+          "id": "share-heat",
+          "digit": "1",
+          "label": "Share what little warmth you carry",
+          "next": "final"
+        },
+        {
+          "id": "cup-fragile-life",
+          "digit": "2",
+          "label": "Shield the frailest creature the dawn has left exposed",
+          "next": "final"
+        }
+      ]
+    },
+    "bold1": {
+      "text": "The waking world is not always gentle. Even in dawn's beauty there are hawks, traps, and the quick violence of hunger.",
+      "choices": [
+        {
+          "id": "rush-in",
+          "digit": "1",
+          "label": "Rush in before the danger can finish its work",
+          "next": "final"
+        },
+        {
+          "id": "strike-hard",
+          "digit": "2",
+          "label": "Strike hard and trust courage to settle the rest",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By the time the meadow has fully woken, it has already decided what kind of company, if any, your road deserves.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "cautious-path",
+          "digit": "1",
+          "label": "Move quietly and let dawn's shy creature choose you"
+        },
+        {
+          "id": "kind-path",
+          "digit": "2",
+          "label": "Offer warmth and care to the exposed life of the morning"
+        },
+        {
+          "id": "bold-path",
+          "digit": "3",
+          "label": "Step into danger before the sun can burn the frost away"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#e7eadf"/>
+  <rect y="420" width="1200" height="300" fill="#9ba97a"/>
+  <rect x="180" y="320" width="180" height="130" fill="#d1c3a3"/>
+  <polygon points="160,330 270,250 380,330" fill="#86614a"/>
+  <rect x="470" y="300" width="210" height="150" fill="#d7ccb2"/>
+  <polygon points="440,315 575,215 710,315" fill="#785844"/>
+  <rect x="820" y="335" width="170" height="115" fill="#cab998"/>
+  <polygon points="800,345 905,270 1010,345" fill="#815f49"/>
+  <text x="70" y="94" fill="#3d422f" font-size="42" font-family="Georgia, serif">fallback / village</text>
+</svg>

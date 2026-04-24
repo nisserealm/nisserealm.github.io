@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Moor">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9e3d1"/>
+      <stop offset="100%" stop-color="#f1ebdf"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7b8660"/>
+      <stop offset="100%" stop-color="#5e674a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <path d="M0 430 C180 390 310 470 470 440 C640 406 770 500 930 462 C1040 436 1120 452 1200 430 L1200 800 L0 800 Z" fill="url(#ground)"/>
+  <path d="M0 520 C150 500 270 560 420 540 C560 522 720 590 860 562 C1010 532 1100 566 1200 546" fill="none" stroke="#8f9a73" stroke-width="7" opacity="0.55"/>
+  <path d="M0 612 C160 600 280 650 430 632 C600 612 720 686 890 662 C1020 644 1110 672 1200 660" fill="none" stroke="#4e5740" stroke-width="8" opacity="0.45"/>
+</svg>

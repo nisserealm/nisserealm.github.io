@@ -1,0 +1,141 @@
+{
+  "id": "nightforest",
+  "title": "Night Forest",
+  "theme": "forest",
+  "startNode": "start",
+  "tileHint": "A forest tile after dusk, where older shadows, watchful eyes, and night creatures rule the path",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Move carefully, trust your ears, and let the dark reveal what it wants to reveal.",
+        "baseChance": 46,
+        "levelGain": 1,
+        "successTitle": "A night watcher takes your road",
+        "successBody": "$companionName chooses your silence and keeps to your shadow from then on.",
+        "failureTitle": "The dark keeps its distance",
+        "failureBody": "You pass through the night forest unharmed, but its hidden life withdraws beyond your reach."
+      },
+      "2": {
+        "hint": "Meet the gentle life of the forest with patience and warmth, even after sunset.",
+        "baseChance": 50,
+        "levelGain": 1,
+        "successTitle": "A gentle bond is made in the dusk",
+        "successBody": "$companionName follows as if kindness in the dark were a lantern of its own.",
+        "failureTitle": "The creature returns to the trees",
+        "failureBody": "You give comfort freely, but the night asks no promise in return."
+      },
+      "3": {
+        "hint": "Step straight into danger and break what would bind the wild for profit.",
+        "baseChance": 56,
+        "levelGain": 1,
+        "successTitle": "A fierce creature trusts your courage",
+        "successBody": "$companionName stays after the danger is broken, as though boldness has earned a place beside it.",
+        "failureTitle": "The trap is broken, but no bond remains",
+        "failureBody": "You act in time to shatter the worst of it, yet the wounded night creature vanishes back into the black wood."
+      }
+    }
+  },
+  "startText": "Night changes the forest. The trunks stand closer, the clearings feel deeper, and every rustle seems to belong to something that does not wish to be named too soon.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The path through the night forest offers no single answer. What comes to you there depends on the kind of presence you carry into the dark.",
+      "choices": [
+        {
+          "id": "listen-dark",
+          "digit": "1",
+          "label": "Walk slowly and listen to the dark before acting",
+          "next": "watch1"
+        },
+        {
+          "id": "walk-gently",
+          "digit": "2",
+          "label": "Move gently and offer comfort to every creature you meet",
+          "next": "kind1"
+        },
+        {
+          "id": "break-danger",
+          "digit": "3",
+          "label": "Go toward the first sign of danger and break it apart",
+          "next": "bold1"
+        }
+      ]
+    },
+    "watch1": {
+      "text": "You let your sight matter less than your hearing. Wingbeats, bark-creaks, and the thin complaints of night creatures begin to sort themselves into meaning.",
+      "choices": [
+        {
+          "id": "follow-call",
+          "digit": "1",
+          "label": "Follow the sound that returns twice from above",
+          "next": "final"
+        },
+        {
+          "id": "wait-hollow",
+          "digit": "2",
+          "label": "Wait below the old hollow tree until the dark grows patient with you",
+          "next": "final"
+        }
+      ]
+    },
+    "kind1": {
+      "text": "You pass through the dark wood without taking liberties. What is small and frightened does not flee you as quickly as it otherwise might.",
+      "choices": [
+        {
+          "id": "comfort-small-life",
+          "digit": "1",
+          "label": "Comfort the smallest life first and ask nothing back",
+          "next": "final"
+        },
+        {
+          "id": "rest-beside-clearing",
+          "digit": "2",
+          "label": "Rest quietly at the edge of a moonlit clearing",
+          "next": "final"
+        }
+      ]
+    },
+    "bold1": {
+      "text": "A harsher sign reaches you through the dark: iron scent, strained breathing, and the mean craft of something set by hands that value sale over life.",
+      "choices": [
+        {
+          "id": "go-straight-in",
+          "digit": "1",
+          "label": "Go straight in and break what holds the creature",
+          "next": "final"
+        },
+        {
+          "id": "stalk-trapper",
+          "digit": "2",
+          "label": "Circle through the brush and strike from where the trapper least expects",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By the time the night forest releases you, it has decided what sort of companion, if any, it is willing to entrust to your road.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "cautious-path",
+          "digit": "1",
+          "label": "Listen carefully and let the dark reveal a watcher"
+        },
+        {
+          "id": "kind-path",
+          "digit": "2",
+          "label": "Offer quiet kindness to the gentler life of the forest"
+        },
+        {
+          "id": "bold-path",
+          "digit": "3",
+          "label": "Break the snare and face what profits from wild pain"
+        }
+      ]
+    }
+  }
+}

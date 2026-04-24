@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#dce4ec"/>
+  <rect y="450" width="1200" height="270" fill="#bcc8d4"/>
+  <polygon points="0,520 250,250 470,520" fill="#8998a7"/>
+  <polygon points="250,560 620,180 930,560" fill="#738291"/>
+  <polygon points="710,520 1000,260 1200,520" fill="#60707d"/>
+  <polygon points="480,335 620,180 760,335" fill="#f5f6f7"/>
+  <text x="70" y="94" fill="#273843" font-size="42" font-family="Georgia, serif">fallback / mountain</text>
+</svg>

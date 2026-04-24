@@ -1,0 +1,141 @@
+{
+  "id": "hotforest",
+  "title": "Hot Forest",
+  "theme": "forest",
+  "startNode": "start",
+  "tileHint": "A forest under hard summer heat, where thirst, brittle leaves, and small surviving lives shape the encounter",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Move carefully through the dry wood and notice what survives by caution rather than speed.",
+        "baseChance": 46,
+        "levelGain": 1,
+        "successTitle": "A wary creature accepts your care",
+        "successBody": "$companionName decides your patience is safer than the heat-struck forest.",
+        "failureTitle": "The dry wood keeps its distance",
+        "failureBody": "You glimpse the creature of the hot forest, but it remains unwilling to trust you."
+      },
+      "2": {
+        "hint": "Give what small kindness you can to a forest living through thirst.",
+        "baseChance": 50,
+        "levelGain": 1,
+        "successTitle": "A small life chooses your road",
+        "successBody": "$companionName stays with you as though kindness were cooler than shade.",
+        "failureTitle": "The little creature survives without following",
+        "failureBody": "You help where you can, but the creature takes the gift and returns to its own hidden path."
+      },
+      "3": {
+        "hint": "Take on a harder burden and carry life where it cannot carry itself.",
+        "baseChance": 56,
+        "levelGain": 1,
+        "successTitle": "A fierce survivor walks beside you",
+        "successBody": "$companionName chooses to remain with the one who bore it through thirst.",
+        "failureTitle": "The rescue holds, but the bond does not",
+        "failureBody": "You bring the wild creature through the worst of its need, yet the forest keeps its fiercer heart to itself."
+      }
+    }
+  },
+  "startText": "Heat has settled over the forest for too long. Leaves curl at the edges, the ground cracks beneath the roots, and every living thing seems to be measuring water as carefully as breath.",
+  "visuals": {
+    "entry": ""
+  },
+  "branches": {
+    "start": {
+      "text": "The forest is not merely warm but strained. In such weather, every creature answers differently to caution, kindness, or courage.",
+      "choices": [
+        {
+          "id": "walk-slowly",
+          "digit": "1",
+          "label": "Walk slowly and read the signs of the dry wood",
+          "next": "watch1"
+        },
+        {
+          "id": "care-gently",
+          "digit": "2",
+          "label": "Give what small care you can to the lives that remain",
+          "next": "kind1"
+        },
+        {
+          "id": "bear-burden",
+          "digit": "3",
+          "label": "Take on the hardest burden the forest offers",
+          "next": "bold1"
+        }
+      ]
+    },
+    "watch1": {
+      "text": "You let the forest tell its story through marks in dust, stripped bark, and the little hard signs of creatures surviving one hot day at a time.",
+      "choices": [
+        {
+          "id": "follow-quills",
+          "digit": "1",
+          "label": "Follow the drag of loose quills through the roots",
+          "next": "final"
+        },
+        {
+          "id": "wait-in-shade",
+          "digit": "2",
+          "label": "Wait in the thin shade until the creature decides whether to trust you",
+          "next": "final"
+        }
+      ]
+    },
+    "kind1": {
+      "text": "In a thirsty forest, gentleness matters differently. You become careful not just with life, but with effort, water, and shade.",
+      "choices": [
+        {
+          "id": "share-water",
+          "digit": "1",
+          "label": "Share the last of your cool water where it will matter most",
+          "next": "final"
+        },
+        {
+          "id": "offer-fruit",
+          "digit": "2",
+          "label": "Gather what little sweetness remains and offer it freely",
+          "next": "final"
+        }
+      ]
+    },
+    "bold1": {
+      "text": "Heat and thirst turn even the strongest creatures into burdens they cannot carry alone. The forest tests whether you will take that burden for a while.",
+      "choices": [
+        {
+          "id": "carry-downslope",
+          "digit": "1",
+          "label": "Carry the creature toward the valley seep",
+          "next": "final"
+        },
+        {
+          "id": "break-through-heat",
+          "digit": "2",
+          "label": "Push through the burning slope until water is found",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "By the time the hot forest releases you, it has decided what sort of life, if any, your road is worthy to shelter.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "cautious-path",
+          "digit": "1",
+          "label": "Read the dry wood carefully and approach the wary survivor"
+        },
+        {
+          "id": "kind-path",
+          "digit": "2",
+          "label": "Share kindness and small comfort with a thirsty creature"
+        },
+        {
+          "id": "bold-path",
+          "digit": "3",
+          "label": "Carry a fiercer life through heat toward water"
+        }
+      ]
+    }
+  }
+}

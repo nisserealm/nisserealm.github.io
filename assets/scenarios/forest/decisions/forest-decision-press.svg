@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#14180f"/>
+  <path d="M0 470 C220 390, 420 520, 620 420 S980 330, 1200 430 L1200 600 L0 600 Z" fill="#1d2616"/>
+  <path d="M500 600 C540 520, 590 440, 680 320 S860 120, 1050 40" stroke="#879c5f" stroke-width="22" fill="none"/>
+  <path d="M250 470 L330 150 L410 470 Z" fill="#0c1309"/>
+  <path d="M820 470 L900 130 L980 470 Z" fill="#0d140a"/>
+  <polygon points="986,60 1055,40 1012,101" fill="#c8f169"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="42" font-family="Georgia, serif">Press</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">Keep moving deeper even after the path stops feeling friendly.</text>
+</svg>

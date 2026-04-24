@@ -1,0 +1,150 @@
+{
+  "id": "reindeer",
+  "title": "Reindeer",
+  "theme": "mountain",
+  "startNode": "start",
+  "tileHint": "High snowy ridge with a lone spruce tree",
+  "mechanics": {
+    "bonusPattern": "121",
+    "bonusPerMatch": 6,
+    "endings": {
+      "1": {
+        "hint": "Ask if Lumi can come with you as your companion.",
+        "baseChance": 46,
+        "levelGain": 1,
+        "grantsReindeer": true,
+        "successTitle": "Lumi chooses your road",
+        "successBody": "The old herder studies you for a long moment, then nods. Lumi lowers her head, steps close, and decides your road is one she is willing to share.",
+        "failureTitle": "A promise kept for another winter",
+        "failureBody": "The old herder smiles sadly and says Lumi is not ready to leave him yet. Even so, he shares a little of the old song and sends you away with warmer courage."
+      },
+      "2": {
+        "hint": "Leave him a little warmth and wish him well.",
+        "baseChance": 52,
+        "levelGain": 1,
+        "grantsReindeer": true,
+        "successTitle": "Kindness circles back",
+        "successBody": "You share what small comfort and patience you can. The old herder presses a small silver charm into your hand in return and blesses your road.",
+        "failureTitle": "A quiet gift left in the snow",
+        "failureBody": "You leave what you can and ask for nothing back. The old herder thanks you with the kind of warmth that stays longer than trade."
+      },
+      "3": {
+        "hint": "Offer to stay the night and help him tomorrow.",
+        "baseChance": 58,
+        "levelGain": 1,
+        "grantsReindeer": true,
+        "successTitle": "A warm night under old songs",
+        "successBody": "You stay, mend the fire, and hear the old songs all the way through. By morning the snow feels lighter, and Lumi noses your mitten as if the choice has already been made.",
+        "failureTitle": "The snow keeps the song",
+        "failureBody": "You stay the night and help as best you can. Lumi does not leave with you, but the old herder gives you a blessing and a memory bright enough to outlast the cold."
+      }
+    }
+  },
+  "startText": "You crest a small snowy rise and the biting wind suddenly falls quiet.\n\nUnder an old snow-heavy spruce tree sits an elderly Nisse. His beard is long and white as fresh powder, his red cap faded from many winters. Beside him stands one thin but calm reindeer doe, watching you with dark clever eyes.\n\nThe old one slowly lifts his head and smiles with tired kindness.\n\n\"Well now... another small one out in the white. Come sit a while if you have time for an old herder's tale.\"",
+  "visuals": {
+    "entry": "images/entry.svg",
+    "nodes": {
+      "listen1": "images/listen1.svg",
+      "help1": "images/help1.svg",
+      "ask1": "images/ask1.svg",
+      "final": "images/final.svg"
+    }
+  },
+  "branches": {
+    "start": {
+      "text": "The old herder looks at you warmly, waiting.",
+      "choices": [
+        {
+          "id": "listen",
+          "digit": "1",
+          "label": "Sit down and listen to his story",
+          "next": "listen1"
+        },
+        {
+          "id": "help",
+          "digit": "2",
+          "label": "Offer to help with his fire and reindeer",
+          "next": "help1"
+        },
+        {
+          "id": "ask",
+          "digit": "3",
+          "label": "Ask him what happened to the rest of his herd",
+          "next": "ask1"
+        }
+      ]
+    },
+    "listen1": {
+      "text": "He speaks softly while stroking the reindeer's neck.\n\n\"Many winters ago a terrible blizzard came. My whole herd ran north following the old songs. I was too weak to follow... Only little Lumi here stayed with me.\"",
+      "choices": [
+        {
+          "id": "share",
+          "digit": "1",
+          "label": "Share some of your food with them",
+          "next": "final"
+        },
+        {
+          "id": "sing",
+          "digit": "2",
+          "label": "Sing an old herding song with him",
+          "next": "final"
+        }
+      ]
+    },
+    "help1": {
+      "text": "The old Nisse chuckles warmly.\n\n\"Help these old bones? The fire is weak and Lumi hasn't found good lichen in days. But I won't say no to kindness from a fellow herder.\"",
+      "choices": [
+        {
+          "id": "share",
+          "digit": "1",
+          "label": "Give them some of your provisions",
+          "next": "final"
+        },
+        {
+          "id": "fire",
+          "digit": "2",
+          "label": "Help him rebuild the fire",
+          "next": "final"
+        }
+      ]
+    },
+    "ask1": {
+      "text": "His eyes grow distant for a moment.\n\n\"They went north... following the old songs. I was too slow. Only Lumi stayed. She has always had a loyal heart.\"",
+      "choices": [
+        {
+          "id": "share",
+          "digit": "1",
+          "label": "Share food and ask if Lumi could travel with you",
+          "next": "final"
+        },
+        {
+          "id": "sing",
+          "digit": "2",
+          "label": "Sing the old calling song to see if Lumi reacts",
+          "next": "final"
+        }
+      ]
+    },
+    "final": {
+      "text": "The old herder looks at you with soft, hopeful eyes. The moment feels important.",
+      "isFinal": true,
+      "commitChoices": [
+        {
+          "id": "ask-lumi",
+          "digit": "1",
+          "label": "Ask if Lumi can come with you as your companion"
+        },
+        {
+          "id": "leave-warmth",
+          "digit": "2",
+          "label": "Leave him a little warmth and wish him well"
+        },
+        {
+          "id": "stay-night",
+          "digit": "3",
+          "label": "Offer to stay the night and help him tomorrow"
+        }
+      ]
+    }
+  }
+}

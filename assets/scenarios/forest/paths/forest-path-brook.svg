@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#101712"/>
+  <rect y="360" width="1200" height="240" fill="#162016"/>
+  <path d="M0 410 C180 360, 340 470, 510 420 S860 330, 1200 420" stroke="#84aeb1" stroke-width="36" fill="none" opacity="0.85"/>
+  <path d="M0 430 C180 380, 340 490, 510 440 S860 350, 1200 440" stroke="#c7ece5" stroke-width="12" fill="none" opacity="0.7"/>
+  <path d="M210 430 L280 170 L350 430 Z" fill="#0c140f"/>
+  <path d="M520 430 L600 130 L680 430 Z" fill="#0d1610"/>
+  <path d="M860 430 L930 160 L1000 430 Z" fill="#0b130e"/>
+  <circle cx="835" cy="182" r="34" fill="#eff8d0" opacity="0.2"/>
+  <text x="80" y="90" fill="#d7dfc8" font-size="42" font-family="Georgia, serif">Brook</text>
+  <text x="80" y="132" fill="#91a07a" font-size="24" font-family="Georgia, serif">Cold water, pale signs, and the feeling that something rare just passed by.</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mountain ridge placeholder</title>
+  <desc id="desc">Placeholder illustration for the mountain ridge path scene.</desc>
+  <rect width="1600" height="900" fill="#8ea1b3"/>
+  <path d="M0 700 L260 420 L440 500 L700 230 L980 540 L1220 260 L1600 620 L1600 900 L0 900 Z" fill="#47525c"/>
+  <path d="M700 230 L770 300 L840 230 L910 310" fill="none" stroke="#ecf2f6" stroke-width="20" stroke-linecap="round"/>
+  <ellipse cx="930" cy="600" rx="90" ry="36" fill="#2e3438" opacity="0.35"/>
+  <ellipse cx="1090" cy="560" rx="115" ry="42" fill="#2e3438" opacity="0.35"/>
+  <text x="90" y="120" fill="#f4f7fb" font-size="62" font-family="Georgia, serif">mountain-path-ridge</text>
+  <text x="90" y="190" fill="#e1ebf4" font-size="32" font-family="Georgia, serif">Thin snow, old runes, and something heavy moving above the slope.</text>
+</svg>

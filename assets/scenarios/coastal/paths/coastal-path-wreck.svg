@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Wreck path</title>
+  <desc id="desc">Broken ribs of a wreck on a pale beach.</desc>
+  <rect width="960" height="540" fill="#c9dddf"/>
+  <rect y="220" width="960" height="320" fill="#396781"/>
+  <path d="M0 310C178 265 288 318 451 290C632 259 765 325 960 284V540H0Z" fill="#cfbb86"/>
+  <path d="M245 343c49-61 121-90 206-77" fill="none" stroke="#5f4227" stroke-width="14" stroke-linecap="round"/>
+  <path d="M275 341l-20 93M326 318l-17 112M378 302l-14 129M430 296l-9 139" stroke="#4c351f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M500 256c25 7 51 31 78 70" fill="none" stroke="#eef7ff" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="620" cy="337" r="8" fill="#ffe39c"/>
+</svg>

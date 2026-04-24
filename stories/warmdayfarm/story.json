@@ -1,0 +1,10 @@
+{
+  "id": "warmdayfarm",
+  "title": "Warm Day Farm",
+  "theme": "farm",
+  "tileHint": "Heat-struck lanes, orchards, creekbeds, and worked fields under a hard summer sun",
+  "structure": {
+    "attitudes": ["cautious", "kind", "bold"],
+    "outcomes": ["success"]
+  }
+}

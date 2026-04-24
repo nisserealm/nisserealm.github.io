@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#dbe8ef"/>
+  <rect y="380" width="1200" height="340" fill="#5f95ae"/>
+  <rect y="270" width="1200" height="130" fill="#d8c8a8"/>
+  <polygon points="0,280 200,180 420,280" fill="#7b8e99"/>
+  <polygon points="840,320 1020,210 1200,320" fill="#6a7c87"/>
+  <text x="70" y="94" fill="#244050" font-size="42" font-family="Georgia, serif">fallback / coastal</text>
+</svg>

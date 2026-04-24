@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#efe5c9"/>
+  <rect y="360" width="1200" height="360" fill="#b79863"/>
+  <path d="M0 470 C220 440 380 520 620 470 S930 430 1200 500" fill="none" stroke="#78a7c4" stroke-width="16"/>
+  <path d="M130 400 L130 670 M280 395 L280 670 M430 390 L430 670 M580 388 L580 670 M730 395 L730 670 M880 400 L880 670" stroke="#8d6e42" stroke-width="8"/>
+  <text x="70" y="94" fill="#554021" font-size="42" font-family="Georgia, serif">fallback / farmland</text>
+</svg>

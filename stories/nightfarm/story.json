@@ -1,0 +1,10 @@
+{
+  "id": "nightfarm",
+  "title": "Night Farm",
+  "theme": "farm",
+  "tileHint": "Dark field roads, sleeping farms, shrines, and hedgerows under restless night",
+  "structure": {
+    "attitudes": ["cautious", "kind", "bold"],
+    "outcomes": ["success"]
+  }
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Observe the coast</title>
+  <desc id="desc">A calm shoreline view with a watcher studying the water.</desc>
+  <rect width="960" height="540" fill="#cedfdd"/>
+  <rect y="220" width="960" height="320" fill="#275f79"/>
+  <path d="M0 300c168-36 303 15 432-12 126-27 284 29 528-18V540H0Z" fill="#cdb37f"/>
+  <circle cx="715" cy="147" r="42" fill="#fff6cf"/>
+  <path d="M291 409c0-51 18-87 53-109" fill="none" stroke="#312920" stroke-width="15" stroke-linecap="round"/>
+  <path d="M341 317c15 25 22 49 21 72" fill="none" stroke="#312920" stroke-width="11" stroke-linecap="round"/>
+  <path d="M80 272c103-20 159 24 247 3 98-23 174 33 269 14 84-16 183 17 300-15" fill="none" stroke="#eef8ff" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#eee3c4"/>
+  <rect y="370" width="1200" height="350" fill="#b99863"/>
+  <path d="M0 470 C220 430 420 540 620 480 S950 430 1200 520" fill="none" stroke="#7daecc" stroke-width="18"/>
+  <rect x="675" y="315" width="170" height="110" fill="#d6c7a6"/>
+  <polygon points="650,325 760,245 870,325" fill="#866149"/>
+  <circle cx="235" cy="188" r="14" fill="#4c6f92"/>
+  <circle cx="275" cy="160" r="12" fill="#4c6f92"/>
+  <circle cx="315" cy="200" r="13" fill="#4c6f92"/>
+  <text x="70" y="94" fill="#5b4320" font-size="42" font-family="Georgia, serif">tile / 5_4</text>
+  <text x="70" y="140" fill="#5b4320" font-size="24" font-family="Georgia, serif">Creekside farmstead placeholder</text>
+</svg>

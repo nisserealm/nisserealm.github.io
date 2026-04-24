@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Coastal entry</title>
+  <desc id="desc">A painted shoreline with surf, dunes, and a distant boat.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#8fd1ff"/>
+      <stop offset="100%" stop-color="#dfeec8"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#2d7ca2"/>
+      <stop offset="100%" stop-color="#14394e"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#sky)"/>
+  <rect y="250" width="960" height="290" fill="url(#sea)"/>
+  <path d="M0 260C120 240 190 270 300 255C400 240 490 205 620 225C720 240 830 295 960 270V540H0Z" fill="#d4c08a"/>
+  <path d="M0 282C120 264 200 300 315 287C425 276 548 238 666 258C764 275 859 325 960 307" fill="none" stroke="#f6f1df" stroke-width="9" stroke-linecap="round"/>
+  <path d="M720 200l26-28 38 26-3 20h-49z" fill="#6d5033"/>
+  <path d="M745 171l4 64" stroke="#3d2c1e" stroke-width="6" stroke-linecap="round"/>
+  <path d="M749 176l42 20-42 12z" fill="#f7f3e8"/>
+  <circle cx="150" cy="110" r="34" fill="#fff1b3" opacity="0.9"/>
+</svg>
