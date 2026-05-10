@@ -97,50 +97,65 @@
                       <div id="playerStagePosition" class="place-meta"></div>
                     </div>
                   </div>
-                  <div class="player-stage-grid">
-                    <div class="player-stage-card player-stage-card-wide">
-                      <div class="player-stage-label">Identity</div>
-                      <div class="identity-box player-stage-identity">
-                        <div class="identity-fields">
-                          <label class="identity-label">
-                            <span>Player Name</span>
-                            <input id="identityPlayerName" type="text" placeholder="Existing player name">
-                          </label>
-                          <label class="identity-label">
-                            <span>Key Name</span>
-                            <input id="identityKeyName" type="text" placeholder="gnokey name">
-                          </label>
-                        </div>
-                        <div class="identity-actions">
-                          <button id="importIdentityButton" type="button">Import Player</button>
-                          <button id="stageMintButton" type="button">Stage Mint</button>
-                        </div>
-                        <div class="player-stage-note">Import an existing nisse or prepare the mint command for a new one.</div>
+                  <div class="player-stage-layout">
+	                    <div class="player-stage-main">
+	                      <div class="player-stage-card">
+	                        <div class="player-stage-label">Identity</div>
+	                        <div class="identity-box player-stage-identity">
+	                          <div class="identity-fields">
+	                            <label class="identity-label">
+	                              <span>Player Name</span>
+	                              <input id="identityPlayerName" type="text" placeholder="Existing player name">
+	                            </label>
+	                            <label class="identity-label">
+	                              <span>Key Name</span>
+	                              <input id="identityKeyName" type="text" placeholder="gnokey name">
+	                            </label>
+	                          </div>
+	                          <div class="identity-actions">
+	                            <button id="importIdentityButton" type="button">Import Player</button>
+	                            <button id="stageMintButton" type="button">Stage Mint</button>
+	                          </div>
+	                          <div class="player-stage-note">Import an existing nisse or prepare the mint command for a new one.</div>
+	                        </div>
+	                      </div>
+	                      <div class="player-stage-card">
+	                        <div class="player-stage-label">Staging Deploy</div>
+	                        <div class="identity-box player-stage-identity">
+	                          <div class="identity-actions">
+	                            <button id="adenaConnectButton" type="button">Connect Adena</button>
+	                            <button id="adenaUploadPackageButton" type="button">Upload Nisse Package</button>
+	                          </div>
+	                          <pre id="adenaDeployResult" class="companion-registry-result market-result">Use Adena to connect, then upload the hosted nisse package to staging.</pre>
+	                          <div class="player-stage-note">This only appears in hosted mode. Local mode keeps using staged CLI commands.</div>
+	                        </div>
+	                      </div>
+	                    </div>
+                    <div class="player-stage-summary">
+                      <div class="player-stage-summary-row">
+                        <div class="player-stage-label">Stats</div>
+                        <div id="playerStageStats" class="player-stage-value"></div>
                       </div>
-                    </div>
-                    <div class="player-stage-card">
-                      <div class="player-stage-label">Stats</div>
-                      <div id="playerStageStats" class="player-stage-value"></div>
-                    </div>
-                    <div class="player-stage-card">
-                      <div class="player-stage-label">Wealth</div>
-                      <div id="playerStageWealth" class="player-stage-value"></div>
-                    </div>
-                    <div class="player-stage-card">
-                      <div class="player-stage-label">Items</div>
-                      <div id="playerStageItems" class="player-stage-value"></div>
-                    </div>
-                    <div class="player-stage-card">
-                      <div class="player-stage-label">Companions</div>
-                      <div id="playerStageCompanions" class="player-stage-value player-stage-scroll"></div>
-                    </div>
-                    <div class="player-stage-card">
-                      <div class="player-stage-label">Monsters</div>
-                      <div id="playerStageMonsters" class="player-stage-value player-stage-scroll"></div>
-                    </div>
-                    <div class="player-stage-card">
-                      <div class="player-stage-label">Claims</div>
-                      <div id="playerStageClaims" class="player-stage-value"></div>
+                      <div class="player-stage-summary-row">
+                        <div class="player-stage-label">Wealth</div>
+                        <div id="playerStageWealth" class="player-stage-value"></div>
+                      </div>
+                      <div class="player-stage-summary-row">
+                        <div class="player-stage-label">Items</div>
+                        <div id="playerStageItems" class="player-stage-value"></div>
+                      </div>
+                      <div class="player-stage-summary-row">
+                        <div class="player-stage-label">Companions</div>
+                        <div id="playerStageCompanions" class="player-stage-value player-stage-scroll"></div>
+                      </div>
+                      <div class="player-stage-summary-row">
+                        <div class="player-stage-label">Monsters</div>
+                        <div id="playerStageMonsters" class="player-stage-value player-stage-scroll"></div>
+                      </div>
+                      <div class="player-stage-summary-row">
+                        <div class="player-stage-label">Claims</div>
+                        <div id="playerStageClaims" class="player-stage-value"></div>
+                      </div>
                     </div>
                   </div>
                   <div id="playerCommandOverlay" class="map-command-overlay player-command-overlay hidden">
@@ -292,15 +307,6 @@
             </div>
             <pre id="frensResult" class="companion-registry-result">Loads show living player counts. Frens show named players with their saved appearance.</pre>
           </div>
-          <div class="companion-registry-box">
-            <p class="eyebrow">Staging Deploy</p>
-            <div class="identity-actions">
-              <button id="adenaConnectButton" type="button">Connect Adena</button>
-              <button id="adenaUploadPackageButton" type="button">Upload Nisse Package</button>
-            </div>
-            <pre id="adenaDeployResult" class="companion-registry-result market-result">Use Adena to connect, then upload the hosted nisse package to staging.</pre>
-          </div>
-
           <div class="panel-header compact">
             <div>
               <p class="eyebrow">Session</p>
