@@ -27,15 +27,17 @@
     "keywords": "farm,fields,lanes,chapel,rural-day"
   },
   "tile-13-5": {
-    "title": "Arizmendi",
+    "title": "Melkern",
     "theme": "farm",
+    "image": "/assets/map-tiles/melkern.png",
     "description": "Dark field roads and sleeping holdings stretch beneath a restless night, with shrines, hedgerows, and wolf-fear never too far from the lane.",
     "imagePrompt": "early medieval rural night, dark farm lanes, sleeping fields, roadside shrine, lantern light, northern countryside",
     "keywords": "farm,night,lanes,shrine,hedgerow"
   },
   "tile-13-6": {
-    "title": "Arruti",
+    "title": "Florida",
     "theme": "farm",
+    "image": "/assets/map-tiles/minde.png",
     "description": "Heat-struck lanes, orchards, creek bends, and worked fields lie under a hard summer sun where kindness and nerve matter as much as water.",
     "imagePrompt": "early medieval rural summer, orchard edge, creek bend, worked fields, dry lane, hard sun, northern countryside",
     "keywords": "farm,summer,orchard,creek,backroad"

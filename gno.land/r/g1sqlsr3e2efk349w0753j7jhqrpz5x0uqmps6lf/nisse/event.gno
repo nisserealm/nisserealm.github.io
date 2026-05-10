@@ -2,9 +2,6 @@ package nisse
 
 func advanceEventPlayer(player *Player) {
 	player.Turns++
-	if player.Turns%365 == 0 {
-		player.AgeYears++
-	}
 }
 
 func partialEventReward(reward uint64) uint64 {

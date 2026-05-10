@@ -6,13 +6,12 @@ import (
 )
 
 type WorldResource struct {
-	ID          uint64
-	Kind        string
-	Status      string
-	Description string
-	Pos         Position
-	Level       uint64
-	Tier        uint64
+	ID     uint64
+	Kind   string
+	Status string
+	Pos    Position
+	Level  uint64
+	Tier   uint64
 }
 
 var terrain [][]uint8
@@ -24,14 +23,14 @@ var startCityPos Position
 func init() {
 	terrain = [][]uint8{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-		{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0},
 		{0, 0, 0, 1, 13, 3, 3, 2, 2, 2, 11, 3, 3, 3, 1, 1, 0, 0},
 		{0, 1, 1, 1, 3, 3, 3, 12, 3, 10, 3, 3, 7, 3, 2, 1, 1, 0},
 		{0, 1, 11, 3, 3, 5, 5, 10, 3, 10, 15, 3, 3, 3, 10, 4, 1, 0},
 		{0, 8, 5, 3, 15, 12, 10, 7, 10, 10, 3, 3, 3, 5, 5, 1, 1, 0},
 		{0, 1, 3, 3, 3, 4, 10, 3, 10, 4, 11, 2, 2, 5, 14, 1, 0, 0},
 		{0, 1, 1, 3, 11, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0},
-		{0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	}
 
@@ -86,6 +85,46 @@ func terrainName(code uint8) string {
 	default:
 		return "unknown"
 	}
+}
+
+func terrainResources(code uint8) string {
+	switch terrainName(code) {
+	case "forest":
+		return "berries,nuts"
+	case "mountain":
+		return "gems,gold"
+	case "coastal", "harbor", "fishing_village":
+		return "flint,shells"
+	case "hills":
+		return "iron,berries"
+	case "meadow", "moor":
+		return "herbs,vegetables"
+	case "farm":
+		return "milk,eggs"
+	default:
+		return ""
+	}
+}
+
+func monthIndexForTurns(turns uint64) uint64 {
+	return turns % 12
+}
+
+func seasonNameForTurns(turns uint64) string {
+	switch monthIndexForTurns(turns) / 3 {
+	case 0:
+		return "spring"
+	case 1:
+		return "summer"
+	case 2:
+		return "fall"
+	default:
+		return "winter"
+	}
+}
+
+func seasonMonthForTurns(turns uint64) uint64 {
+	return monthIndexForTurns(turns) % 3
 }
 
 func placeName(pos Position) string {
@@ -146,7 +185,7 @@ func absDiff(a uint64, b uint64) uint64 {
 	return b - a
 }
 
-func createResource(kind string, status string, description string, pos Position) {
+func createResource(kind string, status string, pos Position) {
 	if !isLand(pos.X, pos.Y) {
 		return
 	}
@@ -162,13 +201,12 @@ func createResource(kind string, status string, description string, pos Position
 	}
 
 	resources[id] = &WorldResource{
-		ID:          id,
-		Kind:        kind,
-		Status:      status,
-		Description: description,
-		Pos:         pos,
-		Level:       level,
-		Tier:        tier,
+		ID:     id,
+		Kind:   kind,
+		Status: status,
+		Pos:    pos,
+		Level:  level,
+		Tier:   tier,
 	}
 }
 
@@ -199,19 +237,10 @@ func spawnStarterWorld(seed uint64, center Position) {
 		"hidden",
 	}
 
-	descriptions := []string{
-		"An empty home waiting for a future owner.",
-		"A horse is roaming nearby.",
-		"A hound is sniffing around the path.",
-		"A falcon circles above the district.",
-		"A small stash of pearls lies nearby.",
-		"A scrap of local knowledge can be discovered here.",
-	}
-
 	for i := 0; i < 3; i++ {
 		index := int((seed + uint64(i)) % uint64(len(kinds)))
 		pos := pattern[(int(seed)+i)%len(pattern)]
-		createResource(kinds[index], statuses[index], descriptions[index], pos)
+		createResource(kinds[index], statuses[index], pos)
 	}
 }
 
@@ -338,9 +367,9 @@ func landTravelPathDetails(start Position, dest Position) (uint64, bool) {
 	panic("no land route to that tile")
 }
 
-func boatTravelPathCost(start Position, dest Position) (uint64, bool) {
+func boatTravelPathCost(start Position, dest Position) uint64 {
 	if sameTile(start, dest) {
-		return 0, oceanTravelTile(GetTile(start.X, start.Y))
+		return 0
 	}
 	if !waterTravelTile(GetTile(start.X, start.Y)) || !waterTravelTile(GetTile(dest.X, dest.Y)) {
 		panic("boat travel requires coastal, harbor, or water tiles")
@@ -352,7 +381,6 @@ func boatTravelPathCost(start Position, dest Position) (uint64, bool) {
 	unreachable := ^uint64(0)
 	dist := make([]uint64, total)
 	queue := make([]uint64, total)
-	touchedOcean := make([]bool, total)
 	for i := uint64(0); i < total; i++ {
 		dist[i] = unreachable
 	}
@@ -362,7 +390,6 @@ func boatTravelPathCost(start Position, dest Position) (uint64, bool) {
 	head := 0
 	tail := 0
 	dist[startIdx] = 0
-	touchedOcean[startIdx] = oceanTravelTile(GetTile(start.X, start.Y))
 	queue[tail] = startIdx
 	tail++
 
@@ -370,7 +397,7 @@ func boatTravelPathCost(start Position, dest Position) (uint64, bool) {
 		idx := queue[head]
 		head++
 		if idx == destIdx {
-			return dist[idx], touchedOcean[idx]
+			return dist[idx]
 		}
 
 		x := idx % width
@@ -396,7 +423,6 @@ func boatTravelPathCost(start Position, dest Position) (uint64, bool) {
 				nextIdx := travelNodeIndex(nx, ny, width)
 				if dist[nextIdx] == unreachable {
 					dist[nextIdx] = dist[idx] + 1
-					touchedOcean[nextIdx] = touchedOcean[idx] || oceanTravelTile(GetTile(nx, ny))
 					queue[tail] = nextIdx
 					tail++
 				}
@@ -451,10 +477,9 @@ func TravelPlayer(cur realm, playerName string, x uint64, y uint64, attitude str
 
 	boatCost := uint64(0)
 	boatFeasible := false
-	boatTouchesOcean := false
 	if playerCarriesBoat(key) && waterTravelTile(originCode) && waterTravelTile(destCode) {
-		boatCost, boatTouchesOcean = boatTravelPathCost(origin, dest)
-		if boatTouchesOcean && boatCost <= boatTravelBudget(key) {
+		boatCost = boatTravelPathCost(origin, dest)
+		if boatCost <= boatTravelBudget(key) {
 			boatFeasible = true
 		}
 	}
@@ -470,7 +495,7 @@ func TravelPlayer(cur realm, playerName string, x uint64, y uint64, attitude str
 	} else if landFeasible {
 		cost = landCost
 		budget = travelBudget(player)
-	} else if playerCarriesBoat(key) && waterTravelTile(originCode) && waterTravelTile(destCode) && boatTouchesOcean {
+	} else if playerCarriesBoat(key) && waterTravelTile(originCode) && waterTravelTile(destCode) {
 		panic("boat travel requires " + strconv.Itoa(int(boatCost)) + " water moves but only 8 are available")
 	} else if isLand(origin.X, origin.Y) && isLand(x, y) {
 		panic("travel requires " + strconv.Itoa(int(landCost)) + " moves but only " + strconv.Itoa(int(travelBudget(player))) + " are available")
@@ -488,9 +513,6 @@ func TravelPlayer(cur realm, playerName string, x uint64, y uint64, attitude str
 	}
 	boatRecovered = recoverBoatIfPresent(key, player)
 	player.Turns++
-	if player.Turns%365 == 0 {
-		player.AgeYears++
-	}
 
 	title := "A short crossing"
 	body := "You travel to " + placeName(player.Pos) + ".\n"
@@ -529,68 +551,6 @@ func GetTile(x uint64, y uint64) uint8 {
 		panic("tile out of bounds")
 	}
 	return terrain[y][x]
-}
-
-func DescribeTile(x uint64, y uint64) string {
-	code := GetTile(x, y)
-	pos := Position{X: x, Y: y}
-	out := "Tile (" + strconv.Itoa(int(x)) + ", " + strconv.Itoa(int(y)) + ")\n"
-	out += "Code: " + strconv.Itoa(int(code)) + "\n"
-	out += "Zone: " + terrainName(code)
-	if currentPlaceName(pos) != "" {
-		out += "\nPlace: " + currentPlaceName(pos)
-	} else if placeCanBeNamed(pos) {
-		out += "\nPlace: " + unnamedPlaceLabel(pos)
-		out += "\nNaming: This frontier place is still unnamed."
-	}
-	if code == 0 {
-		out += "\nMoveCost: blocked"
-	} else {
-		out += "\nMoveCost: " + strconv.Itoa(int(terrainMoveCost(code)))
-	}
-
-	playerCount := 0
-	for _, player := range players {
-		if player.Pos.X == x && player.Pos.Y == y {
-			playerCount++
-			out += "\nPlayer: " + player.Name + " (level " + strconv.Itoa(int(player.Level)) + ")"
-			key := normalizeKey(player.Name)
-			stall, ok := peddlers[key]
-			if ok && stall != nil && stall.Active {
-				out += "\nPeddler: " + stall.OwnerPlayer + " [" + stall.Model + "] " +
-					strconv.Itoa(int(stall.PriceUGNOTPerPearl)) + " ugnot per pearl"
-			}
-		if totalCompanions(key) > 0 {
-			out += "\nCompanions: " + strconv.Itoa(int(totalCompanions(key)))
-		}
-	}
-
-	for _, boat := range boats {
-		if boat != nil && !boat.Carried && boat.Pos.X == x && boat.Pos.Y == y {
-			out += "\nBoat: " + boat.Name + " left by " + boat.OwnerPlayer
-		}
-	}
-	}
-
-	resourceCount := 0
-	for _, resource := range resources {
-		if resource.Pos.X == x && resource.Pos.Y == y {
-			resourceCount++
-			out += "\nResource: #" + strconv.Itoa(int(resource.ID)) + " " + resource.Kind + " (" + resource.Status + ")"
-			if resource.Level > 0 {
-				out += " level " + strconv.Itoa(int(resource.Level))
-			}
-			if resource.Tier > 0 {
-				out += " tier " + strconv.Itoa(int(resource.Tier))
-			}
-		}
-	}
-
-	if playerCount == 0 && resourceCount == 0 {
-		out += "\nNothing notable is currently on this tile."
-	}
-
-	return out
 }
 
 func stringsContains(value string, needle string) bool {

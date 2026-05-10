@@ -3,31 +3,71 @@ import { createStore } from "./state/store.js";
 import { movementCost } from "./api/map_data.js";
 
 const refreshButton = document.getElementById("refreshButton");
-const portraitJumpButton = document.getElementById("portraitJumpButton");
-const attitudeButton = document.getElementById("attitudeButton");
-const travelToggleButton = document.getElementById("travelToggleButton");
-const travelCommitButton = document.getElementById("travelCommitButton");
-const travelCancelButton = document.getElementById("travelCancelButton");
+const seasonChip = document.getElementById("seasonChip");
+const mapHomeButton = document.getElementById("mapHomeButton");
+const openPlayerPanelButton = document.getElementById("openPlayerPanelButton");
+const openPortraitPanelButton = document.getElementById("openPortraitPanelButton");
+const openPlacePanelButton = document.getElementById("openPlacePanelButton");
+const openMailPanelButton = document.getElementById("openMailPanelButton");
+const mapCommandOverlay = document.getElementById("mapCommandOverlay");
+const mapCommandText = document.getElementById("mapCommandText");
+const copyMapCommandButton = document.getElementById("copyMapCommandButton");
+const playerCommandOverlay = document.getElementById("playerCommandOverlay");
+const playerCommandTitle = document.getElementById("playerCommandTitle");
+const playerCommandText = document.getElementById("playerCommandText");
+const copyPlayerCommandButton = document.getElementById("copyPlayerCommandButton");
+const closePlayerCommandButton = document.getElementById("closePlayerCommandButton");
+const mailCommandOverlay = document.getElementById("mailCommandOverlay");
+const mailCommandTitle = document.getElementById("mailCommandTitle");
+const mailCommandText = document.getElementById("mailCommandText");
+const copyMailCommandButton = document.getElementById("copyMailCommandButton");
+const closeMailCommandButton = document.getElementById("closeMailCommandButton");
+const attitudeCautiousButton = document.getElementById("attitudeCautiousButton");
+const attitudeKindButton = document.getElementById("attitudeKindButton");
+const attitudeBoldButton = document.getElementById("attitudeBoldButton");
 const tileLabelsButton = document.getElementById("tileLabelsButton");
 const mapFullscreenButton = document.getElementById("mapFullscreenButton");
 const mapPanel = document.getElementById("mapPanel");
 const mapRoot = document.getElementById("mapRoot");
+const playerPanel = document.getElementById("playerPanel");
+const portraitPanel = document.getElementById("portraitPanel");
+const placePanel = document.getElementById("placePanel");
+const mailPanel = document.getElementById("mailPanel");
 const placeTitle = document.getElementById("placeTitle");
 const placeMeta = document.getElementById("placeMeta");
 const placeVisual = document.getElementById("placeVisual");
 const placeText = document.getElementById("placeText");
 const placeActions = document.getElementById("placeActions");
+const playerStageName = document.getElementById("playerStageName");
+const playerStagePosition = document.getElementById("playerStagePosition");
+const playerStageStats = document.getElementById("playerStageStats");
+const playerStageWealth = document.getElementById("playerStageWealth");
+const playerStageItems = document.getElementById("playerStageItems");
+const playerStageCompanions = document.getElementById("playerStageCompanions");
+const playerStageMonsters = document.getElementById("playerStageMonsters");
+const playerStageClaims = document.getElementById("playerStageClaims");
 const playerName = document.getElementById("playerName");
 const playerPosition = document.getElementById("playerPosition");
 const playerPearls = document.getElementById("playerPearls");
 const playerLevel = document.getElementById("playerLevel");
 const playerTravelBonus = document.getElementById("playerTravelBonus");
+const playerItems = document.getElementById("playerItems");
 const playerSpiritStats = document.getElementById("playerSpiritStats");
 const playerCompanions = document.getElementById("playerCompanions");
 const playerMonsters = document.getElementById("playerMonsters");
-const inheritanceBox = document.getElementById("inheritanceBox");
-const inheritanceText = document.getElementById("inheritanceText");
-const claimInheritanceButton = document.getElementById("claimInheritanceButton");
+const stagePearls = document.getElementById("stagePearls");
+const stageMoves = document.getElementById("stageMoves");
+const stageBoat = document.getElementById("stageBoat");
+const stageBoldness = document.getElementById("stageBoldness");
+const stageCaution = document.getElementById("stageCaution");
+const stageKindness = document.getElementById("stageKindness");
+const stageSoul = document.getElementById("stageSoul");
+const stageCompanions = document.getElementById("stageCompanions");
+const stageMonsters = document.getElementById("stageMonsters");
+const stageClaims = document.getElementById("stageClaims");
+const mintCompanionButton = document.getElementById("mintCompanionButton");
+const stageCompanionIcon = document.getElementById("stageCompanionIcon");
+const stageMonsterIcon = document.getElementById("stageMonsterIcon");
 const companionRegistryInput = document.getElementById("companionRegistryInput");
 const companionRegistryButton = document.getElementById("companionRegistryButton");
 const companionRegistryResult = document.getElementById("companionRegistryResult");
@@ -37,36 +77,11 @@ const frensInput = document.getElementById("frensInput");
 const loadFrensButton = document.getElementById("loadFrensButton");
 const clearFrensButton = document.getElementById("clearFrensButton");
 const frensResult = document.getElementById("frensResult");
-const marketRefreshButton = document.getElementById("marketRefreshButton");
-const openPeddlerButton = document.getElementById("openPeddlerButton");
-const closePeddlerButton = document.getElementById("closePeddlerButton");
-const marketOwnerFilter = document.getElementById("marketOwnerFilter");
-const marketKindFilter = document.getElementById("marketKindFilter");
-const marketCompanionSelect = document.getElementById("marketCompanionSelect");
-const marketPriceInput = document.getElementById("marketPriceInput");
-const marketListingSelect = document.getElementById("marketListingSelect");
-const marketListButton = document.getElementById("marketListButton");
-const marketBuyButton = document.getElementById("marketBuyButton");
-const marketResult = document.getElementById("marketResult");
 const messageToInput = document.getElementById("messageToInput");
 const messageBodyInput = document.getElementById("messageBodyInput");
 const messageSendButton = document.getElementById("messageSendButton");
 const messageRefreshButton = document.getElementById("messageRefreshButton");
 const messageInboxResult = document.getElementById("messageInboxResult");
-const ugnotDepositInput = document.getElementById("ugnotDepositInput");
-const ugnotWithdrawInput = document.getElementById("ugnotWithdrawInput");
-const ugnotDepositButton = document.getElementById("ugnotDepositButton");
-const ugnotWithdrawButton = document.getElementById("ugnotWithdrawButton");
-const ugnotPouchResult = document.getElementById("ugnotPouchResult");
-const moneyPearlReserveInput = document.getElementById("moneyPearlReserveInput");
-const moneyUGNOTReserveInput = document.getElementById("moneyUGNOTReserveInput");
-const moneyOpenButton = document.getElementById("moneyOpenButton");
-const moneyRefreshButton = document.getElementById("moneyRefreshButton");
-const moneyPeddlerSelect = document.getElementById("moneyPeddlerSelect");
-const moneyPearlAmountInput = document.getElementById("moneyPearlAmountInput");
-const moneyBuyPearlsButton = document.getElementById("moneyBuyPearlsButton");
-const moneyBuyUGNOTButton = document.getElementById("moneyBuyUGNOTButton");
-const moneyMarketResult = document.getElementById("moneyMarketResult");
 const adenaConnectButton = document.getElementById("adenaConnectButton");
 const adenaUploadPackageButton = document.getElementById("adenaUploadPackageButton");
 const adenaDeployResult = document.getElementById("adenaDeployResult");
@@ -89,10 +104,14 @@ const avatarBox = document.getElementById("avatarBox");
 
 const TILE_LABELS_STORAGE_KEY = "nisse.uiClick.showTileLabels";
 const AVATAR_STORAGE_KEY = "nisse.avatar16";
+const FOG_REVEAL_STORAGE_KEY_PREFIX = "nisse.uiClick.revealedTiles";
+const FOG_LAST_POSITION_STORAGE_KEY_PREFIX = "nisse.uiClick.lastPosition";
+const FOG_DEBUG = true;
 const MAP_TILE_ASSET_BASE = "/assets/map-tiles-web";
 const PLACE_TILE_ASSET_BASE = "/assets/map-tiles";
 const BENEVOLENT_MONASTERY_IMAGE = "/assets/map-tiles/benevolent.png";
 const PLAYER_SPRITE_IMAGE = "/assets/nissesprite.png";
+const REALM_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
 const AVATAR_SIZE = 16;
 const AVATAR_PALETTE = [
   "transparent",
@@ -120,7 +139,7 @@ const AVATAR_PALETTE = [
 ];
 const MAP_TERRAIN_IMAGES = {
   ocean: `${MAP_TILE_ASSET_BASE}/ocean.png`,
-  coastal: `${MAP_TILE_ASSET_BASE}/coastal.png`,
+  coastal: `${MAP_TILE_ASSET_BASE}/coastal_seadown.png`,
   moor: `${MAP_TILE_ASSET_BASE}/moor.png`,
   meadow: `${MAP_TILE_ASSET_BASE}/meadow.png`,
   forest: `${MAP_TILE_ASSET_BASE}/forest.png`,
@@ -138,7 +157,7 @@ const MAP_TERRAIN_IMAGES = {
 };
 const PLACE_TERRAIN_IMAGES = {
   ocean: `${PLACE_TILE_ASSET_BASE}/ocean.png`,
-  coastal: `${PLACE_TILE_ASSET_BASE}/coastal_seaup.png`,
+  coastal: `${PLACE_TILE_ASSET_BASE}/coastal_seadown.png`,
   moor: `${PLACE_TILE_ASSET_BASE}/moor.png`,
   meadow: `${PLACE_TILE_ASSET_BASE}/meadow.png`,
   forest: `${PLACE_TILE_ASSET_BASE}/forest.png`,
@@ -157,6 +176,7 @@ const PLACE_TERRAIN_IMAGES = {
 const TRAVEL_ANIMATION_STEP_MS = 170;
 const STORY_RESULT_POLL_MS = 4000;
 const STORY_RESULT_POLL_TIMEOUT_MS = 120000;
+const APP_MODE = inferAppMode();
 
 let api = createGnoGameApi();
 const store = createStore(null);
@@ -171,6 +191,7 @@ let placePanelMode = {
   view: "default"
 };
 let currentAttitude = api.attitude ? api.attitude() : "cautious";
+let mainViewMode = "map";
 let authoredNarrativeState = {
   key: "",
   loading: false,
@@ -189,23 +210,16 @@ let avatarPointerDown = false;
 let currentPlayerSpriteUrl = PLAYER_SPRITE_IMAGE;
 let avatarLoadedAppearance16 = "";
 let avatarDirty = false;
-let marketState = {
-  loading: false,
-  listings: [],
-  ownerFilter: "",
-  kindFilter: "",
-  selectedAssetCode: "",
-  peddlersText: "",
-  error: ""
+let playerCommandState = {
+  title: "Player Command",
+  text: ""
 };
-let moneyMarketState = {
-  loading: false,
-  peddlers: [],
-  selectedSeller: "",
-  error: ""
+let mailCommandState = {
+  title: "Message Command",
+  text: ""
 };
 let adenaState = {
-  available: typeof window !== "undefined" && !!window.adena,
+  available: APP_MODE === "hosted" && typeof window !== "undefined" && !!window.adena,
   connecting: false,
   connected: false,
   uploading: false,
@@ -228,12 +242,181 @@ function loadTileLabelsPreference() {
   }
 }
 
+function inferAppMode() {
+  if (typeof window === "undefined") {
+    return "hosted";
+  }
+  const host = String(window.location?.hostname || "").toLowerCase();
+  if (!host || host === "localhost" || host === "127.0.0.1" || host === "::1") {
+    return "local";
+  }
+  return "hosted";
+}
+
 function saveTileLabelsPreference(value) {
   try {
     localStorage.setItem(TILE_LABELS_STORAGE_KEY, value ? "true" : "false");
   } catch (err) {
     // Ignore storage failures and keep the in-memory value.
   }
+}
+
+function fogRevealStorageKey(playerName) {
+  return `${FOG_REVEAL_STORAGE_KEY_PREFIX}:${String(playerName || "").trim().toLowerCase() || "nisse"}`;
+}
+
+function fogLastPositionStorageKey(playerName) {
+  return `${FOG_LAST_POSITION_STORAGE_KEY_PREFIX}:${String(playerName || "").trim().toLowerCase() || "nisse"}`;
+}
+
+function loadRevealedTiles(playerName) {
+  try {
+    const raw = localStorage.getItem(fogRevealStorageKey(playerName));
+    const parsed = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(parsed) ? parsed.map((value) => String(value || "")) : []);
+  } catch (err) {
+    return new Set();
+  }
+}
+
+function saveRevealedTiles(playerName, revealed) {
+  try {
+    localStorage.setItem(fogRevealStorageKey(playerName), JSON.stringify(Array.from(revealed)));
+  } catch (err) {
+    // Ignore storage failures and keep the in-memory map usable.
+  }
+}
+
+function loadLastFogPosition(playerName) {
+  try {
+    const raw = localStorage.getItem(fogLastPositionStorageKey(playerName));
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (!parsed || !Number.isFinite(parsed.x) || !Number.isFinite(parsed.y)) {
+      return null;
+    }
+    return { x: Number(parsed.x), y: Number(parsed.y) };
+  } catch (err) {
+    return null;
+  }
+}
+
+function saveLastFogPosition(playerName, pos) {
+  if (!pos) {
+    return;
+  }
+  try {
+    localStorage.setItem(fogLastPositionStorageKey(playerName), JSON.stringify({
+      x: Number(pos.x),
+      y: Number(pos.y)
+    }));
+  } catch (err) {
+    // Ignore storage failures and keep the in-memory map usable.
+  }
+}
+
+function revealAroundPosition(revealed, map, pos) {
+  if (!Array.isArray(map) || !pos) {
+    return revealed;
+  }
+
+  const next = new Set(revealed);
+  for (let dy = -1; dy <= 1; dy += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) {
+      const x = Number(pos.x) + dx;
+      const y = Number(pos.y) + dy;
+      if (y < 0 || y >= map.length || x < 0 || x >= (map[y]?.length || 0)) {
+        continue;
+      }
+      next.add(`${x},${y}`);
+    }
+  }
+  return next;
+}
+
+function revealPathWithNeighbors(revealed, map, path) {
+  let next = new Set(revealed);
+  for (const step of path || []) {
+    next = revealAroundPosition(next, map, step);
+  }
+  return next;
+}
+
+function applyFogOfWar(state) {
+  if (!state || !Array.isArray(state.map) || !state.player?.position) {
+    return state;
+  }
+
+  const playerName = state.player?.name || "nisse";
+  const playerPos = state.player.position;
+  const loaded = loadRevealedTiles(playerName);
+  const lastPos = loadLastFogPosition(playerName);
+  let revealed = new Set(loaded);
+
+  if (lastPos && !sameTile(lastPos, playerPos)) {
+    const previousTile = tileAt(state.map, lastPos.x, lastPos.y);
+    const currentTile = tileAt(state.map, playerPos.x, playerPos.y);
+    const useBoat = !!state.player?.ownsBoat
+      && !!previousTile
+      && !!currentTile
+      && waterTravelTile(previousTile.code)
+      && waterTravelTile(currentTile.code);
+    const path = shortestTravelPath(state.map, lastPos, playerPos, { useBoat });
+    revealed = revealPathWithNeighbors(revealed, state.map, path.length ? path : [lastPos, playerPos]);
+  }
+
+  revealed = revealAroundPosition(revealed, state.map, playerPos);
+
+  if (revealed.size !== loaded.size) {
+    saveRevealedTiles(playerName, revealed);
+  }
+  saveLastFogPosition(playerName, playerPos);
+
+  const map = state.map.map((row) =>
+    row.map((tile) => {
+      const isVisible = revealed.has(`${tile.x},${tile.y}`);
+      return {
+        ...tile,
+        isVisible,
+        activeStory: isVisible ? tile.activeStory : null
+      };
+    })
+  );
+
+  if (FOG_DEBUG && typeof console !== "undefined") {
+    const totalTiles = map.reduce((sum, row) => sum + row.length, 0);
+    const visibleTiles = map.reduce(
+      (sum, row) => sum + row.filter((tile) => tile.isVisible).length,
+      0
+    );
+    console.log("[fog]", {
+      playerName,
+      storageKey: fogRevealStorageKey(playerName),
+      position: playerPos,
+      revealedCount: revealed.size,
+      visibleTiles,
+      totalTiles,
+      sample: Array.from(revealed).slice(0, 20)
+    });
+    if (typeof window !== "undefined") {
+      window.__nisseFogDebug = {
+        playerName,
+        storageKey: fogRevealStorageKey(playerName),
+        position: playerPos,
+        revealed: Array.from(revealed),
+        visibleTiles,
+        totalTiles
+      };
+    }
+  }
+
+  return {
+    ...state,
+    map
+  };
+}
+
+function setUiState(nextState) {
+  store.setState(applyFogOfWar(nextState));
 }
 
 function defaultAvatarPixels() {
@@ -260,6 +443,24 @@ function loadAvatarState() {
   } catch (err) {
     return { pixels: defaultAvatarPixels(), selected: 1 };
   }
+}
+
+function emojiForCompanionList(companionList) {
+  const first = String(companionList?.[0]?.species || companionList?.[0]?.name || "").toLowerCase();
+  if (first.includes("dog")) return "🐕";
+  if (first.includes("donkey")) return "🫏";
+  if (first.includes("reindeer")) return "🦌";
+  if (first.includes("mule")) return "🐴";
+  return "🦄";
+}
+
+function emojiForMonsterMarks(monsterMarks) {
+  const first = String(monsterMarks?.[0]?.kind || "").toLowerCase();
+  if (first.includes("goblin")) return "👺";
+  if (first.includes("dragon") || first.includes("drake")) return "🐉";
+  if (first.includes("troll")) return "👹";
+  if (first.includes("elf")) return "🧝";
+  return "👹";
 }
 
 function persistAvatarState() {
@@ -481,7 +682,6 @@ function errorState(message) {
       level: 0,
       travelBonus: 0
     },
-    inheritance: null,
     map: [],
     place: {
       title: "Connection problem",
@@ -519,13 +719,12 @@ function renderNarrativeText(text, extras = {}) {
   const state = store.getState();
   const player = state?.player || {};
   const place = state?.place || {};
-  const inheritance = state?.inheritance || {};
   const baseContext = {
     playerName: player.name || "",
+    name: place.placeName || place.title || place.terrain || "",
     place: place.title || place.placeName || place.terrain || "",
     companionName: extras.companionName || "",
-    attitude: currentAttitude || "",
-    fromName: inheritance.from || ""
+    attitude: currentAttitude || ""
   };
   if (window.NisseStoryRunner?.interpolateStoryText) {
     return window.NisseStoryRunner.interpolateStoryText(source, baseContext);
@@ -592,142 +791,6 @@ function renderFrensBox(state) {
     lines.push("Frens inactive.");
   }
   frensResult.textContent = lines.join("\n");
-}
-
-function inferListingKind(listing) {
-  const haystack = `${listing.assetCode} ${listing.displayName}`.toLowerCase();
-  if (haystack.includes("reindeer")) return "reindeer";
-  if (haystack.includes("donkey")) return "donkey";
-  if (haystack.includes("mule")) return "mule";
-  if (haystack.includes("dog")) return "dog";
-  return "companion";
-}
-
-function filteredMarketListings() {
-  const ownerNeedle = String(marketState.ownerFilter || "").trim().toLowerCase();
-  const kindNeedle = String(marketState.kindFilter || "").trim().toLowerCase();
-  return (marketState.listings || []).filter((listing) => {
-    if (ownerNeedle && !String(listing.ownerPlayer || "").toLowerCase().includes(ownerNeedle)) {
-      return false;
-    }
-    if (kindNeedle && !inferListingKind(listing).includes(kindNeedle)) {
-      return false;
-    }
-    return true;
-  });
-}
-
-function renderMarketBox(state) {
-  if (!marketResult) {
-    return;
-  }
-  if (marketOwnerFilter && document.activeElement !== marketOwnerFilter) {
-    marketOwnerFilter.value = marketState.ownerFilter || "";
-  }
-  if (marketKindFilter && document.activeElement !== marketKindFilter) {
-    marketKindFilter.value = marketState.kindFilter || "";
-  }
-
-  const companionList = state?.companionList || [];
-  if (marketCompanionSelect) {
-    const currentValue = marketCompanionSelect.value;
-    marketCompanionSelect.innerHTML =
-      `<option value="">Choose companion</option>` +
-      companionList.map((companion) => {
-        const label = companion.name || companion.species || `#${companion.id}`;
-        return `<option value="${escapeHtml(companion.id)}">${escapeHtml(label)}${companion.active ? " (active)" : ""}</option>`;
-      }).join("");
-    if ([...marketCompanionSelect.options].some((option) => option.value === currentValue)) {
-      marketCompanionSelect.value = currentValue;
-    }
-  }
-
-  const listings = filteredMarketListings().slice(0, 5);
-  if (marketListingSelect) {
-    const currentValue = marketState.selectedAssetCode || marketListingSelect.value;
-    marketListingSelect.innerHTML =
-      `<option value="">Choose listing</option>` +
-      listings.map((listing) => {
-        const label = `${listing.displayName || listing.assetCode} · ${listing.listedPearlPrice} pearls`;
-        return `<option value="${escapeHtml(listing.assetCode)}">${escapeHtml(label)}</option>`;
-      }).join("");
-    if ([...marketListingSelect.options].some((option) => option.value === currentValue)) {
-      marketListingSelect.value = currentValue;
-      marketState.selectedAssetCode = currentValue;
-    } else {
-      marketState.selectedAssetCode = listings[0]?.assetCode || "";
-      marketListingSelect.value = marketState.selectedAssetCode;
-    }
-  }
-  const lines = [];
-  if (marketState.error) {
-    lines.push(`Error: ${marketState.error}`);
-  } else if (marketState.loading) {
-    lines.push("Loading market...");
-  } else if (!marketState.listings.length) {
-    lines.push("No active companion listings.");
-  } else {
-    lines.push("Top listings:");
-    for (const listing of listings) {
-      const selected = marketState.selectedAssetCode === listing.assetCode ? " *" : "";
-      const label = listing.displayName || listing.assetCode;
-      lines.push(`- ${label}${selected}`);
-      lines.push(`  code: ${listing.assetCode}`);
-      lines.push(`  owner: ${listing.ownerPlayer}`);
-      lines.push(`  type: ${inferListingKind(listing)}`);
-      lines.push(`  price: ${listing.listedPearlPrice} pearls${listing.local ? " (local)" : " (remote)"}`);
-      lines.push(`  tile: (${listing.position.x}, ${listing.position.y})`);
-    }
-  }
-  if (marketState.peddlersText) {
-    lines.push("");
-    lines.push(marketState.peddlersText);
-  }
-  marketResult.textContent = lines.join("\n");
-  marketBuyButton.disabled = !marketState.selectedAssetCode;
-}
-
-function renderMoneyMarketBox() {
-  if (!moneyMarketResult) {
-    return;
-  }
-  if (moneyPeddlerSelect) {
-    const currentValue = moneyMarketState.selectedSeller || moneyPeddlerSelect.value;
-    moneyPeddlerSelect.innerHTML =
-      `<option value="">Choose peddler</option>` +
-      (moneyMarketState.peddlers || []).map((peddler) => {
-        const label = `${peddler.ownerPlayer} · ${peddler.priceUGNOTPerPearl} ugnot/pearl · pearls ${peddler.pearlReserve} · ugnot ${peddler.ugnotReserve}`;
-        return `<option value="${escapeHtml(peddler.ownerPlayer)}">${escapeHtml(label)}</option>`;
-      }).join("");
-    if ([...moneyPeddlerSelect.options].some((option) => option.value === currentValue)) {
-      moneyPeddlerSelect.value = currentValue;
-      moneyMarketState.selectedSeller = currentValue;
-    } else {
-      moneyMarketState.selectedSeller = moneyMarketState.peddlers[0]?.ownerPlayer || "";
-      moneyPeddlerSelect.value = moneyMarketState.selectedSeller;
-    }
-  }
-  const lines = [];
-  if (moneyMarketState.error) {
-    lines.push(`Error: ${moneyMarketState.error}`);
-  } else if (moneyMarketState.loading) {
-    lines.push("Loading changers...");
-  } else if (!moneyMarketState.peddlers.length) {
-    lines.push("No active money changers.");
-  } else {
-    lines.push("Active changers:");
-    for (const peddler of moneyMarketState.peddlers) {
-      const selected = moneyMarketState.selectedSeller === peddler.ownerPlayer ? " *" : "";
-      lines.push(`- ${peddler.ownerPlayer}${selected}`);
-      lines.push(`  place: ${peddler.place}`);
-      lines.push(`  price: ${peddler.priceUGNOTPerPearl} ugnot per pearl`);
-      lines.push(`  pearls: ${peddler.pearlReserve} · ugnot: ${peddler.ugnotReserve}`);
-    }
-  }
-  moneyMarketResult.textContent = lines.join("\n");
-  const hasSeller = !!moneyMarketState.selectedSeller;
-  moneyBuyPearlsButton.disabled = !hasSeller;
-  moneyBuyUGNOTButton.disabled = !hasSeller;
 }
 
 function adenaData(payload) {
@@ -847,13 +910,105 @@ async function sendWithAdena({ messages, gasWanted, gasFee, memo = "", address =
   }
 
   const payload = {
+    tx: {
+      messages,
+      memo: String(memo || "")
+    },
     messages,
     gasFee: Number(gasFee),
     gasWanted: Number(gasWanted),
-    memo: String(memo || "")
+    memo: String(memo || ""),
+    isNotification: true
   };
 
   return window.adena.DoContract(payload);
+}
+
+function canUseAdenaWrites() {
+  return APP_MODE === "hosted" && typeof window !== "undefined" && !!window.adena;
+}
+
+async function ensureAdenaReady() {
+  if (!window.adena) {
+    throw new Error("Adena extension was not found in this browser.");
+  }
+  if (!adenaState.connected) {
+    await connectAdenaWallet();
+  }
+  const address = String(adenaState.address || "").trim();
+  if (!address) {
+    throw new Error("No connected Adena address is available.");
+  }
+  return address;
+}
+
+async function callRealmWithAdena(func, args = [], { send = "", memo = "" } = {}) {
+  const sender = await ensureAdenaReady();
+  const response = await sendWithAdena({
+    address: sender,
+    messages: [
+      {
+        type: "/vm.m_call",
+        value: {
+          caller: sender,
+          send: String(send || ""),
+          pkg_path: REALM_PKG_PATH,
+          func: String(func || ""),
+          args: Array.isArray(args) ? args.map((value) => String(value)) : []
+        }
+      }
+    ],
+    gasWanted: Number(DEFAULT_GAS_WANTED),
+    gasFee: DEFAULT_GAS_FEE,
+    memo
+  });
+  const txHash = String(response?.data?.hash || response?.data?.txHash || response?.txHash || response?.hash || "").trim();
+  pushLogMessage(`${func} sent with Adena.${txHash ? `\n${txHash}` : ""}`);
+  try {
+    const nextState = await api.refresh();
+    setUiState(nextState);
+  } catch (err) {
+    pushLogMessage("Adena write succeeded, but readonly refresh is unavailable right now.");
+  }
+  return response;
+}
+
+async function handleRealmCallAction({ func, args = [], memo = "", send = "", fallback = null, overlay = null, switchView = "" }) {
+  if (!canUseAdenaWrites()) {
+    if (fallback) {
+      await runAction(fallback);
+      const command = latestCliCommand(store.getState());
+      if (overlay === "player") {
+        setPlayerCommandOverlay(func, command || "No command is available.");
+      } else if (overlay === "mail") {
+        setMailCommandOverlay(func, command || "No command is available.");
+      }
+    }
+    if (switchView) {
+      setMainViewMode(switchView);
+    }
+    return;
+  }
+
+  try {
+    await callRealmWithAdena(func, args, { send, memo });
+    if (overlay === "player") {
+      clearPlayerCommandOverlay();
+    } else if (overlay === "mail") {
+      clearMailCommandOverlay();
+    }
+  } catch (err) {
+    const message = err?.message || String(err);
+    pushLogMessage(message);
+    if (overlay === "player") {
+      setPlayerCommandOverlay(func, message);
+    } else if (overlay === "mail") {
+      setMailCommandOverlay(func, message);
+    }
+  }
+  if (switchView) {
+    setMainViewMode(switchView);
+  }
 }
 
 async function uploadHostedNissePackage() {
@@ -907,9 +1062,15 @@ async function uploadHostedNissePackage() {
 }
 
 function renderAdenaDeployBox() {
+  const adenaBox = adenaDeployResult?.closest(".companion-registry-box");
+  if (APP_MODE !== "hosted") {
+    adenaBox?.classList.add("hidden");
+    return;
+  }
   if (!adenaDeployResult) {
     return;
   }
+  adenaBox?.classList.remove("hidden");
   const lines = [];
   if (!adenaState.available) {
     lines.push("Adena not detected in this browser.");
@@ -947,7 +1108,6 @@ function renderMailBox(state) {
   }
 
   const mailbox = state?.mailbox || { messages: [], latest: null };
-  const ugnotPouch = state?.ugnotPouch || { total: 0, latest: "" };
 
   if (messageInboxResult) {
     const lines = [];
@@ -969,13 +1129,6 @@ function renderMailBox(state) {
     messageInboxResult.textContent = lines.join("\n").trim() || "No messages yet.";
   }
 
-  if (ugnotPouchResult) {
-    const lines = [
-      `Total: ${Number(ugnotPouch.total || 0)} ugnot`,
-      `Latest: ${ugnotPouch.latest || "No ugnot transfers yet."}`
-    ];
-    ugnotPouchResult.textContent = lines.join("\n");
-  }
 }
 
 function storyOutcomeKey(tier) {
@@ -1132,20 +1285,6 @@ function cityServiceEntries(place) {
   const south = place?.terrain === "city_south";
   return [
     {
-      key: "money-changer",
-      title: "Money Changer",
-      summary: south
-        ? "A peddler-style stall exchanging pearls and ugnot under the market awnings."
-        : "A square-side changer dealing in pearls, ugnot, and small trade margins.",
-      hint: "For now this stands in for pearls, ugnot, and the peddler economy."
-    },
-    {
-      key: "companion-stall",
-      title: "Companion Stall",
-      summary: "A seller of creatures, birds, and loyal oddments priced in pearls.",
-      hint: "This is the future home of companion buying and companion-linked offers."
-    },
-    {
       key: "scroll-seller",
       title: "Scrolls and Wisdom",
       summary: "Old books, copied sayings, brittle scrolls, and useful fragments of learning.",
@@ -1213,7 +1352,7 @@ function placeFeatureEntries(place, player) {
     addEntry(
       "village-life",
       "Village Life",
-      "These places may support peddlers, nearby hints, gossip, and local practical trade as the village systems deepen.",
+      "These places may support nearby hints, gossip, and local practical help as the village systems deepen.",
       "A quieter service layer than the city."
     );
   }
@@ -1240,6 +1379,14 @@ function placeFeatureEntries(place, player) {
 function placeImageForDisplay(place) {
   if (!place) {
     return "";
+  }
+  const map = store.getState()?.map || [];
+  const textureVariant = coastalTextureVariant(map, place.x, place.y);
+  if (textureVariant === "coastal-sea-down") {
+    return `${PLACE_TILE_ASSET_BASE}/coastal_seadown.png`;
+  }
+  if (textureVariant === "coastal-sea-up") {
+    return `${PLACE_TILE_ASSET_BASE}/coastal_seaup.png`;
   }
   const tileLikeImage = tileTextureOverride({
     x: place.x,
@@ -1309,24 +1456,21 @@ function currentArrivalResult(state, place) {
   return result;
 }
 
-function cycleAttitude(value) {
-  switch (String(value || "").toLowerCase()) {
-    case "kind":
-      return "bold";
-    case "bold":
-      return "cautious";
-    default:
-      return "kind";
-  }
-}
-
 function renderAttitudeButton() {
-  if (!attitudeButton) {
-    return;
+  const buttons = [
+    ["cautious", attitudeCautiousButton],
+    ["kind", attitudeKindButton],
+    ["bold", attitudeBoldButton]
+  ];
+  for (const [attitude, button] of buttons) {
+    if (!button) {
+      continue;
+    }
+    const active = currentAttitude === attitude;
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.classList.toggle("attitude-button-active", active);
+    button.classList.toggle(`attitude-button--${attitude}`, active);
   }
-  attitudeButton.textContent = `Attitude: ${currentAttitude[0].toUpperCase()}${currentAttitude.slice(1)}`;
-  attitudeButton.classList.remove("attitude-button--cautious", "attitude-button--kind", "attitude-button--bold");
-  attitudeButton.classList.add(`attitude-button--${currentAttitude}`);
 }
 
 function pushLogMessage(message) {
@@ -1364,7 +1508,7 @@ function availableActionsForPlace(place, player) {
     actions.push("boat");
   }
   if (cityLike || villageLike) {
-    actions.push("peddler", "peddlers");
+    actions.push("services");
   }
   if (monasteryLike) {
     actions.push("pages", "entry");
@@ -1415,7 +1559,7 @@ function renderPlaceActions(place, player) {
       `<div class="place-actions-list place-actions-list--stack">` +
       `<button type="button" class="place-primary-button" data-place-action="place-explore">Explore</button>` +
       `<div class="place-action-note">Explore checks for active city adventures first. If none are active, it opens the city view with its stalls, sellers, and services.</div>` +
-      `<div class="place-action-note">From here the city can lead into: adventure, city view, peddler trade, companion buying, scrolls and wisdom, and boat trips.</div>` +
+      `<div class="place-action-note">From here the city can lead into: adventure, city view, scrolls and wisdom, and boat trips.</div>` +
       `</div>`;
     return;
   }
@@ -1531,10 +1675,10 @@ function coastalTextureVariant(map, x, y) {
   const oceanLeft = oceanOrMapEdge(left);
   const oceanRight = oceanOrMapEdge(right);
 
-  if (oceanUp && !oceanDown && !oceanLeft && !oceanRight) {
+  if (oceanUp && !oceanDown) {
     return "coastal-sea-up";
   }
-  if (oceanDown && !oceanUp && !oceanLeft && !oceanRight) {
+  if (oceanDown && !oceanUp) {
     return "coastal-sea-down";
   }
   return "";
@@ -1549,6 +1693,10 @@ function tileTextureOverride(tile, assetBase = MAP_TILE_ASSET_BASE) {
   switch (key) {
     case "12,3":
       return BENEVOLENT_MONASTERY_IMAGE;
+    case "13,5":
+      return `${assetBase}/melkern.png`;
+    case "13,6":
+      return `${assetBase}/minde.png`;
     case "1,3":
       return `${assetBase}/coastal_convex_NW.png`;
     case "1,4":
@@ -1705,7 +1853,7 @@ function shortestTravelPath(map, start, target, options = {}) {
 
     for (const next of neighbors) {
       const nextKey = `${next.x},${next.y}`;
-      const nextCost = current.cost + movementCost(next.code);
+      const nextCost = current.cost + (options.useBoat ? 1 : movementCost(next.code));
       if (!distances.has(nextKey) || nextCost < distances.get(nextKey)) {
         distances.set(nextKey, nextCost);
         previous.set(nextKey, currentKey);
@@ -1857,8 +2005,9 @@ function renderMap(state) {
         "tile-button",
         `terrain-${tile.terrain}`
       ];
+      if (!tile.isVisible) classes.push("is-hidden");
       const textureVariant = coastalTextureVariant(map, tile.x, tile.y);
-      if (textureVariant) classes.push(textureVariant);
+      if (textureVariant && tile.isVisible) classes.push(textureVariant);
       if (displayMarker && tile.x === displayMarker.x && tile.y === displayMarker.y) classes.push("is-player");
       if (tile.isCursor) classes.push("is-cursor");
       if (tile.isAdjacent) classes.push("is-adjacent");
@@ -1870,7 +2019,7 @@ function renderMap(state) {
       const dataAttrs = `data-x="${tile.x}" data-y="${tile.y}"`;
       const textureOverride = tileTextureOverride(tile);
       const styleParts = [];
-      if (textureOverride) {
+      if (textureOverride && tile.isVisible) {
         styleParts.push(`background-image: linear-gradient(rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.08)), url('${escapeHtml(textureOverride)}')`);
       }
       const styleAttr = styleParts.length ? ` style="${styleParts.join("; ")};"` : "";
@@ -1879,12 +2028,12 @@ function renderMap(state) {
       return (
         `<button type="button" class="${classes.join(" ")}" ${dataAttrs}${styleAttr}>` +
         (tile.isReachable && tile.travelCost !== null ? `<span class="tile-cost">${escapeHtml(tile.travelCost)}</span>` : "") +
-        (loads.active && loadCount > 0 ? `<span class="tile-load-count" title="${escapeHtml(loadCount)} living players">&#9829;<span class="tile-load-count-value">${escapeHtml(loadCount)}</span></span>` : "") +
-        (tile.activeStory ? `<span class="tile-story-flag" title="${escapeHtml(tile.activeStory.title || tile.activeStory.id || 'Active story')}">&#9873;</span>` : "") +
-        (boatLeftPosition && tile.x === boatLeftPosition.x && tile.y === boatLeftPosition.y
+        (tile.isVisible && loads.active && loadCount > 0 ? `<span class="tile-load-count" title="${escapeHtml(loadCount)} living players">&#9829;<span class="tile-load-count-value">${escapeHtml(loadCount)}</span></span>` : "") +
+        (tile.isVisible && tile.activeStory ? `<span class="tile-story-flag" title="${escapeHtml(tile.activeStory.title || tile.activeStory.id || 'Active story')}">&#9873;</span>` : "") +
+        (tile.isVisible && boatLeftPosition && tile.x === boatLeftPosition.x && tile.y === boatLeftPosition.y
           ? `<span class="tile-boat-anchor" title="Your boat is waiting here">&#9875;</span>`
           : "") +
-        (showTileLabels ? `<span class="tile-label">${escapeHtml(tileLabel(tile, canShowOceanLabels))}</span>` : "") +
+        (tile.isVisible && showTileLabels ? `<span class="tile-label">${escapeHtml(tileLabel(tile, canShowOceanLabels))}</span>` : "") +
         "</button>"
       );
     }).join("");
@@ -2031,10 +2180,21 @@ function renderPlayer(state) {
   }
   syncAvatarFromChain(player);
   playerName.textContent = player.name;
+  if (seasonChip) {
+    const season = String(player.season || "").trim();
+    seasonChip.textContent = `Season: ${season ? season[0].toUpperCase() + season.slice(1) : "Spring"}`;
+  }
   playerPosition.textContent = `(${player.position.x}, ${player.position.y})`;
   playerPearls.textContent = String(player.pearls);
   playerLevel.textContent = String(player.level);
   playerTravelBonus.textContent = `+${player.travelBonus || 0}`;
+  if (playerItems) {
+    const items = [];
+    if (player.boatStatus && player.boatStatus.toLowerCase() !== "none") {
+      items.push(player.boatStatus);
+    }
+    playerItems.textContent = items.length ? items.join(" · ") : "None";
+  }
   if (playerSpiritStats) {
     playerSpiritStats.textContent = `B ${player.boldness ?? "-"} · C ${player.caution ?? "-"} · K ${player.kindness ?? "-"} · Soul ${player.soul ?? "-"}`;
   }
@@ -2063,6 +2223,79 @@ function renderPlayer(state) {
         .join(", ");
     }
   }
+  const companionList = state?.companionList || [];
+  const monsterMarks = (state?.monsterMarks || []).filter((entry) => entry?.state === "yes");
+  const currentMoves = state?.travel?.active
+    ? Number(state?.travel?.movesLeft || 0)
+    : (3 + Number(player?.travelBonus || 0));
+  const claimCount = Number(state?.companionClaimsCount || 0);
+  const hasBoat = !!(player.boatStatus && player.boatStatus.toLowerCase() !== "none");
+  if (stagePearls) {
+    stagePearls.textContent = String(player.pearls ?? 0);
+  }
+  if (stageMoves) {
+    stageMoves.textContent = String(currentMoves);
+  }
+  if (stageBoat) {
+    stageBoat.textContent = hasBoat ? "1" : "0";
+  }
+  if (stageBoldness) {
+    stageBoldness.textContent = String(player.boldness ?? 0);
+  }
+  if (stageCaution) {
+    stageCaution.textContent = String(player.caution ?? 0);
+  }
+  if (stageKindness) {
+    stageKindness.textContent = String(player.kindness ?? 0);
+  }
+  if (stageSoul) {
+    stageSoul.textContent = String(player.soul ?? 0);
+  }
+  if (stageCompanions) {
+    stageCompanions.textContent = String(companionList.length);
+  }
+  if (stageMonsters) {
+    stageMonsters.textContent = String(monsterMarks.length);
+  }
+  if (stageClaims) {
+    stageClaims.textContent = String(claimCount);
+  }
+  if (mintCompanionButton) {
+    const canMint = claimCount > 0;
+    mintCompanionButton.disabled = !canMint;
+    mintCompanionButton.setAttribute("aria-pressed", canMint ? "true" : "false");
+    mintCompanionButton.classList.toggle("stage-stat-button-mint-ready", canMint);
+  }
+  if (stageCompanionIcon) {
+    stageCompanionIcon.textContent = emojiForCompanionList(companionList);
+  }
+  if (stageMonsterIcon) {
+    stageMonsterIcon.textContent = emojiForMonsterMarks(monsterMarks);
+  }
+  if (playerStageName) {
+    playerStageName.textContent = player.name || "Player";
+  }
+  if (playerStagePosition) {
+    playerStagePosition.textContent = `at (${player.position.x}, ${player.position.y})`;
+  }
+  if (playerStageStats) {
+    playerStageStats.textContent = `Lvl ${player.level} · Moves ${currentMoves} · Travel +${player.travelBonus || 0}`;
+  }
+  if (playerStageWealth) {
+    playerStageWealth.textContent = `Pearls ${player.pearls ?? 0}`;
+  }
+  if (playerStageItems) {
+    playerStageItems.textContent = playerItems?.textContent || "None";
+  }
+  if (playerStageCompanions) {
+    playerStageCompanions.textContent = playerCompanions?.textContent || "None";
+  }
+  if (playerStageMonsters) {
+    playerStageMonsters.textContent = playerMonsters?.textContent || "None";
+  }
+  if (playerStageClaims) {
+    playerStageClaims.textContent = claimCount > 0 ? `Mintable ${claimCount}` : "None";
+  }
   const identity = api.identity();
   currentAttitude = identity.attitude || currentAttitude;
   if (identityPlayerName && document.activeElement !== identityPlayerName) {
@@ -2072,37 +2305,148 @@ function renderPlayer(state) {
     identityKeyName.value = identity.keyName || "";
   }
 
-  const inheritance = state?.inheritance;
-  if (!inheritance || !inheritanceBox || !inheritanceText || !claimInheritanceButton) {
-    inheritanceBox?.classList.add("hidden");
-    return;
-  }
+}
 
-  inheritanceBox.classList.remove("hidden");
-  const onSite = Number(player.position.x) === Number(inheritance.position.x)
-    && Number(player.position.y) === Number(inheritance.position.y);
-  inheritanceText.textContent =
-    `From ${inheritance.from}\n` +
-    `Map: (${inheritance.position.x}, ${inheritance.position.y})\n` +
-    `Pearls: ${inheritance.pearls}` +
-    (inheritance.ugnot ? ` · UGNOT: ${inheritance.ugnot}` : "") +
-    `\nCause: ${inheritance.cause || "Unknown"}` +
-    (onSite ? `\nYou are standing at the hidden site.` : `\nTravel there to recover it.`);
-  claimInheritanceButton.disabled = !onSite;
+function renderDrawerPanels() {
+  mapPanel?.classList.toggle("hidden", mainViewMode !== "map");
+  playerPanel?.classList.toggle("hidden", mainViewMode !== "player");
+  portraitPanel?.classList.toggle("hidden", mainViewMode !== "portrait");
+  placePanel?.classList.toggle("hidden", mainViewMode !== "place");
+  mailPanel?.classList.toggle("hidden", mainViewMode !== "mail");
+  if (mapHomeButton) {
+    mapHomeButton.disabled = mainViewMode === "map";
+  }
+  if (openPlayerPanelButton) {
+    openPlayerPanelButton.disabled = mainViewMode === "player";
+  }
+  if (openPortraitPanelButton) {
+    openPortraitPanelButton.disabled = mainViewMode === "portrait";
+  }
+  if (openPlacePanelButton) {
+    openPlacePanelButton.disabled = mainViewMode === "place";
+  }
+  if (openMailPanelButton) {
+    openMailPanelButton.disabled = mainViewMode === "mail";
+  }
+}
+
+function setMainViewMode(mode) {
+  const nextMode = mode === "player" || mode === "portrait" || mode === "place" || mode === "mail" ? mode : "map";
+  const previousMode = mainViewMode;
+  mainViewMode = nextMode;
+  render(store.getState());
+  if (nextMode === "portrait") {
+    window.requestAnimationFrame(() => {
+      avatarEditor?.focus();
+    });
+  }
+  if (nextMode === "map" && previousMode !== "map") {
+    window.requestAnimationFrame(() => {
+      repositionMarkerAfterLayout();
+    });
+  }
 }
 
 function renderTravelControls(state) {
   const travel = state?.travel;
   const active = !!travel?.active;
-  const canCommit = active && travel.cursor &&
-    (travel.cursor.x !== travel.origin.x || travel.cursor.y !== travel.origin.y);
-
   travelBadge.classList.toggle("hidden", !active);
   travelBadge.textContent = active ? `Travel Mode · ${travel.movesLeft} left` : "Travel Mode";
-  travelToggleButton.textContent = active ? "Reset Travel" : "Begin Travel";
-  travelCommitButton.disabled = !canCommit;
-  travelCancelButton.disabled = !active;
   tileLabelsButton.textContent = showTileLabels ? "Hide Tile Labels" : "Show Tile Labels";
+}
+
+function latestCliCommand(state) {
+  const log = state?.log || [];
+  for (const entry of log) {
+    const text = String(entry ?? "");
+    const commandMatch = text.match(/(gnokey maketx call[\s\S]*)$/);
+    if (commandMatch) {
+      return commandMatch[1].trim();
+    }
+  }
+  return "";
+}
+
+function renderMapCommandOverlay(state) {
+  if (!mapCommandOverlay || !mapCommandText) {
+    return;
+  }
+  const command = latestCliCommand(state);
+  const show = !!command && !!state?.travel?.active;
+  mapCommandOverlay.classList.toggle("hidden", !show);
+  mapCommandText.value = show ? command : "";
+  if (copyMapCommandButton) {
+    copyMapCommandButton.disabled = !show;
+  }
+}
+
+function renderPlayerCommandOverlay() {
+  if (!playerCommandOverlay || !playerCommandText) {
+    return;
+  }
+  const text = String(playerCommandState?.text || "").trim();
+  const show = !!text;
+  playerCommandOverlay.classList.toggle("hidden", !show);
+  playerCommandText.value = show ? text : "";
+  if (playerCommandTitle) {
+    playerCommandTitle.textContent = playerCommandState?.title || "Player Command";
+  }
+  if (copyPlayerCommandButton) {
+    copyPlayerCommandButton.disabled = !show;
+  }
+}
+
+function setPlayerCommandOverlay(title, text) {
+  playerCommandState = {
+    title: String(title || "Player Command"),
+    text: String(text || "").trim()
+  };
+  renderPlayerCommandOverlay();
+}
+
+function clearPlayerCommandOverlay() {
+  setPlayerCommandOverlay("", "");
+}
+
+function renderMailCommandOverlay() {
+  if (!mailCommandOverlay || !mailCommandText) {
+    return;
+  }
+  const text = String(mailCommandState?.text || "").trim();
+  const show = !!text;
+  mailCommandOverlay.classList.toggle("hidden", !show);
+  mailCommandText.value = show ? text : "";
+  if (mailCommandTitle) {
+    mailCommandTitle.textContent = mailCommandState?.title || "Message Command";
+  }
+  if (copyMailCommandButton) {
+    copyMailCommandButton.disabled = !show;
+  }
+}
+
+function setMailCommandOverlay(title, text) {
+  mailCommandState = {
+    title: String(title || "Message Command"),
+    text: String(text || "").trim()
+  };
+  renderMailCommandOverlay();
+}
+
+function clearMailCommandOverlay() {
+  setMailCommandOverlay("", "");
+}
+
+function buildImportIdentityNote(playerName, keyName) {
+  const cleanPlayerName = String(playerName || "").trim() || "Nisse";
+  const cleanKeyName = String(keyName || "").trim() || "mykey";
+  return [
+    "Local player import",
+    `Player: ${cleanPlayerName}`,
+    `Key: ${cleanKeyName}`,
+    "",
+    "This action imports an existing on-chain player into the local browser session.",
+    "No gnokey transaction is required."
+  ].join("\n");
 }
 
 function renderLog(state) {
@@ -2132,12 +2476,14 @@ function render(state) {
   renderAdenaDeployBox();
   renderCompanionRegistryBox();
   renderFrensBox(state);
-  renderMarketBox(state);
-  renderMoneyMarketBox();
   renderTravelControls(state);
+  renderMapCommandOverlay(state);
+  renderPlayerCommandOverlay();
+  renderMailCommandOverlay();
   renderLog(state);
   renderAttitudeButton();
   renderAvatarEditor();
+  renderDrawerPanels();
 }
 
 function repositionMarkerAfterLayout() {
@@ -2190,85 +2536,25 @@ function centerMapOnMarkerAfterLayout() {
 async function loadState() {
   try {
     const nextState = await api.getState();
-    store.setState(nextState);
+    setUiState(nextState);
     centerMapOnMarkerAfterLayout();
   } catch (err) {
-    store.setState(errorState(err?.message || String(err)));
+    setUiState(errorState(err?.message || String(err)));
   }
 }
 
 async function runAction(action) {
   try {
     const nextState = await action();
-    store.setState(nextState);
+    setUiState(nextState);
   } catch (err) {
     const current = store.getState();
     const message = err?.message || String(err);
-    store.setState(current ? {
+    setUiState(current ? {
       ...current,
       log: [message, ...(current.log || [])].slice(0, 24)
     } : errorState(message));
   }
-}
-
-async function refreshMarketBox() {
-  marketState = {
-    ...marketState,
-    loading: true,
-    error: ""
-  };
-  render(store.getState());
-  try {
-    const [listings, peddlersText] = await Promise.all([
-      api.listCompanionListings(),
-      api.describePeddlers()
-    ]);
-    const previousSelection = marketState.selectedAssetCode;
-    marketState = {
-      ...marketState,
-      loading: false,
-      listings,
-      peddlersText,
-      error: "",
-      selectedAssetCode: listings.some((listing) => listing.assetCode === previousSelection) ? previousSelection : (listings[0]?.assetCode || "")
-    };
-  } catch (err) {
-    marketState = {
-      ...marketState,
-      loading: false,
-      error: err?.message || String(err)
-    };
-  }
-  render(store.getState());
-}
-
-async function refreshMoneyMarketBox() {
-  moneyMarketState = {
-    ...moneyMarketState,
-    loading: true,
-    error: ""
-  };
-  render(store.getState());
-  try {
-    const peddlers = await api.listPeddlers();
-    const previousSelection = moneyMarketState.selectedSeller;
-    moneyMarketState = {
-      ...moneyMarketState,
-      loading: false,
-      peddlers,
-      error: "",
-      selectedSeller: peddlers.some((entry) => entry.ownerPlayer === previousSelection)
-        ? previousSelection
-        : (peddlers[0]?.ownerPlayer || "")
-    };
-  } catch (err) {
-    moneyMarketState = {
-      ...moneyMarketState,
-      loading: false,
-      error: err?.message || String(err)
-    };
-  }
-  render(store.getState());
 }
 
 function syncFullscreenButtonLabel() {
@@ -2280,17 +2566,12 @@ function syncFullscreenButtonLabel() {
     : "Fullscreen Map";
 }
 
-refreshButton.addEventListener("click", async () => {
+refreshButton?.addEventListener("click", async () => {
   await runAction(() => api.refresh());
   centerMapOnMarkerAfterLayout();
 });
 
-portraitJumpButton?.addEventListener("click", () => {
-  avatarBox?.scrollIntoView({ behavior: "smooth", block: "start" });
-  window.setTimeout(() => avatarEditor?.focus(), 180);
-});
-
-mapFullscreenButton.addEventListener("click", async () => {
+mapFullscreenButton?.addEventListener("click", async () => {
   if (!mapPanel) {
     return;
   }
@@ -2311,27 +2592,41 @@ mapFullscreenButton.addEventListener("click", async () => {
   }
 });
 
-travelToggleButton.addEventListener("click", async () => {
-  const state = store.getState();
-  await runAction(() => state?.travel?.active
-    ? api.resetTravel()
-    : api.beginTravel());
-});
-
-travelCommitButton.addEventListener("click", async () => {
-  await runAction(() => api.commitTravel());
-});
-
-attitudeButton?.addEventListener("click", () => {
-  currentAttitude = api.setAttitude ? api.setAttitude(cycleAttitude(currentAttitude)) : cycleAttitude(currentAttitude);
+attitudeCautiousButton?.addEventListener("click", () => {
+  currentAttitude = api.setAttitude ? api.setAttitude("cautious") : "cautious";
   render(store.getState());
 });
 
-travelCancelButton.addEventListener("click", async () => {
-  await runAction(() => api.cancelTravel());
+attitudeKindButton?.addEventListener("click", () => {
+  currentAttitude = api.setAttitude ? api.setAttitude("kind") : "kind";
+  render(store.getState());
 });
 
-tileLabelsButton.addEventListener("click", () => {
+attitudeBoldButton?.addEventListener("click", () => {
+  currentAttitude = api.setAttitude ? api.setAttitude("bold") : "bold";
+  render(store.getState());
+});
+
+mintCompanionButton?.addEventListener("click", async () => {
+  const state = store.getState();
+  const playerName = state?.player?.name || identityPlayerName?.value || "Nisse";
+  const claim = (state?.companionClaims || []).find((entry) => Number(entry?.count || 0) > 0);
+  if (!claim?.claimID) {
+    setPlayerCommandOverlay("Mint Companion", "No mintable companion claims are ready.");
+    setMainViewMode("player");
+    return;
+  }
+  await handleRealmCallAction({
+    func: "MintEarnedCompanion",
+    args: [playerName, claim.claimID, ""],
+    memo: `Mint ${claim.type || "companion"}`,
+    fallback: () => api.stageMintEarnedCompanion(),
+    overlay: "player",
+    switchView: "player"
+  });
+});
+
+tileLabelsButton?.addEventListener("click", () => {
   showTileLabels = !showTileLabels;
   saveTileLabelsPreference(showTileLabels);
   render(store.getState());
@@ -2339,14 +2634,27 @@ tileLabelsButton.addEventListener("click", () => {
 
 importIdentityButton?.addEventListener("click", async () => {
   await runAction(() => api.importIdentity(identityPlayerName?.value, identityKeyName?.value));
+  setPlayerCommandOverlay(
+    "Import Player",
+    buildImportIdentityNote(identityPlayerName?.value, identityKeyName?.value)
+  );
 });
 
 stageMintButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageMintIdentity(identityPlayerName?.value, identityKeyName?.value));
-});
-
-claimInheritanceButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageClaimInheritancePurse());
+  const playerName = String(identityPlayerName?.value || "").trim();
+  if (!playerName) {
+    setPlayerCommandOverlay("MintPlayer", "Enter the player name for the new nisse.");
+    setMainViewMode("player");
+    return;
+  }
+  await handleRealmCallAction({
+    func: "MintPlayer",
+    args: [playerName],
+    memo: `Mint player ${playerName}`,
+    fallback: () => api.stageMintIdentity(identityPlayerName?.value, identityKeyName?.value),
+    overlay: "player",
+    switchView: "player"
+  });
 });
 
 companionRegistryButton?.addEventListener("click", async () => {
@@ -2434,19 +2742,20 @@ messageBodyInput?.addEventListener("input", () => {
 });
 
 messageSendButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageWriteToFriend(mailComposerState.to, mailComposerState.body));
+  const state = store.getState();
+  const playerName = state?.player?.name || identityPlayerName?.value || "Nisse";
+  await handleRealmCallAction({
+    func: "WriteToFriend",
+    args: [playerName, mailComposerState.to, mailComposerState.body],
+    memo: `Message ${mailComposerState.to || "friend"}`,
+    fallback: () => api.stageWriteToFriend(mailComposerState.to, mailComposerState.body),
+    overlay: "mail",
+    switchView: "mail"
+  });
 });
 
 messageRefreshButton?.addEventListener("click", async () => {
   await runAction(() => api.refresh());
-});
-
-ugnotDepositButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageDepositUGNOT(ugnotDepositInput?.value));
-});
-
-ugnotWithdrawButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageWithdrawUGNOT(ugnotWithdrawInput?.value));
 });
 
 adenaConnectButton?.addEventListener("click", async () => {
@@ -2476,78 +2785,6 @@ adenaUploadPackageButton?.addEventListener("click", async () => {
     };
     render(store.getState());
   }
-});
-
-marketRefreshButton?.addEventListener("click", async () => {
-  await refreshMarketBox();
-});
-
-openPeddlerButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageOpenPeddler());
-});
-
-closePeddlerButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageClosePeddler());
-});
-
-marketOwnerFilter?.addEventListener("input", () => {
-  marketState = {
-    ...marketState,
-    ownerFilter: marketOwnerFilter.value || ""
-  };
-  render(store.getState());
-});
-
-marketKindFilter?.addEventListener("input", () => {
-  marketState = {
-    ...marketState,
-    kindFilter: marketKindFilter.value || ""
-  };
-  render(store.getState());
-});
-
-marketCompanionSelect?.addEventListener("change", () => {
-  render(store.getState());
-});
-
-marketListingSelect?.addEventListener("change", () => {
-  marketState = {
-    ...marketState,
-    selectedAssetCode: marketListingSelect.value || ""
-  };
-  render(store.getState());
-});
-
-marketListButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageListCompanionForSale(marketCompanionSelect?.value, marketPriceInput?.value));
-});
-
-marketBuyButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageBuyListedCompanion(marketState.selectedAssetCode));
-});
-
-moneyOpenButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageOpenFixedPeddler(moneyPearlReserveInput?.value, moneyUGNOTReserveInput?.value));
-});
-
-moneyRefreshButton?.addEventListener("click", async () => {
-  await refreshMoneyMarketBox();
-});
-
-moneyPeddlerSelect?.addEventListener("change", () => {
-  moneyMarketState = {
-    ...moneyMarketState,
-    selectedSeller: moneyPeddlerSelect.value || ""
-  };
-  render(store.getState());
-});
-
-moneyBuyPearlsButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageBuyPearlsFromPeddler(moneyMarketState.selectedSeller, moneyPearlAmountInput?.value));
-});
-
-moneyBuyUGNOTButton?.addEventListener("click", async () => {
-  await runAction(() => api.stageBuyUGNOTFromPeddler(moneyMarketState.selectedSeller, moneyPearlAmountInput?.value));
 });
 
 avatarPalette?.addEventListener("click", (event) => {
@@ -2593,7 +2830,16 @@ avatarSaveButton?.addEventListener("click", async () => {
   const payload = avatarState.pixels.some((value) => value !== 0)
     ? encodeAvatarPixels(avatarState.pixels)
     : "none";
-  await runAction(() => api.stageSetPlayerAppearance(payload));
+  const state = store.getState();
+  const playerName = state?.player?.name || identityPlayerName?.value || "Nisse";
+  await handleRealmCallAction({
+    func: "SetPlayerAppearance",
+    args: [playerName, payload],
+    memo: "Update portrait",
+    fallback: () => api.stageSetPlayerAppearance(payload),
+    overlay: "player",
+    switchView: "portrait"
+  });
 });
 
 nameButton.addEventListener("click", async () => {
@@ -2601,7 +2847,16 @@ nameButton.addEventListener("click", async () => {
   if (!value) {
     return;
   }
-  await runAction(() => api.nameCurrentTile(value));
+  const state = store.getState();
+  const playerName = state?.player?.name || identityPlayerName?.value || "Nisse";
+  await handleRealmCallAction({
+    func: "NameTile",
+    args: [playerName, value],
+    memo: `Name tile ${value}`,
+    fallback: () => api.nameCurrentTile(value),
+    overlay: "player",
+    switchView: "place"
+  });
   nameInput.value = "";
 });
 
@@ -2642,7 +2897,15 @@ placeActions?.addEventListener("click", (event) => {
     return;
   }
   if (placeAction === "buy-boat") {
-    runAction(() => api.stageBuyBoat());
+    const playerName = state?.player?.name || identityPlayerName?.value || "Nisse";
+    handleRealmCallAction({
+      func: "BuyBoat",
+      args: [playerName],
+      memo: "Buy boat",
+      fallback: () => api.stageBuyBoat(),
+      overlay: "player",
+      switchView: "place"
+    });
     return;
   }
 
@@ -2654,36 +2917,6 @@ placeActions?.addEventListener("click", (event) => {
     "scroll-seller": "Scrolls and Wisdom: this is the future bookseller for sayings, old scrolls, and pieces of wisdom bought with pearls.",
     "boat-trips": "Boat Trips: this will become the city guide for sailing, coastal passage, and captains offering routes."
   };
-  if (service === "money-changer") {
-    refreshMoneyMarketBox().catch((err) => {
-      const current = store.getState();
-      store.setState({
-        ...current,
-        log: [(err?.message || String(err)), ...(current.log || [])].slice(0, 24)
-      });
-    });
-    const current = store.getState();
-    store.setState({
-      ...current,
-      log: ["Money Changer opened in the sidebar market box.", ...(current.log || [])].slice(0, 24)
-    });
-    return;
-  }
-  if (service === "companion-stall") {
-    refreshMarketBox().catch((err) => {
-      const current = store.getState();
-      store.setState({
-        ...current,
-        log: [(err?.message || String(err)), ...(current.log || [])].slice(0, 24)
-      });
-    });
-    const current = store.getState();
-    store.setState({
-      ...current,
-      log: ["Companion Stall opened in the sidebar market box.", ...(current.log || [])].slice(0, 24)
-    });
-    return;
-  }
   const message = serviceMessages[service];
   if (!message) {
     return;
@@ -2693,6 +2926,79 @@ placeActions?.addEventListener("click", (event) => {
     ...current,
     log: [message, ...(current.log || [])].slice(0, 24)
   });
+});
+
+openPlayerPanelButton?.addEventListener("click", () => {
+  setMainViewMode("player");
+});
+
+openPortraitPanelButton?.addEventListener("click", () => {
+  setMainViewMode("portrait");
+});
+
+openPlacePanelButton?.addEventListener("click", () => {
+  setMainViewMode("place");
+});
+
+openMailPanelButton?.addEventListener("click", () => {
+  setMainViewMode("mail");
+});
+
+mapHomeButton?.addEventListener("click", () => {
+  setMainViewMode("map");
+});
+
+copyMapCommandButton?.addEventListener("click", async () => {
+  if (!mapCommandText?.value) {
+    return;
+  }
+  mapCommandText.focus();
+  mapCommandText.select();
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(mapCommandText.value);
+    }
+  } catch (err) {
+    // Selection fallback is already active.
+  }
+});
+
+copyPlayerCommandButton?.addEventListener("click", async () => {
+  if (!playerCommandText?.value) {
+    return;
+  }
+  playerCommandText.focus();
+  playerCommandText.select();
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(playerCommandText.value);
+    }
+  } catch (err) {
+    // Selection fallback is already active.
+  }
+});
+
+closePlayerCommandButton?.addEventListener("click", () => {
+  clearPlayerCommandOverlay();
+});
+
+copyMailCommandButton?.addEventListener("click", async () => {
+  if (!mailCommandText?.value) {
+    return;
+  }
+  mailCommandText.focus();
+  mailCommandText.select();
+  try {
+    if (navigator?.clipboard?.writeText) {
+      await navigator.clipboard.writeText(mailCommandText.value);
+    }
+  } catch (err) {
+    // Selection fallback is already active.
+  }
+});
+
+closeMailCommandButton?.addEventListener("click", () => {
+  clearMailCommandOverlay();
 });
 
 store.subscribe(render);
@@ -2720,6 +3026,9 @@ mapRoot.addEventListener("click", async (event) => {
   if (!clickedTile) {
     return;
   }
+  if (!clickedTile.isVisible && !current?.travel?.active) {
+    return;
+  }
 
   if (!current?.travel?.active) {
     if (clickedTile?.isPlayer) {
@@ -2731,7 +3040,17 @@ mapRoot.addEventListener("click", async (event) => {
   travelAnimationLocked = true;
   try {
     await animateTravelSelection(current, { x, y });
-    await runAction(() => api.moveTravelTo(x, y));
+    if (canUseAdenaWrites()) {
+      const playerName = current?.player?.name || identityPlayerName?.value || "Nisse";
+      await handleRealmCallAction({
+        func: "TravelPlayer",
+        args: [playerName, String(x), String(y), currentAttitude],
+        memo: `Travel to (${x}, ${y})`,
+        fallback: () => api.moveTravelTo(x, y)
+      });
+    } else {
+      await runAction(() => api.moveTravelTo(x, y));
+    }
   } finally {
     travelAnimationLocked = false;
   }

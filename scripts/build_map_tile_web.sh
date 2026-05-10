@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-ROOT="/Users/gnosandbox/workspace/projects/nisserealm"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SRC_DIR="$ROOT/assets/map-tiles"
 DEST_DIR="$ROOT/assets/map-tiles-web"
 MAX_SIZE="${1:-256}"
