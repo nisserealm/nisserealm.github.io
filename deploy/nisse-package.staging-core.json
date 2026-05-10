@@ -1,10 +1,10 @@
 {
-  "name": "nisse",
-  "path": "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse",
+  "name": "nisse01",
+  "path": "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse01",
   "deposit": "1ugnot",
   "gasFee": 8000000,
   "gasWanted": 120000000,
-  "filesBaseUrl": "https://nisserealm.github.io/gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse/",
+  "filesBaseUrl": "https://nisserealm.github.io/gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse01/",
   "files": [
     { "name": "gnomod.toml", "path": "gnomod.toml" },
     { "name": "nisse.gno", "path": "nisse.gno" },

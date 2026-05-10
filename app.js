@@ -111,7 +111,8 @@ const MAP_TILE_ASSET_BASE = "/assets/map-tiles-web";
 const PLACE_TILE_ASSET_BASE = "/assets/map-tiles";
 const BENEVOLENT_MONASTERY_IMAGE = "/assets/map-tiles/benevolent.png";
 const PLAYER_SPRITE_IMAGE = "/assets/nissesprite.png";
-const REALM_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
+const LOCAL_REALM_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
+const HOSTED_REALM_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse01";
 const AVATAR_SIZE = 16;
 const AVATAR_PALETTE = [
   "transparent",
@@ -252,6 +253,8 @@ function inferAppMode() {
   }
   return "hosted";
 }
+
+const REALM_PKG_PATH = APP_MODE === "local" ? LOCAL_REALM_PKG_PATH : HOSTED_REALM_PKG_PATH;
 
 function saveTileLabelsPreference(value) {
   try {
