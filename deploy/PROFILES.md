@@ -39,4 +39,5 @@ cp deploy/nisse-package.local-core.json deploy/nisse-package.json
 - The old full-file versions of `pigeonpost.gno` and `treasury.gno` are archived under `archive/deprecated-full-files/` and are no longer part of the active package directory.
 - Hosted staging uploads now target `.../nisse01` as the fresh package path.
 - Local runtime continues to use `.../nisse`.
-- Package `path` stays aligned with `gnomod.toml` module (`.../nisse`) to avoid invalid path/module mismatch issues.
+- Package source stays local under `gno.land/` and is no longer meant to be served by the public GitHub Pages UI.
+- The hosted UI now stages a local `gnokey maketx addpkg` command instead of uploading package files directly from the browser.

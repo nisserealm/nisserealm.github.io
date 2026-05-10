@@ -113,6 +113,7 @@ const BENEVOLENT_MONASTERY_IMAGE = "/assets/map-tiles/benevolent.png";
 const PLAYER_SPRITE_IMAGE = "/assets/nissesprite.png";
 const LOCAL_REALM_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
 const HOSTED_REALM_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse01";
+const STAGING_DEPLOY_MANIFEST_PATH = "./deploy/nisse-package.staging-core.json";
 const AVATAR_SIZE = 16;
 const AVATAR_PALETTE = [
   "transparent",
@@ -816,38 +817,60 @@ function adenaNickname(payload) {
   return String(data.name || data.nickname || data.keyName || "").trim();
 }
 
-async function loadNissePackageManifest() {
-  const response = await fetch(new URL("./deploy/nisse-package.json", document.baseURI), { cache: "no-store" });
+function shellQuote(value) {
+  return "'" + String(value).replace(/'/g, "'\\''") + "'";
+}
+
+function stagingChainId() {
+  const value = document.querySelector('meta[name="gnoconnect:chainid"]')?.getAttribute("content") || "";
+  return String(value).trim() || "staging";
+}
+
+function stagingRpcHost() {
+  const value = document.querySelector('meta[name="gnoconnect:rpc"]')?.getAttribute("content") || "";
+  try {
+    const parsed = new URL(String(value).trim());
+    return parsed.host || "rpc.gno.land:443";
+  } catch (err) {
+    return String(value).replace(/^https?:\/\//, "").replace(/\/+$/, "") || "rpc.gno.land:443";
+  }
+}
+
+async function loadNissePackageManifest(manifestPath = STAGING_DEPLOY_MANIFEST_PATH) {
+  const response = await fetch(new URL(manifestPath, document.baseURI), { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Package manifest HTTP ${response.status}`);
   }
   return {
-    manifest: await response.json(),
-    manifestUrl: response.url
+    manifest: await response.json()
   };
 }
 
-async function buildHostedPackagePayload() {
-  const { manifest, manifestUrl } = await loadNissePackageManifest();
-  const filesBaseUrl = new URL(String(manifest.filesBaseUrl || "./"), manifestUrl);
-  const files = await Promise.all((manifest.files || []).map(async (entry) => {
-    const response = await fetch(new URL(entry.path, filesBaseUrl), { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`Failed to load ${entry.name} (HTTP ${response.status})`);
-    }
-    return {
-      name: entry.name,
-      body: await response.text()
-    };
-  }));
-  return {
-    name: manifest.name,
-    path: manifest.path,
-    deposit: manifest.deposit,
-    gasFee: Number(manifest.gasFee || 8000000),
-    gasWanted: Number(manifest.gasWanted || 120000000),
-    files
-  };
+async function buildHostedPackageCliCommand() {
+  const { manifest } = await loadNissePackageManifest(STAGING_DEPLOY_MANIFEST_PATH);
+  const keyName = String(identityKeyName?.value || adenaState.nickname || "mykey").trim() || "mykey";
+  const pkgPath = String(manifest.path || HOSTED_REALM_PKG_PATH).trim();
+  const pkgDir = `./${pkgPath}`;
+  const gasFee = `${Number(manifest.gasFee || 8000000)}ugnot`;
+  const gasWanted = `${Number(manifest.gasWanted || 120000000)}`;
+  const maxDeposit = String(manifest.deposit || "1ugnot").trim() || "1ugnot";
+  const command = [
+    "gnokey maketx addpkg",
+    shellQuote(keyName),
+    "--broadcast",
+    "--chainid", shellQuote(stagingChainId()),
+    "--remote", shellQuote(stagingRpcHost()),
+    "--gas-fee", shellQuote(gasFee),
+    "--gas-wanted", shellQuote(gasWanted),
+    "--max-deposit", shellQuote(maxDeposit),
+    "--pkgdir", shellQuote(pkgDir),
+    "--pkgpath", shellQuote(pkgPath)
+  ].join(" ");
+  return [
+    "# Run from your local nisserealm checkout",
+    "cd /path/to/local/nisserealm",
+    command
+  ].join("\n");
 }
 
 async function connectAdenaWallet() {
@@ -1014,56 +1037,6 @@ async function handleRealmCallAction({ func, args = [], memo = "", send = "", fa
   }
 }
 
-async function uploadHostedNissePackage() {
-  if (!window.adena) {
-    throw new Error("Adena extension was not found in this browser.");
-  }
-  if (!adenaState.connected) {
-    await connectAdenaWallet();
-  }
-
-  adenaState = {
-    ...adenaState,
-    uploading: true,
-    error: "",
-    lastTxHash: ""
-  };
-  render(store.getState());
-
-  const manifest = await buildHostedPackagePayload();
-  const sender = adenaState.address;
-  const response = await sendWithAdena({
-    address: sender,
-    messages: [
-      {
-        type: "/vm.m_addpkg",
-        value: {
-          creator: sender,
-          deposit: manifest.deposit,
-          package: {
-            name: manifest.name,
-            path: manifest.path,
-            files: manifest.files
-          }
-        }
-      }
-    ],
-    gasWanted: manifest.gasWanted,
-    gasFee: manifest.gasFee,
-    memo: "Upload Nisse package from GitHub Pages"
-  });
-
-  const txHash = String(response?.data?.txHash || response?.txHash || response?.hash || "").trim();
-  adenaState = {
-    ...adenaState,
-    uploading: false,
-    error: "",
-    lastTxHash: txHash
-  };
-  render(store.getState());
-  return response;
-}
-
 function renderAdenaDeployBox() {
   const adenaBox = adenaDeployResult?.closest(".companion-registry-box");
   if (APP_MODE !== "hosted") {
@@ -1083,10 +1056,10 @@ function renderAdenaDeployBox() {
   } else {
     lines.push("Adena is available but not connected yet.");
   }
-  if (adenaState.lastTxHash) {
-    lines.push("");
-    lines.push(`Latest upload tx: ${adenaState.lastTxHash}`);
-  }
+  lines.push("");
+  lines.push("Package deploy uses a local CLI command now.");
+  lines.push(`Path: ${HOSTED_REALM_PKG_PATH}`);
+  lines.push(`RPC: ${stagingRpcHost()}`);
   if (adenaState.error) {
     lines.push("");
     lines.push(`Error: ${adenaState.error}`);
@@ -1097,8 +1070,8 @@ function renderAdenaDeployBox() {
     adenaConnectButton.textContent = adenaState.connecting ? "Connecting..." : "Connect Adena";
   }
   if (adenaUploadPackageButton) {
-    adenaUploadPackageButton.disabled = !adenaState.available || adenaState.connecting || adenaState.uploading;
-    adenaUploadPackageButton.textContent = adenaState.uploading ? "Uploading..." : "Upload Nisse Package";
+    adenaUploadPackageButton.disabled = adenaState.connecting;
+    adenaUploadPackageButton.textContent = "Stage Upload CLI";
   }
 }
 
@@ -2777,13 +2750,13 @@ adenaConnectButton?.addEventListener("click", async () => {
 
 adenaUploadPackageButton?.addEventListener("click", async () => {
   try {
-    const response = await uploadHostedNissePackage();
-    const responseText = JSON.stringify(response?.data || response || {}, null, 2);
-    pushLogMessage(`Adena addpkg submitted.\n${responseText}`);
+    const command = await buildHostedPackageCliCommand();
+    setPlayerCommandOverlay("Stage Upload CLI", command);
+    setMainViewMode("player");
+    pushLogMessage("Staged gnokey addpkg command for the staging network.");
   } catch (err) {
     adenaState = {
       ...adenaState,
-      uploading: false,
       error: err?.message || String(err)
     };
     render(store.getState());
