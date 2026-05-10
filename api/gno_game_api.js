@@ -6,7 +6,8 @@ import {
   movementCost
 } from "./map_data.js";
 
-const PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
+const LOCAL_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
+const HOSTED_PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse01";
 const PLAYER_NAME_STORAGE_KEY = "nisse.playerName";
 const KEY_NAME_STORAGE_KEY = "nisse.keyName";
 const ATTITUDE_STORAGE_KEY = "nisse.attitude";
@@ -25,6 +26,19 @@ const SPECIAL_TILE_STORIES = {
 function appUrl(path) {
   return new URL(String(path || "./"), import.meta.url).href;
 }
+
+function inferPkgPath() {
+  if (typeof window === "undefined") {
+    return HOSTED_PKG_PATH;
+  }
+  const host = String(window.location?.hostname || "").toLowerCase();
+  if (!host || host === "localhost" || host === "127.0.0.1" || host === "::1") {
+    return LOCAL_PKG_PATH;
+  }
+  return HOSTED_PKG_PATH;
+}
+
+const PKG_PATH = inferPkgPath();
 
 function defaultProxyUrl() {
   return new URL("../proxy", window.location.href).href;
