@@ -9,9 +9,9 @@ func init() {
 	seedPlaceName(Position{X: 5, Y: 4}, "Agerre")
 	seedPlaceName(Position{X: 6, Y: 4}, "Aldazabal")
 	seedPlaceName(Position{X: 2, Y: 5}, "Altzibar")
-	seedPlaceName(Position{X: 13, Y: 5}, "Arizmendi")
+	seedPlaceName(Position{X: 13, Y: 5}, "Melkern")
 	seedPlaceName(Position{X: 14, Y: 5}, "Arregi")
-	seedPlaceName(Position{X: 13, Y: 6}, "Arruti")
+	seedPlaceName(Position{X: 13, Y: 6}, "Florida")
 }
 
 func placeTileKey(pos Position) string {

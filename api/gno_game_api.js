@@ -6,7 +6,7 @@ import {
   movementCost
 } from "./map_data.js";
 
-const PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse_staging";
+const PKG_PATH = "gno.land/r/g1sqlsr3e2efk349w0753j7jhqrpz5x0uqmps6lf/nisse";
 const PLAYER_NAME_STORAGE_KEY = "nisse.playerName";
 const KEY_NAME_STORAGE_KEY = "nisse.keyName";
 const ATTITUDE_STORAGE_KEY = "nisse.attitude";
@@ -238,7 +238,7 @@ function buildMintPlayerCommand(playerName, keyName) {
   ].join(" ");
 }
 
-function buildClaimInheritanceCommand(playerName, keyName) {
+function buildMintEarnedCompanionCommand(playerName, keyName, claimID, displayName = "") {
   return [
     "gnokey maketx call",
     cleanInput(keyName) || "mykey",
@@ -247,8 +247,10 @@ function buildClaimInheritanceCommand(playerName, keyName) {
     "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
     "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
     "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("ClaimInheritancePurse"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse")
+    "--func", shellQuote("MintEarnedCompanion"),
+    "--args", shellQuote(cleanInput(playerName) || "Nisse"),
+    "--args", shellQuote(cleanInput(claimID)),
+    "--args", shellQuote(cleanInput(displayName))
   ].join(" ");
 }
 
@@ -263,115 +265,6 @@ function buildBuyBoatCommand(playerName, keyName) {
     "--pkgpath", shellQuote(PKG_PATH),
     "--func", shellQuote("BuyBoat"),
     "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse")
-  ].join(" ");
-}
-
-function buildOpenPeddlerCommand(playerName, keyName) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("OpenPeddler"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote("0"),
-    "--args", shellQuote("0")
-  ].join(" ");
-}
-
-function buildOpenFixedPeddlerCommand(playerName, keyName, pearlAmount, ugnotAmount) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("OpenPeddler"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote(String(pearlAmount)),
-    "--args", shellQuote(String(ugnotAmount))
-  ].join(" ");
-}
-
-function buildClosePeddlerCommand(playerName, keyName) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("ClosePeddler"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse")
-  ].join(" ");
-}
-
-function buildListCompanionForSaleCommand(playerName, keyName, companionID, pearlPrice) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("ListCompanionForSale"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote(String(companionID)),
-    "--args", shellQuote(String(pearlPrice))
-  ].join(" ");
-}
-
-function buildBuyListedCompanionCommand(playerName, keyName, assetCode) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("BuyListedCompanion"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote(cleanInput(assetCode))
-  ].join(" ");
-}
-
-function buildBuyPearlsFromPeddlerCommand(playerName, keyName, sellerPlayerName, pearlAmount) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("BuyPearlsFromPeddler"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote(cleanInput(sellerPlayerName)),
-    "--args", shellQuote(String(pearlAmount))
-  ].join(" ");
-}
-
-function buildBuyUGNOTFromPeddlerCommand(playerName, keyName, sellerPlayerName, pearlAmount) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("BuyUGNOTFromPeddler"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote(cleanInput(sellerPlayerName)),
-    "--args", shellQuote(String(pearlAmount))
   ].join(" ");
 }
 
@@ -403,36 +296,6 @@ function buildWriteToFriendCommand(playerName, keyName, toPlayerName, body) {
     "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
     "--args", shellQuote(cleanInput(toPlayerName).toLowerCase()),
     "--args", shellQuote(cleanInput(body))
-  ].join(" ");
-}
-
-function buildDepositUGNOTCommand(playerName, keyName, amount) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--send", shellQuote(`${Number(amount)}ugnot`),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("DepositUGNOT"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse")
-  ].join(" ");
-}
-
-function buildWithdrawUGNOTCommand(playerName, keyName, amount) {
-  return [
-    "gnokey maketx call",
-    cleanInput(keyName) || "mykey",
-    "--broadcast",
-    "--chainid dev",
-    "--gas-fee", shellQuote(DEFAULT_GAS_FEE),
-    "--gas-wanted", shellQuote(DEFAULT_GAS_WANTED),
-    "--pkgpath", shellQuote(PKG_PATH),
-    "--func", shellQuote("WithdrawUGNOT"),
-    "--args", shellQuote(cleanInput(playerName).toLowerCase() || "nisse"),
-    "--args", shellQuote(String(amount))
   ].join(" ");
 }
 
@@ -483,6 +346,132 @@ function parsePlayer(text) {
       const value = cleanInput(appearanceMatch ? appearanceMatch[1] : "");
       return value.toLowerCase() === "none" ? "" : value.toLowerCase();
     })()
+  };
+}
+
+function parsePlayerCoreData(text) {
+  const normalized = normalizeRealmText(text);
+  const nameMatch = normalized.match(/^\s*Name:\s*(.+)$/m);
+  const appearanceMatch = normalized.match(/^\s*Appearance16:\s*(.+)$/m);
+  return {
+    name: cleanInput(nameMatch ? nameMatch[1] : "") || playerNameFromStorage(),
+    appearance16: (() => {
+      const value = cleanInput(appearanceMatch ? appearanceMatch[1] : "");
+      return value.toLowerCase() === "none" ? "" : value.toLowerCase();
+    })()
+  };
+}
+
+function parsePlayerStatsData(text) {
+  const normalized = normalizeRealmText(text);
+  const levelMatch = normalized.match(/^\s*Level:\s*(\d+)$/m);
+  const boldnessMatch = normalized.match(/^\s*Boldness:\s*(\d+)$/m);
+  const cautionMatch = normalized.match(/^\s*Caution:\s*(\d+)$/m);
+  const kindnessMatch = normalized.match(/^\s*Kindness:\s*(\d+)$/m);
+  const soulMatch = normalized.match(/^\s*Soul:\s*(\d+)$/m);
+  return {
+    level: Number(levelMatch ? levelMatch[1] : 0),
+    boldness: Number(boldnessMatch ? boldnessMatch[1] : 0),
+    caution: Number(cautionMatch ? cautionMatch[1] : 0),
+    kindness: Number(kindnessMatch ? kindnessMatch[1] : 0),
+    soul: Number(soulMatch ? soulMatch[1] : 0)
+  };
+}
+
+function parsePlayerTravelData(text) {
+  const normalized = normalizeRealmText(text);
+  const positionMatch = normalized.match(/^\s*Position:\s*\((\d+),\s*(\d+)\)$/m);
+  const turnsMatch = normalized.match(/^\s*Turns:\s*(\d+)$/m);
+  const monthIndexMatch = normalized.match(/^\s*MonthIndex:\s*(\d+)$/m);
+  const seasonMatch = normalized.match(/^\s*Season:\s*(.+)$/m);
+  const seasonMonthMatch = normalized.match(/^\s*SeasonMonth:\s*(\d+)$/m);
+  const travelBonusMatch = normalized.match(/^\s*TravelBonus:\s*\+?(\d+)$/m);
+  const boatMatch = normalized.match(/^\s*Boat:\s*(.+)$/m);
+  const boatLeftMatch = normalized.match(/^\s*Boat:\s*.+ left at \((\d+),\s*(\d+)\)\s*$/m);
+
+  if (!positionMatch) {
+    throw new Error("Could not parse player position.");
+  }
+
+  const boatStatus = cleanInput(boatMatch ? boatMatch[1] : "");
+  const position = {
+    x: Number(positionMatch[1]),
+    y: Number(positionMatch[2])
+  };
+  const boatLeftPosition = boatLeftMatch
+    ? { x: Number(boatLeftMatch[1]), y: Number(boatLeftMatch[2]) }
+    : null;
+  const boatAtPlayerTile = !!boatLeftPosition
+    && boatLeftPosition.x === position.x
+    && boatLeftPosition.y === position.y;
+  return {
+    position,
+    turns: Number(turnsMatch ? turnsMatch[1] : 0),
+    monthIndex: Number(monthIndexMatch ? monthIndexMatch[1] : 0),
+    season: cleanInput(seasonMatch ? seasonMatch[1] : "").toLowerCase(),
+    seasonMonth: Number(seasonMonthMatch ? seasonMonthMatch[1] : 0),
+    travelBonus: Number(travelBonusMatch ? travelBonusMatch[1] : 0),
+    boatStatus,
+    ownsBoat: boatStatus.toLowerCase() !== "none",
+    carriesBoat: boatStatus.toLowerCase().includes("(carried)") || boatAtPlayerTile,
+    hasBoat: boatStatus.toLowerCase().includes("(carried)") || boatAtPlayerTile,
+    boatLeftPosition
+  };
+}
+
+function parsePlayerWealthData(text) {
+  const normalized = normalizeRealmText(text);
+  const pearlsMatch = normalized.match(/^\s*Pearls:\s*(\d+)$/m);
+  const ugnotMatch = normalized.match(/^\s*UGNOT:\s*(-?\d+)$/m);
+  return {
+    pearls: Number(pearlsMatch ? pearlsMatch[1] : 0),
+    ugnot: Number(ugnotMatch ? ugnotMatch[1] : 0)
+  };
+}
+
+async function loadPlayerData(playerName) {
+  const [coreText, statsText, travelText, wealthText, companionText] = await Promise.all([
+    runQeval(`${PKG_PATH}.GetPlayerCoreData(${JSON.stringify(playerName)})`),
+    runQeval(`${PKG_PATH}.GetPlayerStatsData(${JSON.stringify(playerName)})`),
+    runQeval(`${PKG_PATH}.GetPlayerTravelData(${JSON.stringify(playerName)})`),
+    runQeval(`${PKG_PATH}.GetPlayerWealthData(${JSON.stringify(playerName)})`),
+    (async () => {
+      try {
+        return await runQeval(`${PKG_PATH}.DescribeCompanion(${JSON.stringify(playerName)})`);
+      } catch (err) {
+        return "No companions.";
+      }
+    })()
+  ]);
+
+  const core = parsePlayerCoreData(coreText);
+  const stats = parsePlayerStatsData(statsText);
+  const travel = parsePlayerTravelData(travelText);
+  const wealth = parsePlayerWealthData(wealthText);
+  const companionList = parseCompanionSummary(companionText);
+
+  return {
+    player: {
+      name: core.name,
+      position: travel.position,
+      pearls: wealth.pearls,
+      ugnot: wealth.ugnot,
+      level: stats.level,
+      boldness: stats.boldness,
+      caution: stats.caution,
+      kindness: stats.kindness,
+      soul: stats.soul,
+      turns: travel.turns,
+      companions: companionList.length,
+      travelBonus: travel.travelBonus,
+      boatStatus: travel.boatStatus,
+      ownsBoat: travel.ownsBoat,
+      carriesBoat: travel.carriesBoat,
+      hasBoat: travel.hasBoat,
+      boatLeftPosition: travel.boatLeftPosition,
+      appearance16: core.appearance16
+    },
+    companionList
   };
 }
 
@@ -547,62 +536,6 @@ function parseCompanionSummary(text) {
     }
   }
   return companions;
-}
-
-function parseCompanionListings(text) {
-  const normalized = normalizeRealmText(text);
-  if (!normalized || /^No companion listings\./i.test(normalized)) {
-    return [];
-  }
-  return normalized
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("- "))
-    .map((line) => {
-      const match = line.match(/^- ([^\s]+)(?: "([^"]+)")? owner (.+?) net (\d+) pearls(?: listed (\d+) pearls)? \[(local|remote)\] @ \((\d+),\s*(\d+)\)$/);
-      if (!match) {
-        return null;
-      }
-      return {
-        assetCode: cleanInput(match[1]),
-        displayName: cleanInput(match[2] || ""),
-        ownerPlayer: cleanInput(match[3]),
-        ownerPearlPrice: Number(match[4]),
-        listedPearlPrice: Number(match[5] || match[4]),
-        local: cleanInput(match[6]) === "local",
-        position: {
-          x: Number(match[7]),
-          y: Number(match[8])
-        }
-      };
-    })
-    .filter(Boolean);
-}
-
-function parsePeddlerList(text) {
-  const normalized = normalizeRealmText(text);
-  if (!normalized || /^No active peddlers\./i.test(normalized)) {
-    return [];
-  }
-  return normalized
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("- "))
-    .map((line) => {
-      const match = line.match(/^- (.+?) \[(.+?)\] at (.+?) (\d+) ugnot\/pearl pearls (\d+) ugnot (-?\d+)$/);
-      if (!match) {
-        return null;
-      }
-      return {
-        ownerPlayer: cleanInput(match[1]),
-        model: cleanInput(match[2]),
-        place: cleanInput(match[3]),
-        priceUGNOTPerPearl: Number(match[4]),
-        pearlReserve: Number(match[5]),
-        ugnotReserve: Number(match[6])
-      };
-    })
-    .filter(Boolean);
 }
 
 function parseFriendQuery(input) {
@@ -715,34 +648,38 @@ function parseMonsterMarks(text) {
     .filter(Boolean);
 }
 
-function parseInheritance(text) {
-  const normalized = normalizeRealmText(text);
-  if (!normalized || /^No hidden inheritance waits/i.test(normalized)) {
-    return null;
+function parseCompanionClaimsCount(text) {
+  const normalized = normalizeRealmText(text).trim();
+  if (!normalized || /no companion claims/i.test(normalized) || /^none\.?$/i.test(normalized)) {
+    return 0;
   }
+  return normalized
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter((line) => line && !/companion claims/i.test(line))
+    .length;
+}
 
-  const fromMatch = normalized.match(/^\s*From:\s*(.+)$/m);
-  const placeMatch = normalized.match(/^\s*Place:\s*\((\d+),\s*(\d+)\)$/m);
-  const deathTurnMatch = normalized.match(/^\s*DeathTurn:\s*(\d+)$/m);
-  const causeMatch = normalized.match(/^\s*Cause:\s*(.+)$/m);
-  const pearlsMatch = normalized.match(/^\s*Pearls:\s*(\d+)$/m);
-  const ugnotMatch = normalized.match(/^\s*UGNOT:\s*(-?\d+)$/m);
-
-  if (!fromMatch || !placeMatch) {
-    return null;
+function parseCompanionClaims(text) {
+  const normalized = normalizeRealmText(text).trim();
+  if (!normalized || /no companion claims/i.test(normalized) || /^none\.?$/i.test(normalized)) {
+    return [];
   }
-
-  return {
-    from: cleanInput(fromMatch[1]),
-    position: {
-      x: Number(placeMatch[1]),
-      y: Number(placeMatch[2])
-    },
-    deathTurn: Number(deathTurnMatch ? deathTurnMatch[1] : 0),
-    cause: cleanInput(causeMatch ? causeMatch[1] : ""),
-    pearls: Number(pearlsMatch ? pearlsMatch[1] : 0),
-    ugnot: Number(ugnotMatch ? ugnotMatch[1] : 0)
-  };
+  return normalized
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .map((line) => {
+      const match = line.match(/^- ([^:]+):\s*([a-z0-9_ -]+)\s+x(\d+)$/i);
+      if (!match) {
+        return null;
+      }
+      return {
+        claimID: cleanInput(match[1]).toLowerCase(),
+        type: cleanInput(match[2]).toLowerCase(),
+        count: Number(match[3] || 0)
+      };
+    })
+    .filter(Boolean);
 }
 
 function parseTileSceneMeta(text) {
@@ -755,6 +692,8 @@ function parseTileSceneMeta(text) {
 
   const titleMatch = normalized.match(/^\s*TileSceneTitle:\s*(.+)$/m);
   const placeNameMatch = normalized.match(/^\s*TileScenePlaceName:\s*(.+)$/m);
+  const terrainMatch = normalized.match(/^\s*TileSceneTerrain:\s*(.+)$/m);
+  const resourcesMatch = normalized.match(/^\s*TileSceneResources:\s*(.+)$/m);
   const canNameMatch = normalized.match(/^\s*TileSceneCanName:\s*(.+)$/m);
   const themeMatch = normalized.match(/^\s*TileSceneTheme:\s*(.+)$/m);
   const imageMatch = normalized.match(/^\s*TileSceneImage:\s*(.+)$/m);
@@ -768,6 +707,11 @@ function parseTileSceneMeta(text) {
     id,
     title: cleanInput(titleMatch ? titleMatch[1] : ""),
     placeName: cleanInput(placeNameMatch ? placeNameMatch[1] : ""),
+    terrain: cleanInput(terrainMatch ? terrainMatch[1] : "").toLowerCase(),
+    resources: cleanInput(resourcesMatch ? resourcesMatch[1] : "")
+      .split(",")
+      .map((value) => cleanInput(value))
+      .filter(Boolean),
     canName: cleanInput(canNameMatch ? canNameMatch[1] : "").toLowerCase() === "yes",
     theme: cleanInput(themeMatch ? themeMatch[1] : "").toLowerCase(),
     image: cleanInput(imageMatch ? imageMatch[1] : ""),
@@ -893,16 +837,6 @@ function parseLatestIncomingMessage(text, recipientName) {
     turn: Number(turnMatch ? turnMatch[1] : 0),
     bodyEncoded,
     body: decodeHexMessage(from, to, bodyEncoded)
-  };
-}
-
-function parseUGNOTPouch(text) {
-  const normalized = normalizeRealmText(text);
-  const totalMatch = normalized.match(/^\s*Total:\s*(-?\d+)$/m);
-  const latestMatch = normalized.match(/^\s*Latest:\s*(.+)$/m);
-  return {
-    total: Number(totalMatch ? totalMatch[1] : 0),
-    latest: cleanInput(latestMatch ? latestMatch[1] : "")
   };
 }
 
@@ -1069,24 +1003,21 @@ function boatReachableCosts(origin, budget) {
   }
 
   const visited = new Map();
-  const startTouchedOcean = oceanTravelTile(startCode);
-  const queue = [{ x: origin.x, y: origin.y, cost: 0, touchedOcean: startTouchedOcean }];
-  visited.set(`${origin.x},${origin.y}|${startTouchedOcean ? 1 : 0}`, 0);
+  const queue = [{ x: origin.x, y: origin.y, cost: 0 }];
+  visited.set(`${origin.x},${origin.y}`, 0);
 
   while (queue.length > 0) {
     queue.sort((a, b) => a.cost - b.cost);
     const current = queue.shift();
-    const visitKey = `${current.x},${current.y}|${current.touchedOcean ? 1 : 0}`;
+    const visitKey = `${current.x},${current.y}`;
     if (current.cost !== visited.get(visitKey)) {
       continue;
     }
 
-    if (current.touchedOcean) {
-      const key = `${current.x},${current.y}`;
-      const existing = results.get(key);
-      if (existing === undefined || current.cost < existing) {
-        results.set(key, current.cost);
-      }
+    const key = `${current.x},${current.y}`;
+    const existing = results.get(key);
+    if (existing === undefined || current.cost < existing) {
+      results.set(key, current.cost);
     }
 
     for (const next of waterNeighbors(current)) {
@@ -1094,15 +1025,13 @@ function boatReachableCosts(origin, budget) {
       if (nextCost > budget) {
         continue;
       }
-      const nextTouchedOcean = current.touchedOcean || oceanTravelTile(tileCodeAt(next.x, next.y));
-      const nextVisitKey = `${next.x},${next.y}|${nextTouchedOcean ? 1 : 0}`;
+      const nextVisitKey = `${next.x},${next.y}`;
       if (!visited.has(nextVisitKey) || nextCost < visited.get(nextVisitKey)) {
         visited.set(nextVisitKey, nextCost);
         queue.push({
           x: next.x,
           y: next.y,
-          cost: nextCost,
-          touchedOcean: nextTouchedOcean
+          cost: nextCost
         });
       }
     }
@@ -1180,11 +1109,6 @@ function notReadyState(message = "Gno adapter loading.") {
       messages: [],
       latest: null
     },
-    ugnotPouch: {
-      total: 0,
-      latest: ""
-    },
-    inheritance: null,
     map: [],
     activeStoryTiles: {},
     place: {
@@ -1287,8 +1211,7 @@ export function createGnoGameApi() {
       );
       for (const requestedName of requested) {
         try {
-          const playerText = await runQeval(`${PKG_PATH}.DescribePlayer(${JSON.stringify(requestedName)})`);
-          const parsed = parsePlayer(playerText);
+          const { player: parsed } = await loadPlayerData(requestedName);
           if (String(parsed?.name || "").trim().toLowerCase() === selfKey) {
             continue;
           }
@@ -1362,18 +1285,10 @@ export function createGnoGameApi() {
 
   async function hydrateState(baseState, logMessage = "") {
     const playerName = playerNameFromStorage();
-    const playerText = await runQeval(`${PKG_PATH}.DescribePlayer(${JSON.stringify(playerName)})`);
-    const player = parsePlayer(playerText);
+    const playerData = await loadPlayerData(playerName);
+    const player = playerData.player;
     const storyBindingText = await runQeval(`${PKG_PATH}.DescribeTileStoryBinding(${JSON.stringify(playerName)})`);
     const boundStory = parseTileStoryBinding(storyBindingText);
-    const inheritance = await (async () => {
-      try {
-        const inheritanceText = await runQeval(`${PKG_PATH}.DescribeInheritance(${JSON.stringify(playerName)})`);
-        return parseInheritance(inheritanceText);
-      } catch (err) {
-        return null;
-      }
-    })();
     const latestStoryResult = await (async () => {
       try {
         const resultText = await runQeval(`${PKG_PATH}.DescribeLatestStoryResult(${JSON.stringify(playerName)})`);
@@ -1382,18 +1297,19 @@ export function createGnoGameApi() {
         return null;
       }
     })();
-    const companionList = await (async () => {
-      try {
-        const companionText = await runQeval(`${PKG_PATH}.DescribeCompanion(${JSON.stringify(playerName)})`);
-        return parseCompanionSummary(companionText);
-      } catch (err) {
-        return [];
-      }
-    })();
+    const companionList = playerData.companionList;
     const monsterMarks = await (async () => {
       try {
         const marksText = await runQeval(`${PKG_PATH}.DescribeMonsterMarks(${JSON.stringify(playerName)})`);
         return parseMonsterMarks(marksText);
+      } catch (err) {
+        return [];
+      }
+    })();
+    const companionClaims = await (async () => {
+      try {
+        const claimsText = await runQeval(`${PKG_PATH}.DescribeCompanionClaims(${JSON.stringify(playerName)})`);
+        return parseCompanionClaims(claimsText);
       } catch (err) {
         return [];
       }
@@ -1423,26 +1339,18 @@ export function createGnoGameApi() {
         };
       }
     })();
-    const ugnotPouch = await (async () => {
-      try {
-        const pouchText = await runQeval(`${PKG_PATH}.DescribeUGNOTPouch(${JSON.stringify(playerName)})`);
-        return parseUGNOTPouch(pouchText);
-      } catch (err) {
-        return { total: 0, latest: "" };
-      }
-    })();
     const travel = clone(baseState?.travel || inactiveTravelState());
     const nextState = {
       player,
       companionList,
       monsterMarks,
+      companionClaims,
+      companionClaimsCount: companionClaims.reduce((sum, claim) => sum + Number(claim.count || 0), 0),
       mailbox,
-      ugnotPouch,
       travel,
       map: [],
       activeStoryTiles,
       place: null,
-      inheritance,
       storyResult: latestStoryResult,
       loads: baseState?.loads || { active: false, counts: {}, total: 0 },
       frens: baseState?.frens || { active: false, query: "", entries: [], missing: [] },
@@ -1588,8 +1496,7 @@ export function createGnoGameApi() {
         throw new Error("Enter the player name you want to import.");
       }
       const nextKeyName = cleanInput(keyName) || keyNameFromStorage();
-      const playerText = await runQeval(`${PKG_PATH}.DescribePlayer(${JSON.stringify(nextPlayerName)})`);
-      parsePlayer(playerText);
+      await loadPlayerData(nextPlayerName);
       persistIdentity(nextPlayerName, nextKeyName);
       return hydrateState({
         ...state,
@@ -1609,16 +1516,21 @@ export function createGnoGameApi() {
       return nextState;
     },
 
-    async stageClaimInheritancePurse() {
+    async stageMintEarnedCompanion() {
       const identity = {
         playerName: playerNameFromStorage(),
         keyName: keyNameFromStorage()
       };
-      const command = buildClaimInheritanceCommand(identity.playerName, identity.keyName);
+      const claims = Array.isArray(state?.companionClaims) ? state.companionClaims : [];
+      const claim = claims.find((entry) => Number(entry?.count || 0) > 0);
+      if (!claim?.claimID) {
+        throw new Error("No mintable companion claims are ready.");
+      }
+      const command = buildMintEarnedCompanionCommand(identity.playerName, identity.keyName, claim.claimID, "");
       const current = state || notReadyState();
       const nextState = {
         ...current,
-        log: [`Inheritance claim command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
+        log: [`Companion mint command ready for ${claim.type}.\n${command}`, ...(current.log || [])].slice(0, 24)
       };
       state = nextState;
       return nextState;
@@ -1672,200 +1584,6 @@ export function createGnoGameApi() {
       const nextState = {
         ...current,
         log: [`Message command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageDepositUGNOT(amount) {
-      const value = Number(amount);
-      if (!Number.isInteger(value) || value <= 0) {
-        throw new Error("Enter a UGNOT amount above zero to load.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildDepositUGNOTCommand(identity.playerName, identity.keyName, value);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Load UGNOT command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageWithdrawUGNOT(amount) {
-      const value = Number(amount);
-      if (!Number.isInteger(value) || value <= 0) {
-        throw new Error("Enter a UGNOT amount above zero to withdraw.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildWithdrawUGNOTCommand(identity.playerName, identity.keyName, value);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Withdraw UGNOT command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async listCompanionListings() {
-      const text = await runQeval(`${PKG_PATH}.ListCompanionListings()`);
-      return parseCompanionListings(text);
-    },
-
-    async describePeddlers() {
-      const text = await runQeval(`${PKG_PATH}.ListPeddlers()`);
-      return normalizeRealmText(text);
-    },
-
-    async listPeddlers() {
-      const text = await runQeval(`${PKG_PATH}.ListPeddlers()`);
-      return parsePeddlerList(text);
-    },
-
-    async stageOpenPeddler() {
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildOpenPeddlerCommand(identity.playerName, identity.keyName);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Open peddler command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageOpenFixedPeddler(pearlAmount, ugnotAmount) {
-      const pearls = Number(pearlAmount);
-      const ugnot = Number(ugnotAmount);
-      if (!Number.isInteger(pearls) || pearls <= 0) {
-        throw new Error("Enter a pearl reserve above zero.");
-      }
-      if (!Number.isInteger(ugnot) || ugnot <= 0) {
-        throw new Error("Enter a UGNOT reserve above zero.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildOpenFixedPeddlerCommand(identity.playerName, identity.keyName, pearls, ugnot);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Open fixed peddler command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageClosePeddler() {
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildClosePeddlerCommand(identity.playerName, identity.keyName);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Close peddler command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageListCompanionForSale(companionID, pearlPrice) {
-      const id = Number(companionID);
-      const price = Number(pearlPrice);
-      if (!Number.isInteger(id) || id <= 0) {
-        throw new Error("Choose a valid companion.");
-      }
-      if (!Number.isInteger(price) || price <= 0) {
-        throw new Error("Enter a pearl price above zero.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildListCompanionForSaleCommand(identity.playerName, identity.keyName, id, price);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`List companion command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageBuyListedCompanion(assetCode) {
-      const code = cleanInput(assetCode);
-      if (!code) {
-        throw new Error("Choose a listing first.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildBuyListedCompanionCommand(identity.playerName, identity.keyName, code);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Buy companion command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageBuyPearlsFromPeddler(sellerPlayerName, pearlAmount) {
-      const seller = cleanInput(sellerPlayerName);
-      const amount = Number(pearlAmount);
-      if (!seller) {
-        throw new Error("Choose a peddler first.");
-      }
-      if (!Number.isInteger(amount) || amount <= 0) {
-        throw new Error("Enter a pearl amount above zero.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildBuyPearlsFromPeddlerCommand(identity.playerName, identity.keyName, seller, amount);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Buy pearls command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
-      };
-      state = nextState;
-      return nextState;
-    },
-
-    async stageBuyUGNOTFromPeddler(sellerPlayerName, pearlAmount) {
-      const seller = cleanInput(sellerPlayerName);
-      const amount = Number(pearlAmount);
-      if (!seller) {
-        throw new Error("Choose a peddler first.");
-      }
-      if (!Number.isInteger(amount) || amount <= 0) {
-        throw new Error("Enter a pearl amount above zero.");
-      }
-      const identity = {
-        playerName: playerNameFromStorage(),
-        keyName: keyNameFromStorage()
-      };
-      const command = buildBuyUGNOTFromPeddlerCommand(identity.playerName, identity.keyName, seller, amount);
-      const current = state || notReadyState();
-      const nextState = {
-        ...current,
-        log: [`Buy UGNOT command ready.\n${command}`, ...(current.log || [])].slice(0, 24)
       };
       state = nextState;
       return nextState;

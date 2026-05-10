@@ -59,7 +59,7 @@ func grantBoat(playerKey string, player *Player, source string) string {
 		Pos:         player.Pos,
 		Carried:     true,
 	}
-	return "You gain a weathered skiff from " + source + "."
+	return "BoatGranted:" + source
 }
 
 func BuyBoat(cur realm, playerName string) string {
@@ -82,10 +82,10 @@ func BuyBoat(cur realm, playerName string) string {
 		"boat",
 		placeName(player.Pos),
 		"day",
-		"A skiff bought at the shore",
-		"You buy a weathered skiff for 1 pearl. The village boatmen know how to let a traveler go without asking too many questions.\n\nThe boat is yours now. If you leave the coast for inland roads, it will be left behind on the last coastal tile you departed.",
+		"boat_bought",
+		"Boat:skiff\nCost:1 pearl",
 	)
-	return "A skiff bought at the shore"
+	return "boat_bought"
 }
 
 func leaveBoatBehind(playerKey string, pos Position) bool {
@@ -121,29 +121,4 @@ func boatStatusSummary(playerKey string) string {
 		return boat.Name + " (carried)"
 	}
 	return boat.Name + " left at (" + strconv.Itoa(int(boat.Pos.X)) + ", " + strconv.Itoa(int(boat.Pos.Y)) + ")"
-}
-
-func DescribeBoat(playerName string) string {
-	key := normalizeKey(playerName)
-	player, ok := players[key]
-	if !ok {
-		panic("player not found")
-	}
-
-	boat := boats[key]
-	if boat == nil {
-		return "Boat for " + player.Name + "\nStatus: none"
-	}
-
-	out := "Boat for " + player.Name + "\n"
-	out += "Name: " + boat.Name + "\n"
-	if boat.Carried {
-		out += "Status: carried\n"
-		out += "WaterTravel: 8 moves"
-		return out
-	}
-
-	out += "Status: left behind\n"
-	out += "Position: (" + strconv.Itoa(int(boat.Pos.X)) + ", " + strconv.Itoa(int(boat.Pos.Y)) + ")"
-	return out
 }
